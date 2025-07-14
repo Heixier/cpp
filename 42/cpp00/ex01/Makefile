@@ -1,8 +1,8 @@
 CXX = g++
 CXXFLAGS = -std=c++98 -Wall -Wextra -Werror
-NAME = megaphone
+NAME = phone
 
-SRCS = megaphone.cpp
+SRCS = main.cpp Contact.cpp PhoneBook.cpp
 OBJS = $(SRCS:.cpp=.o)
 
 %.o: %.cpp
