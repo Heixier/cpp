@@ -64,7 +64,7 @@ void	PhoneBook::add_contact(void)
 
 static std::string truncate(std::string string)
 {
-	if (string.length() >= FMT_LEN)
+	if (string.length() > FMT_LEN)
 		return (string.substr(0, 9) + '.');
 	return (string);
 }
