@@ -24,10 +24,14 @@ void	PhoneBook::add_contact(void)
 
 	std::cout << "Enter first name: ";
 	std::cin >> std::ws >> first_name;
+	if (std::cin.eof())
+		return ;
 	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
 	std::cout << "Enter last name: ";
 	std::cin >> std::ws >> last_name;
+	if (std::cin.eof())
+		return ;
 	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
 	std::cout << "Enter nickname: ";
@@ -35,6 +39,8 @@ void	PhoneBook::add_contact(void)
 
 	std::cout << "Enter phone number: ";
 	std::cin >> std::ws >> phone_number;
+	if (std::cin.eof())
+		return ;
 	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
 	if (!ft_aredigits(phone_number))
@@ -88,6 +94,8 @@ void	PhoneBook::find_contact(void)
 	}
 	std::cout << "Enter index of the entry to display: ";
 	std::cin >> input;
+	if (std::cin.eof())
+		return ;
 	std::istringstream iss(input);
 
 	iss >> idx;
