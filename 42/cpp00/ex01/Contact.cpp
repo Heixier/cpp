@@ -12,15 +12,7 @@ Contact::Contact(void)
 }
 
 Contact::Contact(std::string first_name, std::string last_name, std::string nick_name, std::string phone_number, std::string secret) :
-_first_name(first_name), _last_name(last_name), _nick_name(nick_name), _phone_number(phone_number), _secret(secret)
-{
-	std::cout << "Constructor called\n";
-	std::cout << "First name: " << _first_name << '\n';
-	std::cout << "Last name: " << _last_name << '\n';
-	std::cout << "Nickname: " << _nick_name << '\n';
-	std::cout << "Number: " << _phone_number << '\n';
-	std::cout << "Secret: " << _secret << '\n';
-}
+_first_name(first_name), _last_name(last_name), _nick_name(nick_name), _phone_number(phone_number), _secret(secret) { }
 
 std::string Contact::get_first_name(void)
 {
@@ -47,6 +39,4 @@ std::string Contact::get_secret(void)
 	return (this -> _secret);
 }
 
-Contact::~Contact(void) {
-	std::cout << "Contact for " << this -> _first_name << ' ' << _last_name << " destroyed\n";
-}
+Contact::~Contact(void) { }

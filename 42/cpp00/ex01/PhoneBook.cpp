@@ -31,8 +31,7 @@ void	PhoneBook::add_contact(void)
 	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
 	std::cout << "Enter nickname: ";
-	std::cin >> std::ws >> nick_name;
-	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	std::getline(std::cin, nick_name);
 
 	std::cout << "Enter phone number: ";
 	std::cin >> std::ws >> phone_number;
@@ -43,10 +42,14 @@ void	PhoneBook::add_contact(void)
 		std::cout << "Invalid phone number!\n";
 		return ;
 	}
+	if (phone_number.length() < 8)
+	{
+		std::cout << "Phone number too short! (must be at least 8 digits)\n";
+		return ;
+	}
 
 	std::cout << "Enter secret: ";
-	std::cin >> std::ws >> secret;
-	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	std::getline(std::cin, secret);
 
 	this -> contact_list[contact_idx] = Contact(first_name, last_name, nick_name, phone_number, secret);
 	std::cout << "Added contact number: " << contact_idx << '\n';
@@ -103,10 +106,6 @@ void	PhoneBook::find_contact(void)
 PhoneBook::PhoneBook(void)
 {
 	this -> contact_idx = 0;
-	std::cout << "Phonebook constructor called\n";
 }
 
-PhoneBook::~PhoneBook(void)
-{
-	std::cout << "Phonebook destructor called\n";
-}
+PhoneBook::~PhoneBook(void) { }
