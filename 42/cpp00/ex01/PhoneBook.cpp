@@ -22,26 +22,43 @@ void	PhoneBook::add_contact(void)
 {
 	std::string first_name, last_name, nick_name, phone_number, secret;
 
-	std::cout << "Enter first name: ";
-	std::cin >> std::ws >> first_name;
-	if (std::cin.eof())
-		return ;
-	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	first_name.clear();
+	last_name.clear();
+	nick_name.clear();
+	phone_number.clear();
+	secret.clear();
 
-	std::cout << "Enter last name: ";
-	std::cin >> std::ws >> last_name;
-	if (std::cin.eof())
-		return ;
-	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	while (first_name.empty())
+	{
+		std::cout << "Enter first name: ";
+		std::getline(std::cin, first_name);
+		if (std::cin.eof())
+			return ;
+	}
 
-	std::cout << "Enter nickname: ";
-	std::getline(std::cin, nick_name);
+	while (last_name.empty())
+	{
+		std::cout << "Enter last name: ";
+		std::getline(std::cin, last_name);
+		if (std::cin.eof())
+			return ;
+	}
 
-	std::cout << "Enter phone number: ";
-	std::cin >> std::ws >> phone_number;
-	if (std::cin.eof())
-		return ;
-	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	while (nick_name.empty())
+	{
+		std::cout << "Enter nickname: ";
+		std::getline(std::cin, nick_name);
+		if (std::cin.eof())
+			return ;
+	}
+	
+	while (phone_number.empty())
+	{
+		std::cout << "Enter phone number: ";
+		std::getline(std::cin, phone_number);
+		if (std::cin.eof())
+			return ;
+	}
 
 	if (!ft_aredigits(phone_number))
 	{
@@ -54,8 +71,13 @@ void	PhoneBook::add_contact(void)
 		return ;
 	}
 
-	std::cout << "Enter secret: ";
-	std::getline(std::cin, secret);
+	while (secret.empty())
+	{
+		std::cout << "Enter secret: ";
+		std::getline(std::cin, secret);
+		if (std::cin.eof())
+			return ;
+	}
 
 	this -> contact_list[contact_idx] = Contact(first_name, last_name, nick_name, phone_number, secret);
 	std::cout << "Added contact number: " << contact_idx << '\n';
