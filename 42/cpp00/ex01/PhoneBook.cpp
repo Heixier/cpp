@@ -18,6 +18,23 @@ static bool ft_aredigits(std::string str)
 	return (true);
 }
 
+static bool ft_arealpha(std::string str)
+{
+	if (str.empty())
+		return (false);
+	for (size_t i = 0; i < str.length(); i++)
+	{
+		if (((str[i] < 'a' || str[i] > 'z') && (str[i] < 'A' || str[i] > 'Z')) && str[i] != ' ')
+			return (false);
+	}
+	return (true);
+}
+
+static bool ft_arewhitespace(std::string str)
+{
+	return (str.find_first_not_of(' ') == str.npos);
+}
+
 void	PhoneBook::add_contact(void)
 {
 	std::string first_name, last_name, nick_name, phone_number, secret;
@@ -34,6 +51,18 @@ void	PhoneBook::add_contact(void)
 		std::getline(std::cin, first_name);
 		if (std::cin.eof())
 			return ;
+		if (first_name.empty())
+			continue;
+		if (ft_arewhitespace(first_name))
+		{
+			first_name.clear();
+			continue;
+		}
+		if (!ft_arealpha(first_name))
+		{
+			std::cout << "Invalid characters! [a-Z ] only\n";
+			first_name.clear();
+		}
 	}
 
 	while (last_name.empty())
@@ -42,6 +71,18 @@ void	PhoneBook::add_contact(void)
 		std::getline(std::cin, last_name);
 		if (std::cin.eof())
 			return ;
+		if (last_name.empty())
+			continue;
+		if (ft_arewhitespace(last_name))
+		{
+			last_name.clear();
+			continue;
+		}
+		if (!ft_arealpha(last_name))
+		{
+			std::cout << "Invalid characters! [a-Z ] only\n";
+			last_name.clear();
+		}
 	}
 
 	while (nick_name.empty())
@@ -50,6 +91,11 @@ void	PhoneBook::add_contact(void)
 		std::getline(std::cin, nick_name);
 		if (std::cin.eof())
 			return ;
+		if (ft_arewhitespace(nick_name))
+		{
+			nick_name.clear();
+			continue;
+		}
 	}
 	
 	while (phone_number.empty())
@@ -57,18 +103,24 @@ void	PhoneBook::add_contact(void)
 		std::cout << "Enter phone number: ";
 		std::getline(std::cin, phone_number);
 		if (std::cin.eof())
-			return ;
-	}
-
-	if (!ft_aredigits(phone_number))
-	{
-		std::cout << "Invalid phone number!\n";
-		return ;
-	}
-	if (phone_number.length() < 8)
-	{
-		std::cout << "Phone number too short! (must be at least 8 digits)\n";
-		return ;
+			return;
+		if (ft_arewhitespace(phone_number))
+		{
+			phone_number.clear();
+			continue;
+		}
+		if (!ft_aredigits(phone_number))
+		{
+			std::cout << "Invalid phone number!\n";
+			phone_number.clear();
+			continue;
+		}
+		if (phone_number.length() < 8)
+		{
+			std::cout << "Phone number too short! (must be at least 8 digits)\n";
+			phone_number.clear();
+			continue;
+		}
 	}
 
 	while (secret.empty())
@@ -77,10 +129,14 @@ void	PhoneBook::add_contact(void)
 		std::getline(std::cin, secret);
 		if (std::cin.eof())
 			return ;
+		if (ft_arewhitespace(secret))
+		{
+			secret.clear();
+			continue;
+		}
 	}
 
 	this -> contact_list[contact_idx] = Contact(first_name, last_name, nick_name, phone_number, secret);
-	std::cout << "Added contact number: " << contact_idx << '\n';
 	this -> contact_idx = (this -> contact_idx + 1) % this -> max_contacts;
 }
 
@@ -93,6 +149,12 @@ static std::string truncate(std::string string)
 
 void PhoneBook::display_contacts(void)
 {
+	if (contact_list[0].get_first_name().empty())
+	{
+		std::cout << "\e[38;5;196;1mPhonebook is empty!\033[0m\n";
+		return ;
+	}
+	std::cout << "PDF didn't ask for header so there's no header\n";
 	for (size_t i = 0; i < max_contacts; i++)
 	{
 		if (contact_list[i].get_first_name().empty())
@@ -110,10 +172,8 @@ void	PhoneBook::find_contact(void)
 	int	idx;
 
 	if (contact_list[0].get_first_name().empty())
-	{
-		std::cout << "Phonebook is empty!\n";
 		return ;
-	}
+
 	std::cout << "Enter index of the entry to display: ";
 	std::cin >> input;
 	if (std::cin.eof())
@@ -126,11 +186,11 @@ void	PhoneBook::find_contact(void)
 		std::cout << "Specified contact " << input << " is invalid or does not exist\n";
 		return ;
 	}
-	std::cout << contact_list[idx].get_first_name() << '\n';
-	std::cout << contact_list[idx].get_last_name() << '\n';
-	std::cout << contact_list[idx].get_nick_name() << '\n';
-	std::cout << contact_list[idx].get_phone_number() << '\n';
-	std::cout << contact_list[idx].get_secret() << '\n';
+	std::cout << "First name: " << contact_list[idx].get_first_name() << '\n';
+	std::cout << "Last name: " << contact_list[idx].get_last_name() << '\n';
+	std::cout << "Nickname: " << contact_list[idx].get_nick_name() << '\n';
+	std::cout << "Phone number: " << contact_list[idx].get_phone_number() << '\n';
+	std::cout << "Secret: " << contact_list[idx].get_secret() << '\n';
 }
 
 PhoneBook::PhoneBook(void)

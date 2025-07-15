@@ -10,11 +10,11 @@ int main(void)
 	std::string option;
 	while (1)
 	{
-		std::cout << "You are running phone version 153.28\nEnter the command 'ADD' to add a new contact, 'SEARCH' to display a contact, or 'EXIT' to exit." << std::endl;
-		std::cin >> std::ws >> option;
+		std::cout << "You are running phone version 19.248\nEnter the command 'ADD' to add a new contact, 'SEARCH' to display a contact, or 'EXIT' to exit." << std::endl;
+		std::cout << "\e[1;38;5;118mpromp$> \e[0m";
+		std::getline(std::cin, option);
 		if (std::cin.eof())
 			break ;
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		if (!option.compare("EXIT"))
 			break ;
 		if (!option.compare("ADD"))
