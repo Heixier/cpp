@@ -158,12 +158,11 @@ void	PhoneBook::find_contact(void)
 	while (input.empty())
 	{
 		std::cout << "Enter index of the entry to display: ";
-		std::cin >> input;
+		std::getline(std::cin, input);
 		if (std::cin.eof())
 			return ;
 	}
 	std::istringstream iss(input);
-
 	iss >> idx;
 	if (iss.fail() || input.length() != 1 || (size_t)idx >= max_contacts || contact_list[idx].get_first_name().empty())
 	{
@@ -171,12 +170,12 @@ void	PhoneBook::find_contact(void)
 		return ;
 	}
 	std::cout << '\n';
-	std::cout << "First name: " << contact_list[idx].get_first_name() << '\n';
-	std::cout << "Last name: " << contact_list[idx].get_last_name() << '\n';
-	std::cout << "Nickname: " << contact_list[idx].get_nick_name() << '\n';
-	std::cout << "Phone number: " << contact_list[idx].get_phone_number() << '\n';
-	std::cout << "Secret: " << contact_list[idx].get_secret() << '\n';
-	std::cout << '\n';
+	std::cout << std::left << std:: setw(16) << "First name: " << contact_list[idx].get_first_name() << '\n';
+	std::cout << std::left << std:: setw(16) << "Last name: " << contact_list[idx].get_last_name() << '\n';
+	std::cout << std::left << std:: setw(16) << "Nickname: " << contact_list[idx].get_nick_name() << '\n';
+	std::cout << std::left << std:: setw(16) << "Phone number: " << contact_list[idx].get_phone_number() << '\n';
+	std::cout << std::left << std:: setw(16) << "Secret: " << contact_list[idx].get_secret() << '\n';
+	std::cout << std::endl;
 }
 
 PhoneBook::PhoneBook(void)
