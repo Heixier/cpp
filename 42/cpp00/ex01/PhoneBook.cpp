@@ -154,10 +154,14 @@ void	PhoneBook::find_contact(void)
 	if (contact_list[0].get_first_name().empty())
 		return ;
 
-	std::cout << "Enter index of the entry to display: ";
-	std::cin >> input;
-	if (std::cin.eof())
-		return ;
+	input.clear();
+	while (input.empty())
+	{
+		std::cout << "Enter index of the entry to display: ";
+		std::cin >> input;
+		if (std::cin.eof())
+			return ;
+	}
 	std::istringstream iss(input);
 
 	iss >> idx;
@@ -166,11 +170,13 @@ void	PhoneBook::find_contact(void)
 		std::cout << "Specified contact " << input << " is invalid or does not exist\n";
 		return ;
 	}
+	std::cout << '\n';
 	std::cout << "First name: " << contact_list[idx].get_first_name() << '\n';
 	std::cout << "Last name: " << contact_list[idx].get_last_name() << '\n';
 	std::cout << "Nickname: " << contact_list[idx].get_nick_name() << '\n';
 	std::cout << "Phone number: " << contact_list[idx].get_phone_number() << '\n';
 	std::cout << "Secret: " << contact_list[idx].get_secret() << '\n';
+	std::cout << '\n';
 }
 
 PhoneBook::PhoneBook(void)
