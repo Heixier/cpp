@@ -19,7 +19,7 @@ int main(void)
 			break ;
 		if (!option.compare("ADD"))
 			book.add_contact();
-		if (!option.compare("SEARCH"))
+		if (option == "SEARCH")
 		{
 			book.display_contacts();
 			book.find_contact();
