@@ -18,18 +18,6 @@ static bool ft_aredigits(std::string str)
 	return (true);
 }
 
-static bool ft_arealpha(std::string str)
-{
-	if (str.empty())
-		return (false);
-	for (size_t i = 0; i < str.length(); i++)
-	{
-		if (((str[i] < 'a' || str[i] > 'z') && (str[i] < 'A' || str[i] > 'Z')) && str[i] != ' ')
-			return (false);
-	}
-	return (true);
-}
-
 static bool ft_arewhitespace(std::string str)
 {
 	return (str.find_first_not_of(' ') == str.npos);
@@ -58,11 +46,6 @@ void	PhoneBook::add_contact(void)
 			first_name.clear();
 			continue;
 		}
-		if (!ft_arealpha(first_name))
-		{
-			std::cout << "Invalid characters! [a-Z ] only\n";
-			first_name.clear();
-		}
 	}
 
 	while (last_name.empty())
@@ -77,11 +60,6 @@ void	PhoneBook::add_contact(void)
 		{
 			last_name.clear();
 			continue;
-		}
-		if (!ft_arealpha(last_name))
-		{
-			std::cout << "Invalid characters! [a-Z ] only\n";
-			last_name.clear();
 		}
 	}
 
@@ -154,16 +132,18 @@ void PhoneBook::display_contacts(void)
 		std::cout << "\e[38;5;196;1mPhonebook is empty!\033[0m\n";
 		return ;
 	}
-	std::cout << "PDF didn't ask for header so there's no header\n";
+	std::cout << std::left << std::setw(FMT_LEN * 4) << "\nPDF didn't ask for header so there's no header\n\n";
 	for (size_t i = 0; i < max_contacts; i++)
 	{
 		if (contact_list[i].get_first_name().empty())
 			continue;
-		std::cout << std::right << std::setw(FMT_LEN) << i << '|' 
+		std::cout << ">> ";
+		std::cout << std::right << std::setw(FMT_LEN) << i << '|'
 		<< std::right << std::setw(FMT_LEN) << truncate(contact_list[i].get_first_name()) << '|' 
 		<< std::right << std::setw(FMT_LEN) << truncate(contact_list[i].get_last_name()) << '|'
-		<< std::right << std::setw(FMT_LEN) << truncate(contact_list[i].get_nick_name()) << '\n';
+		<< std::right << std::setw(FMT_LEN) << truncate(contact_list[i].get_nick_name()) << " <<\n";
 	}
+	std::cout << '\n';
 }
 
 void	PhoneBook::find_contact(void)
