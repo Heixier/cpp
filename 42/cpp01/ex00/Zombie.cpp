@@ -3,14 +3,14 @@
 
 void	Zombie::announce(void)
 {
-	std::cout << name << ": BraiiiiiiinnnzzzZ...\n";
+	std::cout << _name << ": BraiiiiiiinnnzzzZ...\n";
 }
 
-Zombie::Zombie(void) : name("Bob") { }
+Zombie::Zombie(void) : _name("Bob") { }
 
-Zombie::Zombie(std::string new_name) : name(new_name) { }
+Zombie::Zombie(std::string new_name) : _name(new_name) { }
 
 Zombie::~Zombie(void)
 {
-	std::cout << name << "'s life subscription has expired!\n";
+	std::cout << _name << "'s life subscription has expired!\n";
 }

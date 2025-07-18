@@ -16,8 +16,8 @@ class Zombie
 		~Zombie(void);
 		
 	private:
-		std::string name;
-		int	_horde_size;
+		std::string _name;
+		int			_horde_size;
 };
 
 #endif

@@ -13,7 +13,7 @@ class Zombie
 		~Zombie(void);
 		
 	private:
-		std::string name;
+		std::string _name;
 };
 
 #endif
