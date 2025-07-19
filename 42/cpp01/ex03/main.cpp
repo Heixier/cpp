@@ -1,12 +1,26 @@
 #include <iostream>
 #include "Weapon.hpp"
+#include "HumanA.hpp"
+#include "HumanB.hpp"
 
 int main(void)
 {
 	Weapon stick("Stick");
-	std::cout << "Weapon name: " << stick.getType() << '\n';
+	Weapon gun("M4A1");
+	HumanA bob("Bob", stick);
+
+	bob.attack();
 	stick.setType("Pen");
-	std::cout << "New weapon name: " << stick.getType() << '\n';
+	bob.attack();
+
+	HumanB sam("Sam");
+	sam.setWeapon(&stick);
+	sam.attack();
+	stick.setType("Sword");
+	sam.attack();
+	sam.setWeapon(&gun);
+	sam.attack();
+	bob.attack();
 
 	return (0);
 }

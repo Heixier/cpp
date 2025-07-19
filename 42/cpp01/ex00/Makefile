@@ -1,6 +1,6 @@
 CXX = c++
 CXXFLAGS = -std=c++98 -Wall -Wextra -Werror
-NAME = ex00_lab
+NAME = lab_00
 
 SRCS = main.cpp Zombie.cpp newZombie.cpp randomChump.cpp
 OBJS = $(SRCS:.cpp=.o)

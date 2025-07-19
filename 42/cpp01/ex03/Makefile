@@ -1,6 +1,6 @@
 CXX = c++
 CXXFLAGS = -std=c++98 -Wall -Wextra -Werror
-NAME = ex03_lab
+NAME = lab_03
 
 SRCS = main.cpp Weapon.cpp HumanA.cpp HumanB.cpp
 OBJS = $(SRCS:.cpp=.o)

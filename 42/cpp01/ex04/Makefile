@@ -1,8 +1,8 @@
 CXX = c++
 CXXFLAGS = -std=c++98 -Wall -Wextra -Werror
-NAME = lab_01
+NAME = lab_04
 
-SRCS = main.cpp Zombie.cpp zombieHorde.cpp
+SRCS = main.cpp
 OBJS = $(SRCS:.cpp=.o)
 
 %.o: %.cpp
