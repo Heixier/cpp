@@ -16,15 +16,16 @@ int main(void)
 	std::cout << "Zombie lab 01:\n";
 
 	std::cout << "Enter number of zombies to spawn: ";
-	std::cin >> std::ws >> input_number;
+	std::getline(std::cin, input_number);
 
 	std::istringstream iss(input_number);
 	iss >> num_zombies;
-	if (iss.fail() || input_number.length() <= 0)
+	if (iss.fail() || input_number.length() <= 0 || num_zombies < 0)
 	{
 		std::cout << "Invalid number \'" << input_number << "\'!\n";
 		return (1);
 	}
+	std::cout << "num zombies: " << input_number << std::endl;
 	std::cout << "Enter name for horde: ";
 	std::cin >> std::ws >> input_name;
 	horde = zombieHorde(num_zombies, input_name);

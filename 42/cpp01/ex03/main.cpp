@@ -14,10 +14,10 @@ int main(void)
 	bob.attack();
 
 	HumanB sam("Sam");
-	sam.setWeapon(&stick);
+	// sam.setWeapon(&stick);
 	sam.attack();
 	stick.setType("Sword");
-	sam.attack();
+	sam.attack(); // still no weapon
 	sam.setWeapon(&gun);
 	sam.attack();
 	bob.attack();

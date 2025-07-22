@@ -27,5 +27,5 @@ Zombie::Zombie(std::string new_name) : _name(new_name), _horde_size(0) { }
 
 Zombie::~Zombie(void)
 {
-	std::cout << _name << "'s life subscription has expired!\n";
+	std::cout << _name << " has died (again)\n";
 }
