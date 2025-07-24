@@ -49,9 +49,31 @@ Fixed&	Fixed::operator= (const Fixed& fixed)
 	return *this;
 }
 
-std::ostream& operator<< (std::ostream& os, const Fixed& fixed)
+bool	Fixed::operator> (const Fixed& operand) const { return (this -> getRawBits() > operand.getRawBits()); }
+bool	Fixed::operator< (const Fixed& operand) const { return (this -> getRawBits() < operand.getRawBits()); }
+bool	Fixed::operator>= (const Fixed& operand) const { return (this -> getRawBits() >= operand.getRawBits()); }
+bool	Fixed::operator<= (const Fixed& operand) const { return (this -> getRawBits() <= operand.getRawBits()); }
+bool	Fixed::operator== (const Fixed& operand) const { return (this -> getRawBits() == operand.getRawBits()); }
+bool	Fixed::operator!= (const Fixed& operand) const { return (this -> getRawBits() != operand.getRawBits()); }
+
+Fixed&	Fixed::operator+ (const Fixed& operand)
 {
-	return (os << fixed.toFloat());
+	value += operand.getRawBits();
+	return *this;
 }
+Fixed&	Fixed::operator- (const Fixed& operand) const
+{
+
+}
+Fixed&	Fixed::operator* (const Fixed& operand) const
+{
+
+}
+Fixed&	Fixed::operator/ (const Fixed& operand) const
+{
+	
+}
+
+std::ostream& operator<< (std::ostream& os, const Fixed& fixed) { return (os << fixed.toFloat()); }
 
 Fixed::~Fixed(void) { std::cout << "Destructor called" << std::endl; }
