@@ -55,7 +55,6 @@ bool	Fixed::operator<= (const Fixed& operand) const { return (this -> getRawBits
 bool	Fixed::operator== (const Fixed& operand) const { return (this -> getRawBits() == operand.getRawBits()); }
 bool	Fixed::operator!= (const Fixed& operand) const { return (this -> getRawBits() != operand.getRawBits()); }
 
-
 Fixed	Fixed::operator+ (const Fixed& operand) const
 {
 	Fixed	result;
@@ -105,6 +104,11 @@ Fixed	Fixed::operator--(int)
 	--(*this);
 	return (before_increment);
 }
+
+Fixed&	Fixed::min(Fixed& left, Fixed& right) { return ((left < right) ? left : right); }
+const Fixed& Fixed::min(const Fixed& left, const Fixed& right) { return ((left < right) ? left : right); }
+Fixed&	Fixed::max(Fixed& left, Fixed& right) { return ((left > right) ? left : right); }
+const Fixed& Fixed::max(const Fixed& left, const Fixed& right) { return ((left > right) ? left : right); }
 
 std::ostream& operator<< (std::ostream& os, const Fixed& fixed) { return (os << fixed.toFloat()); }
 

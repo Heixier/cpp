@@ -9,7 +9,6 @@ class Fixed
 	public:
 		int		getRawBits(void) const;
 		void	setRawBits(int const raw);
-		void	setRawBits(const float raw);
 		float	toFloat(void) const;
 		int		toInt(void) const;
 
@@ -35,6 +34,10 @@ class Fixed
 		Fixed&	operator--();
 		Fixed	operator--(int);
 
+		static Fixed&	min(Fixed& left, Fixed& right);
+		static const Fixed&	min(const Fixed& left, const Fixed& right);
+		static Fixed&	max(Fixed& left, Fixed& right);
+		static const Fixed&	max(const Fixed& left, const Fixed& right);
 
 		Fixed(void);
 		Fixed(const int raw);

@@ -2,38 +2,38 @@
 #include <sstream>
 #include <string>
 
-// static void compare(const Fixed& left, const Fixed& right)
-// {
-// 	if (left > right)
-// 		std::cout << left << " is more than " << right << std::endl;
-// 	if (left < right)
-// 		std::cout << left << " is less than " << right << std::endl;
-// 	if (left >= right)
-// 		std::cout << left << " is more than or equal to " << right << std::endl;
-// 	if (left <= right)
-// 		std::cout << left << " is less than or equal to " << right << std::endl;
-// 	if (left == right)
-// 		std::cout << left << " is equal to " << right << std::endl;
-// 	if (left != right)
-// 		std::cout << left << " is not equal to " << right << std::endl;
-// }
+static void compare(const Fixed& left, const Fixed& right)
+{
+	if (left > right)
+		std::cout << left << " is more than " << right << std::endl;
+	if (left < right)
+		std::cout << left << " is less than " << right << std::endl;
+	if (left >= right)
+		std::cout << left << " is more than or equal to " << right << std::endl;
+	if (left <= right)
+		std::cout << left << " is less than or equal to " << right << std::endl;
+	if (left == right)
+		std::cout << left << " is equal to " << right << std::endl;
+	if (left != right)
+		std::cout << left << " is not equal to " << right << std::endl;
+}
 
-// static void operations(const Fixed& left, const Fixed& right)
-// {
-//     std::cout << left << " + " << right << " = " << (left + right) << std::endl;
-//     std::cout << left << " - " << right << " = " << (left - right) << std::endl;
-//     std::cout << left << " * " << right << " = " << (left * right) << std::endl;
-//     std::cout << left << " / " << right << " = " << (left / right) << std::endl;
+static void operations(const Fixed& left, const Fixed& right)
+{
+    std::cout << left << " + " << right << " = " << (left + right) << std::endl;
+    std::cout << left << " - " << right << " = " << (left - right) << std::endl;
+    std::cout << left << " * " << right << " = " << (left * right) << std::endl;
+    std::cout << left << " / " << right << " = " << (left / right) << std::endl;
 
-// 	Fixed dummy(left);
-//     std::cout << left << " += " << right << " = " << (dummy += right) << std::endl;
-// 	dummy = left;
-//     std::cout << left << " -= " << right << " = " << (dummy -= right) << std::endl;
-// 	dummy = left;
-//     std::cout << left << " *= " << right << " = " << (dummy *= right) << std::endl;
-// 	dummy = left;
-//     std::cout << left << " /= " << right << " = " << (dummy /= right) << std::endl;
-// }
+	Fixed dummy(left);
+    std::cout << left << " += " << right << " = " << (dummy += right) << std::endl;
+	dummy = left;
+    std::cout << left << " -= " << right << " = " << (dummy -= right) << std::endl;
+	dummy = left;
+    std::cout << left << " *= " << right << " = " << (dummy *= right) << std::endl;
+	dummy = left;
+    std::cout << left << " /= " << right << " = " << (dummy /= right) << std::endl;
+}
 
 static void	increment(const Fixed& left)
 {
@@ -47,6 +47,18 @@ static void	increment(const Fixed& left)
 	std::cout << "Second call: " << dummy << std::endl;
 	dummy = left;
 	std::cout << "Pre increment\n--" << dummy << " = " << --dummy << std::endl;
+}
+
+static void	minmax(const Fixed& left, const Fixed& right)
+{
+	std::cout << "Max of const " << left << " and const " << right << " is " << Fixed::max(left, right) << std::endl;;
+	std::cout << "Min of const " << left << " and const " << right << " is " << Fixed::min(left, right) << std::endl;;
+	
+	Fixed a(left);
+	Fixed b(right);
+
+	std::cout << "Min of " << a << " and " << b << " is " << Fixed::min(a, b) << std::endl;;
+	std::cout << "Max of " << a << " and " << b << " is " << Fixed::max(a, b) << std::endl;;
 }
 
 static	bool set_numbers(Fixed& a, Fixed& b)
@@ -79,9 +91,23 @@ int	main(void)
 
 	if (!set_numbers(a, b))
 		return (1);
-	// compare(a, b);
-	// operations(a, b);
+	compare(a, b);
+	operations(a, b);
 	increment(a);
+	minmax(a, b);
 
 	return (0);
 }
+
+// int main( void ) {
+// 	Fixed a;
+// 	Fixed const b( Fixed( 5.05f ) * Fixed( 2 ) );
+// 	std::cout << a << std::endl;
+// 	std::cout << ++a << std::endl;
+// 	std::cout << a << std::endl;
+// 	std::cout << a++ << std::endl;
+// 	std::cout << a << std::endl;
+// 	std::cout << b << std::endl;
+// 	std::cout << Fixed::max( a, b ) << std::endl;
+// 	return 0;
+// }
