@@ -6,15 +6,6 @@ int		Fixed::getRawBits(void) const
 	return value;
 }
 
-static size_t power_of(int base, int power)
-{
-	size_t	output = base;
-
-	for (int i = 0; i < power - 1; i++)
-		output *= base;
-	return (output);
-}
-
 void	Fixed::setRawBits(int const raw)
 {
 	value = raw;
