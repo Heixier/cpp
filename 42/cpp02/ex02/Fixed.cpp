@@ -58,52 +58,52 @@ bool	Fixed::operator!= (const Fixed& operand) const { return (this -> getRawBits
 
 Fixed	Fixed::operator+ (const Fixed& operand) const
 {
-	Fixed result;
-	result.setRawBits((value + operand.getRawBits()));
-	return (result);
+	Fixed	result;
+	return (result.setRawBits((value + operand.getRawBits())), result);
 }
 
 Fixed	Fixed::operator- (const Fixed& operand) const
 {
-	Fixed result;
+	Fixed	result;
 	return (result.setRawBits((value - operand.getRawBits())), result);
 }
 
 Fixed	Fixed::operator* (const Fixed& operand) const
 {
-	Fixed result;
-	return (result.setRawBits((value * operand.getRawBits())), result);
+	Fixed	result;
+	return (result.setRawBits(static_cast<int>((value * operand.getRawBits()) / power_of(2, bits))), result);
 }
 
 Fixed	Fixed::operator/ (const Fixed& operand) const
 {
-	Fixed result;
-	return (result.setRawBits((value / operand.getRawBits())), result);
+	Fixed	result;
+	return (result.setRawBits(static_cast<int>((value / operand.getRawBits()) * power_of(2, bits))), result);
 }
 
 // Optional
-Fixed&	Fixed::operator+= (const Fixed& operand)
+Fixed&	Fixed::operator+= (const Fixed& operand) { return (value += operand.getRawBits(), *this); }
+Fixed&	Fixed::operator-= (const Fixed& operand) { return (value -= operand.getRawBits(), *this); }
+Fixed&	Fixed::operator*= (const Fixed& operand) { return (value = static_cast<int>(((value * operand.getRawBits()) / power_of(2, bits))), *this); }
+Fixed&	Fixed::operator/= (const Fixed& operand) { return (value = static_cast<int>(((value / operand.getRawBits()) * power_of(2, bits))), *this); }
+
+// Pre
+Fixed&	Fixed::operator++() { return (value++, *this); }
+
+// Post
+Fixed	Fixed::operator++(int)
 {
-	value += operand.getRawBits();
-	return *this;
+	Fixed	before_increment(*this);
+	++(*this);
+	return (before_increment);
 }
 
-Fixed&	Fixed::operator-= (const Fixed& operand)
-{
-	value -= operand.getRawBits();
-	return *this;
-}
+Fixed&	Fixed::operator--() { return (value--, *this); }
 
-Fixed&	Fixed::operator*= (const Fixed& operand)
+Fixed	Fixed::operator--(int)
 {
-	value *= operand.getRawBits();
-	return *this;
-}
-
-Fixed&	Fixed::operator/= (const Fixed& operand)
-{
-	value /= operand.getRawBits();
-	return *this;
+	Fixed	before_increment(*this);
+	--(*this);
+	return (before_increment);
 }
 
 std::ostream& operator<< (std::ostream& os, const Fixed& fixed) { return (os << fixed.toFloat()); }

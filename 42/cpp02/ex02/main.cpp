@@ -2,36 +2,54 @@
 #include <sstream>
 #include <string>
 
-static void compare(const Fixed& left, const Fixed& right)
+// static void compare(const Fixed& left, const Fixed& right)
+// {
+// 	if (left > right)
+// 		std::cout << left << " is more than " << right << std::endl;
+// 	if (left < right)
+// 		std::cout << left << " is less than " << right << std::endl;
+// 	if (left >= right)
+// 		std::cout << left << " is more than or equal to " << right << std::endl;
+// 	if (left <= right)
+// 		std::cout << left << " is less than or equal to " << right << std::endl;
+// 	if (left == right)
+// 		std::cout << left << " is equal to " << right << std::endl;
+// 	if (left != right)
+// 		std::cout << left << " is not equal to " << right << std::endl;
+// }
+
+// static void operations(const Fixed& left, const Fixed& right)
+// {
+//     std::cout << left << " + " << right << " = " << (left + right) << std::endl;
+//     std::cout << left << " - " << right << " = " << (left - right) << std::endl;
+//     std::cout << left << " * " << right << " = " << (left * right) << std::endl;
+//     std::cout << left << " / " << right << " = " << (left / right) << std::endl;
+
+// 	Fixed dummy(left);
+//     std::cout << left << " += " << right << " = " << (dummy += right) << std::endl;
+// 	dummy = left;
+//     std::cout << left << " -= " << right << " = " << (dummy -= right) << std::endl;
+// 	dummy = left;
+//     std::cout << left << " *= " << right << " = " << (dummy *= right) << std::endl;
+// 	dummy = left;
+//     std::cout << left << " /= " << right << " = " << (dummy /= right) << std::endl;
+// }
+
+static void	increment(const Fixed& left)
 {
-	if (left > right)
-		std::cout << left << " is more than " << right << std::endl;
-	if (left < right)
-		std::cout << left << " is less than " << right << std::endl;
-	if (left >= right)
-		std::cout << left << " is more than or equal to " << right << std::endl;
-	if (left <= right)
-		std::cout << left << " is less than or equal to " << right << std::endl;
-	if (left == right)
-		std::cout << left << " is equal to " << right << std::endl;
-	if (left != right)
-		std::cout << left << " is not equal to " << right << std::endl;
+	Fixed	dummy(left);
+	std::cout << "Post increment\nFirst call: " << dummy << "++ = " << dummy++ << std::endl;
+	std::cout << "Second call: " << dummy << std::endl;
+	dummy = left;
+	std::cout << "Pre increment\n++" << dummy << " = " << ++dummy << std::endl;
+	dummy = left;
+	std::cout << "Post increment\nFirst call: " << dummy << "-- = " << dummy-- << std::endl;
+	std::cout << "Second call: " << dummy << std::endl;
+	dummy = left;
+	std::cout << "Pre increment\n--" << dummy << " = " << --dummy << std::endl;
 }
 
-#include <cstdio>
-static void operations(const Fixed& left, const Fixed& right)
-{
-    printf("left raw bits: %d\nright raw bits: %d\n", left.getRawBits(), right.getRawBits());
-    
-    Fixed sum = left + right;
-    printf("sum raw bits: %d\n", sum.getRawBits());
-    printf("sum toFloat(): %f\n", sum.toFloat());
-    
-    std::cout << "sum via << operator: " << sum << std::endl;
-    std::cout << left << " + " << right << " = " << sum << std::endl;
-}
-
-static	void set_numbers(Fixed& a, Fixed& b)
+static	bool set_numbers(Fixed& a, Fixed& b)
 {
 	std::string input_str;
 	std::istringstream	iss;
@@ -43,32 +61,27 @@ static	void set_numbers(Fixed& a, Fixed& b)
 	iss.str(input_str);
 	iss >> left;
 	if (iss.fail() || input_str.length() <= 0)
-	{
-		std::cout << "Invalid number\n";
-		return ;
-	}
+		return (std::cout << "Invalid number\n", false);
 	std::cout << "Enter second number: ";
 	std::getline(std::cin, input_str);
 	iss.clear(), iss.str(input_str);
 	iss >> right;
 	if (iss.fail() || input_str.length() <= 0)
-	{
-		std::cout << "Invalid number\n";
-		return ;
-	}
+		return (std::cout << "Invalid number\n", false);
 	a = Fixed(left);
 	b = Fixed(right);
+	return (true);
 }
-
-
 
 int	main(void)
 {
 	Fixed	a, b;
 
-	set_numbers(a, b);
-	compare(a, b);
-	operations(a, b);
+	if (!set_numbers(a, b))
+		return (1);
+	// compare(a, b);
+	// operations(a, b);
+	increment(a);
 
 	return (0);
 }

@@ -30,6 +30,12 @@ class Fixed
 		Fixed&	operator*= (const Fixed& operand);
 		Fixed&	operator/= (const Fixed& operand);
 
+		Fixed&	operator++();
+		Fixed	operator++(int);
+		Fixed&	operator--();
+		Fixed	operator--(int);
+
+
 		Fixed(void);
 		Fixed(const int raw);
 		Fixed(const float raw);
