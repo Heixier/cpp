@@ -57,8 +57,8 @@ static void	minmax(const Fixed& left, const Fixed& right)
 	Fixed a(left);
 	Fixed b(right);
 
-	std::cout << "Min of " << a << " and " << b << " is " << Fixed::min(a, b) << std::endl;;
 	std::cout << "Max of " << a << " and " << b << " is " << Fixed::max(a, b) << std::endl;;
+	std::cout << "Min of " << a << " and " << b << " is " << Fixed::min(a, b) << std::endl;;
 }
 
 static	bool set_numbers(Fixed& a, Fixed& b)
@@ -69,7 +69,7 @@ static	bool set_numbers(Fixed& a, Fixed& b)
 	float		right;
 
 	std::cout << "Enter first number: ";
-	std::getline(std::cin, input_str);
+	std::getline(std::cin, input_str);	
 	iss.str(input_str);
 	iss >> left;
 	if (iss.fail() || input_str.length() <= 0)
