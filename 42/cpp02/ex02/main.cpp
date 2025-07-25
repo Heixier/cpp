@@ -38,15 +38,15 @@ static void operations(const Fixed& left, const Fixed& right)
 static void	increment(const Fixed& left)
 {
 	Fixed	dummy(left);
-	std::cout << "Post increment\nFirst call: " << dummy << "++ = " << dummy++ << std::endl;
+	std::cout << "\nPost increment\nFirst call: " << dummy << "++ = " << dummy++ << std::endl;
 	std::cout << "Second call: " << dummy << std::endl;
 	dummy = left;
-	std::cout << "Pre increment\n++" << dummy << " = " << ++dummy << std::endl;
+	std::cout << "\nPre increment\n++" << dummy << " = " << ++dummy << std::endl;
 	dummy = left;
-	std::cout << "Post increment\nFirst call: " << dummy << "-- = " << dummy-- << std::endl;
+	std::cout << "\nPost increment\nFirst call: " << dummy << "-- = " << dummy-- << std::endl;
 	std::cout << "Second call: " << dummy << std::endl;
 	dummy = left;
-	std::cout << "Pre increment\n--" << dummy << " = " << --dummy << std::endl;
+	std::cout << "\nPre increment\n--" << dummy << " = " << --dummy << std::endl;
 }
 
 static void	minmax(const Fixed& left, const Fixed& right)

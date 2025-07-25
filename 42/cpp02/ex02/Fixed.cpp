@@ -20,33 +20,15 @@ float	Fixed::toFloat(void) const { return (static_cast<float>(value) / static_ca
 
 int		Fixed::toInt(void) const { return (value / power_of(2, bits)); }
 
-Fixed::Fixed(void) : value(0) { std::cout << "Default constructor called" << std::endl; }
+Fixed::Fixed(void) : value(0) { }
 
-Fixed::Fixed(const int raw)
-{
-	std::cout << "Int constructor called" << std::endl;
-	value = raw * power_of(2, bits);	
-}
+Fixed::Fixed(const int raw) { value = raw * power_of(2, bits); }
 
-Fixed::Fixed(const float raw)
-{
+Fixed::Fixed(const float raw) { value = roundf(raw * power_of(2, bits)); }
 
-	std::cout << "Float constructor called" << std::endl;
-	value = roundf(raw * power_of(2, bits));	
-}
+Fixed::Fixed(const Fixed& original) { value = original.getRawBits(); }
 
-Fixed::Fixed(const Fixed& original)
-{
-	std::cout << "Copy constructor called" << std::endl;
-	value = original.getRawBits();
-}
-
-Fixed&	Fixed::operator= (const Fixed& fixed)
-{
-	std::cout << "Copy assignment operator called" << std::endl;
-	value = fixed.getRawBits();
-	return *this;
-}
+Fixed&	Fixed::operator= (const Fixed& fixed) { return (value = fixed.getRawBits(), *this); }
 
 bool	Fixed::operator> (const Fixed& operand) const { return (this -> getRawBits() > operand.getRawBits()); }
 bool	Fixed::operator< (const Fixed& operand) const { return (this -> getRawBits() < operand.getRawBits()); }
@@ -112,4 +94,4 @@ const Fixed& Fixed::max(const Fixed& left, const Fixed& right) { return ((left >
 
 std::ostream& operator<< (std::ostream& os, const Fixed& fixed) { return (os << fixed.toFloat()); }
 
-Fixed::~Fixed(void) { std::cout << "Destructor called" << std::endl; }
+Fixed::~Fixed(void) { }
