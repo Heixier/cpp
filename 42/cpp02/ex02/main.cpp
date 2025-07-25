@@ -2,7 +2,7 @@
 #include <sstream>
 #include <string>
 
-static void compare(const Fixed& left, const Fixed&right)
+static void compare(const Fixed& left, const Fixed& right)
 {
 	if (left > right)
 		std::cout << left << " is more than " << right << std::endl;
@@ -16,6 +16,19 @@ static void compare(const Fixed& left, const Fixed&right)
 		std::cout << left << " is equal to " << right << std::endl;
 	if (left != right)
 		std::cout << left << " is not equal to " << right << std::endl;
+}
+
+#include <cstdio>
+static void operations(const Fixed& left, const Fixed& right)
+{
+    printf("left raw bits: %d\nright raw bits: %d\n", left.getRawBits(), right.getRawBits());
+    
+    Fixed sum = left + right;
+    printf("sum raw bits: %d\n", sum.getRawBits());
+    printf("sum toFloat(): %f\n", sum.toFloat());
+    
+    std::cout << "sum via << operator: " << sum << std::endl;
+    std::cout << left << " + " << right << " = " << sum << std::endl;
 }
 
 static	void set_numbers(Fixed& a, Fixed& b)
@@ -47,12 +60,15 @@ static	void set_numbers(Fixed& a, Fixed& b)
 	b = Fixed(right);
 }
 
+
+
 int	main(void)
 {
 	Fixed	a, b;
 
 	set_numbers(a, b);
 	compare(a, b);
+	operations(a, b);
 
 	return (0);
 }

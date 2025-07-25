@@ -14,9 +14,7 @@ static size_t power_of(int base, int power)
 	return (output);
 }
 
-void	Fixed::setRawBits(int const raw) { value = raw * power_of(2, bits); }
-
-void	Fixed::setRawBits(const float raw) { value = roundf(raw * power_of(2, bits)); }
+void	Fixed::setRawBits(int const raw) { value = raw; }
 
 float	Fixed::toFloat(void) const { return (static_cast<float>(value) / static_cast<float>(power_of(2, bits))); }
 
@@ -24,16 +22,17 @@ int		Fixed::toInt(void) const { return (value / power_of(2, bits)); }
 
 Fixed::Fixed(void) : value(0) { std::cout << "Default constructor called" << std::endl; }
 
-Fixed::Fixed(const int value)
+Fixed::Fixed(const int raw)
 {
 	std::cout << "Int constructor called" << std::endl;
-	setRawBits(value);
+	value = raw * power_of(2, bits);	
 }
 
-Fixed::Fixed(const float value)
+Fixed::Fixed(const float raw)
 {
+
 	std::cout << "Float constructor called" << std::endl;
-	setRawBits(value);
+	value = roundf(raw * power_of(2, bits));	
 }
 
 Fixed::Fixed(const Fixed& original)

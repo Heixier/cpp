@@ -20,14 +20,19 @@ class Fixed
 		bool	operator== (const Fixed& operand) const;
 		bool	operator!= (const Fixed& operand) const;
 
-		Fixed&	Fixed::operator+ (const Fixed& operand);
-		Fixed&	Fixed::operator- (const Fixed& operand);
-		Fixed&	Fixed::operator* (const Fixed& operand);
-		Fixed&	Fixed::operator/ (const Fixed& operand);
+		Fixed	operator+ (const Fixed& operand) const;
+		Fixed	operator- (const Fixed& operand) const;
+		Fixed	operator* (const Fixed& operand) const;
+		Fixed	operator/ (const Fixed& operand) const;
+
+		Fixed&	operator+= (const Fixed& operand);
+		Fixed&	operator-= (const Fixed& operand);
+		Fixed&	operator*= (const Fixed& operand);
+		Fixed&	operator/= (const Fixed& operand);
 
 		Fixed(void);
-		Fixed(const int value);
-		Fixed(const float value);
+		Fixed(const int raw);
+		Fixed(const float raw);
 		Fixed(const Fixed& original);
 		Fixed& operator= (const Fixed& fixed);
 		~Fixed(void);

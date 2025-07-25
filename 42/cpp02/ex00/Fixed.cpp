@@ -17,7 +17,7 @@ static size_t power_of(int base, int power)
 
 void	Fixed::setRawBits(int const raw)
 {
-	value = raw * power_of(2, bits);
+	value = raw;
 }
 
 Fixed::Fixed(void) : value(0) { std::cout << "Default constructor called" << std::endl; }
