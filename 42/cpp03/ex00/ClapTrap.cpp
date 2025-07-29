@@ -10,6 +10,7 @@ void	ClapTrap::attack(const std::string& target)
 	if (m_energy)
 	{
 		std::cout << YELLOW << "ClapTrap " << m_name << " attacks " << target << " for " << m_damage << " damage!\n" << END;
+		std::cout << m_name << " has " << m_energy << " energy left!\n";
 		m_energy--;
 	}
 	else
@@ -46,6 +47,7 @@ void	ClapTrap::beRepaired(unsigned int amount)
 		if (m_hp < 0)
 			m_hp = 0;
 		std::cout << "Health left: " << m_hp << '\n';
+		std::cout << m_name << " has " << m_energy << " energy left!\n";
 	}
 	else
 		std::cout << YELLOW << "ClapTrap " << m_name << " is already dead!\n" << END;
