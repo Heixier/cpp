@@ -1,0 +1,67 @@
+#include "ClapTrap.hpp"
+
+void	ClapTrap::attack(const std::string& target)
+{
+	if (m_hp <= 0)
+	{
+		std::cout << YELLOW << "ClapTrap " << m_name << " is dead!\n" << END;
+		return;
+	}
+	if (m_energy)
+	{
+		std::cout << YELLOW << "ClapTrap " << m_name << " attacks " << target << " for " << m_damage << " damage!\n" << END;
+		m_energy--;
+	}
+	else
+		std::cout << YELLOW << "ClapTrap " << m_name << " is out of energy!\n" << END;
+}
+
+void	ClapTrap::takeDamage(unsigned int amount)
+{
+	if (m_hp > 0)
+	{
+		m_hp -= amount;
+		std::cout << YELLOW << "ClapTrap " << m_name << " took " << amount << " damage!\n" << END;
+		if (m_hp < 0)
+			m_hp = 0;
+		std::cout << "Health left: " << m_hp << '\n';
+	}
+	else
+		std::cout << YELLOW << "ClapTrap " << m_name << " is dead!\n" << END;
+}
+
+void	ClapTrap::beRepaired(unsigned int amount)
+{
+	if (m_hp > 0)
+	{
+		if (m_energy)
+			m_energy--;
+		else
+		{
+			std::cout << YELLOW << "ClapTrap " << m_name << " is out of energy!\n" << END;
+			return ;
+		}
+		m_hp += amount;
+		std::cout << YELLOW << "ClapTrap " << m_name << " healed for " << amount << " health!\n" << END;
+		if (m_hp < 0)
+			m_hp = 0;
+		std::cout << "Health left: " << m_hp << '\n';
+	}
+	else
+		std::cout << YELLOW << "ClapTrap " << m_name << " is already dead!\n" << END;
+}
+
+ClapTrap::ClapTrap(const std::string name) : m_name(name), m_hp(10), m_energy(10), m_damage(0) { } 
+ClapTrap::ClapTrap(const ClapTrap& copy) { *this = copy; }
+ClapTrap& ClapTrap::operator= (const ClapTrap& copy)
+{
+	if (this != &copy)
+	{
+		m_name = copy.m_name;
+		m_hp = copy.m_hp;
+		m_energy = copy.m_energy;
+		m_damage = copy.m_damage;
+	}
+	return (*this);
+}
+ClapTrap::~ClapTrap(void) { }
