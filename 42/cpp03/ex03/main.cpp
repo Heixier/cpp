@@ -1,9 +1,9 @@
-#include "FragTrap.hpp"
+#include "DiamondTrap.hpp"
 #include <sstream>
 
 static bool	ft_aredigits(const std::string& input) { return (input.find_first_not_of("0123456789") == std::string::npos ? true : false); }
 
-static void	battle(ClapTrap& clappy, FragTrap& fraggy, std::string& input)
+static void	battle(ClapTrap& clappy, DiamondTrap& dia, std::string& input)
 {
 	std::string arg;
 	std::istringstream	iss;
@@ -11,10 +11,10 @@ static void	battle(ClapTrap& clappy, FragTrap& fraggy, std::string& input)
 
 	if (input == "attack")
 	{
-		fraggy.attack(clappy.get_name());
-		if (fraggy.get_health() > 0)
+		dia.attack(clappy.p_get_name());
+		if (dia.get_health() > 0 && dia.get_energy() > 0)
 		{
-			clappy.takeDamage(fraggy.get_attack());
+			clappy.takeDamage(dia.get_attack());
 		}
 	}
 	else if (input == "ouch")
@@ -34,7 +34,7 @@ static void	battle(ClapTrap& clappy, FragTrap& fraggy, std::string& input)
 			std::cout << "Invalid number!\n";
 			return;
 		}
-		fraggy.takeDamage(value);
+		dia.takeDamage(value);
 	}
 	else if (input == "repair")
 	{
@@ -54,10 +54,14 @@ static void	battle(ClapTrap& clappy, FragTrap& fraggy, std::string& input)
 			return;
 		}
 		clappy.beRepaired(value);
-		fraggy.beRepaired(value);
+		dia.beRepaired(value);
 	}
+	else if (input == "guard")
+		dia.guardGate();
 	else if (input == "five")
-		fraggy.highFiveGuys();
+		dia.highFiveGuys();
+	else if (input == "who")
+		dia.whoAmI();
 	else
 	{
 		std::cout << "Invalid option!\n";
@@ -82,18 +86,18 @@ int main(void)
 	if (!get_name("ClapTrap", input))
 		return (0);
 	ClapTrap	claptrap(input);
-	if (!get_name("FragTrap", input))
+	if (!get_name("DiamondTrap", input))
 		return (0);
-	FragTrap	FragTrap(input);
+	DiamondTrap	diamondtrap(input);
 	while(true)
 	{
-		std::cout << "Enter a move: (attack), (ouch), (repair), (five), (exit): ";
+		std::cout << "Enter a move: (attack), (ouch), (repair), (guard), (five), (who), (exit): ";
 		std::getline(std::cin, input);
 		if (input == "exit")
 			return (std::cout << GREY << "Game end!" << std::endl, 0);
 		if (std::cin.eof())
 			return (std::cout << "oi" << std::endl, 0);
-		battle(claptrap, FragTrap, input);
+		battle(claptrap, diamondtrap, input);
 	}
 	return (0);
 }

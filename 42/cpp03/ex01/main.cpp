@@ -11,8 +11,8 @@ static void	battle(ClapTrap& clappy, ScavTrap& scavvy, std::string& input)
 
 	if (input == "attack")
 	{
-		scavvy.attack(clappy.get_name());
-		if (scavvy.get_health() > 0)
+		scavvy.attack(clappy.p_get_name());
+		if (scavvy.get_health() > 0 && scavvy.get_energy() > 0)
 		{
 			clappy.takeDamage(scavvy.get_attack());
 		}

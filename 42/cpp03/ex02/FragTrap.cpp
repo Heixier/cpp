@@ -5,7 +5,7 @@ void	FragTrap::highFiveGuys(void)
 {
 	if (this -> get_health() <= 0)
 	{
-		std::cout << RED << "FAILED: " << ORANGE << "Fragtrap " << m_name << " is dead!\n" << END;
+		std::cout << RED << "FAILED: " << ORANGE << "FragTrap " << m_name << " is dead!\n" << END;
 		return ;
 	}
 	int	choice = rand() % 4;

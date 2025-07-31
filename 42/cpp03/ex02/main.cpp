@@ -11,8 +11,8 @@ static void	battle(ClapTrap& clappy, FragTrap& fraggy, std::string& input)
 
 	if (input == "attack")
 	{
-		fraggy.attack(clappy.get_name());
-		if (fraggy.get_health() > 0)
+		fraggy.attack(clappy.p_get_name());
+		if (fraggy.get_health() > 0 && fraggy.get_energy() > 0)
 		{
 			clappy.takeDamage(fraggy.get_attack());
 		}

@@ -19,7 +19,10 @@ class ClapTrap
 		void	takeDamage(unsigned int amount);
 		void	beRepaired(unsigned int amount);
 
-		const std::string& get_name(void) const;
+		const unsigned int&	get_attack(void) const;
+		const unsigned int&	get_health(void) const;
+		const unsigned int&	get_energy(void) const;
+		const std::string& p_get_name(void) const;
 
 		ClapTrap(void);
 		ClapTrap(const std::string& name);
@@ -28,6 +31,7 @@ class ClapTrap
 		~ClapTrap(void);
 
 	protected:
+		virtual const std::string& get_name(void) const;
 		std::string 	m_name;
 		unsigned int	m_hp;
 		unsigned int	m_energy;
