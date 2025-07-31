@@ -50,9 +50,14 @@ void	ClapTrap::beRepaired(unsigned int amount)
 		std::cout << RED << "FAILED: " << YELLOW << "ClapTrap " << m_name << " is dead!\n" << END;
 }
 
-ClapTrap::ClapTrap(const std::string name) : m_name(name), m_hp(10), m_energy(10), m_damage(0)
+ClapTrap::ClapTrap(void) : m_name("Clappy"), m_hp(10), m_energy(10), m_damage(10)
 {
-	std::cout << m_name << " has spawned!\nHP: " << m_hp << "\nEnergy: " << m_energy << "\nDamage: " << m_damage << std::endl;
+	std::cout << YELLOW << "ClapTrap " << m_name << " has spawned!\nHP: " << m_hp << "\nEnergy: " << m_energy << "\nDamage: " << m_damage << END << std::endl;
+}
+
+ClapTrap::ClapTrap(const std::string& name) : m_name(name), m_hp(10), m_energy(10), m_damage(0)
+{
+	std::cout << YELLOW << "ClapTrap " << m_name << " has spawned!\nHP: " << m_hp << "\nEnergy: " << m_energy << "\nDamage: " << m_damage << END << std::endl;
 }
 
 ClapTrap::ClapTrap(const ClapTrap& copy) { *this = copy; }
@@ -67,4 +72,5 @@ ClapTrap& ClapTrap::operator= (const ClapTrap& copy)
 	}
 	return (*this);
 }
-ClapTrap::~ClapTrap(void) { std::cout << m_name << " has been destroyed!\n"; }
+
+ClapTrap::~ClapTrap(void) { std::cout << YELLOW << "Claptrap " << m_name << " has been destroyed!\n"; }

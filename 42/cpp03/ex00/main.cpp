@@ -12,7 +12,10 @@ static void	move(ClapTrap& protagonist, std::string input)
 		std::cout << "Attack target: ";
 		std::getline(std::cin, arg);
 		if (std::cin.eof())
+		{
+			std::cout << "oi\n";
 			return;
+		}
 		protagonist.attack(arg);
 
 	}
@@ -21,7 +24,10 @@ static void	move(ClapTrap& protagonist, std::string input)
 		std::cout << "Damage taken: ";
 		std::getline(std::cin, arg);
 		if (std::cin.eof())
+		{
+			std::cout << "oi\n";
 			return;
+		}
 		iss.str(arg);
 		iss >> value;
 		if (iss.fail() || arg.length() <= 0)
@@ -36,7 +42,10 @@ static void	move(ClapTrap& protagonist, std::string input)
 		std::cout << "Damage repaired: ";
 		std::getline(std::cin, arg);
 		if (std::cin.eof())
+		{
+			std::cout << "oi\n";
 			return;
+		}
 		iss.str(arg);
 		iss >> value;
 		if (iss.fail() || arg.length() <= 0)
@@ -60,15 +69,17 @@ int main(void)
 	std::cout << "Enter a name: ";
 	std::getline(std::cin, input);
 	if (std::cin.eof())
-		return (0);
+		return (std::cout << "oi\n", 0);
 	ClapTrap claptrap(input);
 
 	while(true)
 	{
 		std::cout << "Enter a move: (attack), (ouch), (repair), (exit): ";
 		std::getline(std::cin, input);
-		if (input == "exit" || std::cin.eof())
-			break;
+		if (input == "exit")
+			return (std::cout << GREY << "Game end!\n", 0);
+		if (std::cin.eof())
+			return (std::cout << "oi\n", 0);
 		move(claptrap, input);
 	}
 	return (0);

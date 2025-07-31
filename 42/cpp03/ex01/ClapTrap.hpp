@@ -2,6 +2,7 @@
 
 #define YELLOW "\e[38;5;178;1m"
 #define RED "\e[38;5;160;1m"
+#define ORANGE "\e[38;5;208;1m"
 #define BLUE "\e[38;5;117;1m"
 #define GREY "\e[38;5;248;1m"
 #define END "\e[0m"
@@ -13,7 +14,8 @@ class ClapTrap
 		void	takeDamage(unsigned int amount);
 		void	beRepaired(unsigned int amount);
 
-		ClapTrap(const std::string name);
+		ClapTrap(void);
+		ClapTrap(const std::string& name);
 		ClapTrap(const ClapTrap& copy);
 		ClapTrap& operator= (const ClapTrap& copy);
 		~ClapTrap(void);
