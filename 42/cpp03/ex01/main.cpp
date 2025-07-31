@@ -1,7 +1,7 @@
 #include "ScavTrap.hpp"
 #include <sstream>
 
-static void	move(ScavTrap& protagonist, std::string input)
+static void	battle(ClapTrap& clappy, ScavTrap& scavvy, std::string& input)
 {
 	std::string arg;
 	std::istringstream	iss;
@@ -9,20 +9,17 @@ static void	move(ScavTrap& protagonist, std::string input)
 
 	if (input == "attack")
 	{
-		std::cout << "Attack target: ";
-		std::getline(std::cin, arg);
-		if (std::cin.eof())
+		scavvy.attack(clappy.get_name());
+		if (scavvy.get_health() > 0)
 		{
-			std::cout << "oi\n";
-			return;
+			clappy.takeDamage(scavvy.get_attack());
 		}
-		protagonist.attack(arg);
-
 	}
 	else if (input == "ouch")
 	{
-		std::cout << "Damage taken: ";
+		std::cout << "Damage taken: " << RED;
 		std::getline(std::cin, arg);
+		std::cout << END;
 		if (std::cin.eof())
 		{
 			std::cout << "oi\n";
@@ -35,12 +32,13 @@ static void	move(ScavTrap& protagonist, std::string input)
 			std::cout << "Invalid number!\n";
 			return;
 		}
-		protagonist.takeDamage(value);
+		scavvy.takeDamage(value);
 	}
 	else if (input == "repair")
 	{
-		std::cout << "Damage repaired: ";
+		std::cout << "Damage to repair: " << GREEN;
 		std::getline(std::cin, arg);
+		std::cout << END;
 		if (std::cin.eof())
 		{
 			std::cout << "oi\n";
@@ -53,12 +51,11 @@ static void	move(ScavTrap& protagonist, std::string input)
 			std::cout << "Invalid number!\n";
 			return;
 		}
-		protagonist.beRepaired(value);
+		clappy.beRepaired(value);
+		scavvy.beRepaired(value);
 	}
 	else if (input == "guard")
-	{
-		protagonist.guardGate();
-	}
+		scavvy.guardGate();
 	else
 	{
 		std::cout << "Invalid option!\n";
@@ -66,25 +63,35 @@ static void	move(ScavTrap& protagonist, std::string input)
 	}
 }
 
+static bool get_name(const std::string& type, std::string &input)
+{
+	std::cout << type << " name: " << BLUE;
+	std::getline(std::cin, input);
+	std::cout << END;
+	if (std::cin.eof())
+		return (std::cout << "\noi" << std::endl, false);
+	return (true);
+}
+
 int main(void)
 {
 	std::string	input;
 
-	std::cout << "Enter a name: ";
-	std::getline(std::cin, input);
-	if (std::cin.eof())
-		return (std::cout << "oi\n", 0);
-	ScavTrap scavtrap(input);
-
+	if (!get_name("ClapTrap", input))
+		return (0);
+	ClapTrap	claptrap(input);
+	if (!get_name("ScavTrap", input))
+		return (0);
+	ScavTrap	scavtrap(input);
 	while(true)
 	{
 		std::cout << "Enter a move: (attack), (ouch), (repair), (guard), (exit): ";
 		std::getline(std::cin, input);
 		if (input == "exit")
-			return (std::cout << GREY << "Game end!\n", 0);
+			return (std::cout << GREY << "Game end!" << std::endl, 0);
 		if (std::cin.eof())
-			return (std::cout << "oi\n", 0);
-		move(scavtrap, input);
+			return (std::cout << "oi" << std::endl, 0);
+		battle(claptrap, scavtrap, input);
 	}
 	return (0);
 }
