@@ -38,6 +38,8 @@ void	ClapTrap::takeDamage(unsigned int amount)
 
 void	ClapTrap::beRepaired(unsigned int amount)
 {
+	unsigned long long	result = static_cast<unsigned long long>(amount) + static_cast<unsigned long long>(m_hp);
+
 	if (m_hp > 0)
 	{
 		if (m_energy)
@@ -47,7 +49,10 @@ void	ClapTrap::beRepaired(unsigned int amount)
 			std::cout << RED << "FAILED: " << YELLOW << "ClapTrap " << m_name << " is out of energy!\n" << END;
 			return ;
 		}
-		m_hp += amount;
+		if (result >= UINT_MAX)
+			m_hp = UINT_MAX;
+		else
+			m_hp += amount;
 		std::cout << YELLOW << "ClapTrap " << m_name << " was repaired for " << GREEN << amount << " health!\n" << END;
 		std::cout << YELLOW << "Health: " << GREEN << m_hp << END << '\n';
 		std::cout << YELLOW << m_name << END << " has " << m_energy << " energy left!\n";

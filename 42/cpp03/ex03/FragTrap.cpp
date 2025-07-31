@@ -60,6 +60,8 @@ void	FragTrap::takeDamage(unsigned int amount)
 
 void	FragTrap::beRepaired(unsigned int amount)
 {
+	unsigned long long	result = static_cast<unsigned long long>(amount) + static_cast<unsigned long long>(m_hp);
+
 	if (m_hp > 0)
 	{
 		if (m_energy)
@@ -69,7 +71,10 @@ void	FragTrap::beRepaired(unsigned int amount)
 			std::cout << RED << "FAILED: " << ORANGE << "FragTrap " << m_name << " is out of energy!\n" << END;
 			return ;
 		}
-		m_hp += amount;
+		if (result >= UINT_MAX)
+			m_hp = UINT_MAX;
+		else
+			m_hp += amount;
 		std::cout << ORANGE << "FragTrap " << m_name << " was repaired for " << GREEN << amount << " health!\n" << END;
 		std::cout << ORANGE << "Health: " << GREEN << m_hp << END << '\n';
 		std::cout << ORANGE << m_name << END <<" has " << m_energy << " energy left!\n";

@@ -1,6 +1,8 @@
 #include "FragTrap.hpp"
 #include <sstream>
 
+static bool	ft_aredigits(const std::string& input) { return (input.find_first_not_of("0123456789") == std::string::npos ? true : false); }
+
 static void	battle(ClapTrap& clappy, FragTrap& fraggy, std::string& input)
 {
 	std::string arg;
@@ -27,7 +29,7 @@ static void	battle(ClapTrap& clappy, FragTrap& fraggy, std::string& input)
 		}
 		iss.str(arg);
 		iss >> value;
-		if (iss.fail() || arg.length() <= 0)
+		if (iss.fail() || arg.length() <= 0 || !ft_aredigits(arg))
 		{
 			std::cout << "Invalid number!\n";
 			return;
@@ -46,7 +48,7 @@ static void	battle(ClapTrap& clappy, FragTrap& fraggy, std::string& input)
 		}
 		iss.str(arg);
 		iss >> value;
-		if (iss.fail() || arg.length() <= 0)
+		if (iss.fail() || arg.length() <= 0 || !ft_aredigits(arg))
 		{
 			std::cout << "Invalid number!\n";
 			return;

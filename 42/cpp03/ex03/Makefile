@@ -1,6 +1,6 @@
 CXX = c++
-CXXFLAGS = -std=c++98 -Wall -Wextra -Werror -Wshadow
-NAME = bl2
+CXXFLAGS = -std=c++98 -Wall -Wextra -Werror
+NAME = bl3
 
 SRCS = main.cpp ClapTrap.cpp ScavTrap.cpp FragTrap.cpp
 OBJS = $(SRCS:.cpp=.o)
