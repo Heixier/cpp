@@ -24,7 +24,7 @@ void	ScavTrap::attack(const std::string& target)
 		std::cout << GREY << m_name << END <<" has " << m_energy << " energy left!\n";
 	}
 	else
-		std::cout << RED << "FAILED: " YELLOW << "ScavTrap " << m_name << " is out of energy!\n" << END;
+		std::cout << RED << "FAILED: " GREY << "ScavTrap " << m_name << " is out of energy!\n" << END;
 }
 
 void	ScavTrap::takeDamage(unsigned int amount)
