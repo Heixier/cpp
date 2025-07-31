@@ -1,7 +1,10 @@
+#ifndef SCAVTRAP_HPP
+#define SCAVTRAP_HPP
+
 #include <iostream>
 #include "ClapTrap.hpp"
 
-class ScavTrap : public ClapTrap
+class ScavTrap : public virtual ClapTrap
 {
 	public:
 		void	guardGate(void);
@@ -18,3 +21,5 @@ class ScavTrap : public ClapTrap
 		ScavTrap& operator= (const ScavTrap& scavtrap);
 		~ScavTrap(void);
 };
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef SCAVTRAP_
+#define SCAVTRAP_HPP
+
 #include <iostream>
 #include "ClapTrap.hpp"
 
@@ -18,3 +21,5 @@ class ScavTrap : public ClapTrap
 		ScavTrap& operator= (const ScavTrap& scavtrap);
 		~ScavTrap(void);
 };
+
+#endif

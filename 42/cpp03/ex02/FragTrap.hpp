@@ -1,3 +1,6 @@
+#ifndef FRAGTRAP_HPP
+#define FRAGTRAP_HPP
+
 #include <iostream>
 #include "ClapTrap.hpp"
 
@@ -18,3 +21,5 @@ class FragTrap: public ClapTrap
 		FragTrap& operator= (const FragTrap& fragtrap);
 		~FragTrap(void);
 };
+
+#endif

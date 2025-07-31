@@ -1,3 +1,6 @@
+#ifndef CLAPTRAP_HPP
+#define CLAPTRAP_HPP
+
 #include <iostream>
 #include <limits.h>
 
@@ -28,3 +31,5 @@ class ClapTrap
 		unsigned int	m_energy;
 		unsigned int	m_damage;
 };
+
+#endif
