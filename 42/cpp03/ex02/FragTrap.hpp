@@ -4,7 +4,7 @@
 #include <iostream>
 #include "ClapTrap.hpp"
 
-class FragTrap: public ClapTrap
+class FragTrap: public virtual ClapTrap
 {
 	public:
 		void	highFiveGuys(void);
@@ -12,14 +12,16 @@ class FragTrap: public ClapTrap
 		void	takeDamage(unsigned int amount);
 		void	beRepaired(unsigned int amount);
 
-		const unsigned int&	get_attack(void) const;
-		const unsigned int&	get_health(void) const;
-
 		FragTrap(void);
 		FragTrap(const std::string& name);
-		FragTrap(const FragTrap& fragtrap);
-		FragTrap& operator= (const FragTrap& fragtrap);
+		FragTrap(const FragTrap& other);
+		FragTrap& operator= (const FragTrap& other);
 		~FragTrap(void);
+
+	protected:
+		static const unsigned int hp = 100;
+		static const unsigned int energy = 100;
+		static const unsigned int damage = 30;
 };
 
 #endif

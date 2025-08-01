@@ -73,26 +73,27 @@ void	ScavTrap::beRepaired(unsigned int amount)
 
 ScavTrap::ScavTrap(void) : ClapTrap()
 {
-	m_hp = 100;
-	m_energy = 50;
-	m_damage = 20;
-	std::cout << GREY << "Scavtrap " << get_name() << " has been spawned!\nHP: " << m_hp << "\nEnergy: " << m_energy << "\nDamage: " << m_damage << END << std::endl;
+	m_hp = hp;
+	m_energy = energy;
+	m_damage = damage;
+	std::cout << GREY << "Scavtrap " << get_name() << " has spawned!\nHP: " << m_hp << "\nEnergy: " << m_energy << "\nDamage: " << m_damage << END << std::endl;
 }
 
 ScavTrap::ScavTrap(const std::string& name) : ClapTrap(name)
 {
-	m_hp = 100;
-	m_energy = 50;
-	m_damage = 20;
-	std::cout << GREY << "Scavtrap " << get_name() << " has been spawned!\nHP: " << m_hp << "\nEnergy: " << m_energy << "\nDamage: " << m_damage << END << std::endl;
+	m_hp = hp;
+	m_energy = energy;
+	m_damage = damage;
+	std::cout << GREY << "Scavtrap " << get_name() << " has spawned!\nHP: " << m_hp << "\nEnergy: " << m_energy << "\nDamage: " << m_damage << END << std::endl;
 }
 
-ScavTrap::ScavTrap(const ScavTrap& scavtrap) : ClapTrap(scavtrap) { }
+ScavTrap::ScavTrap(const ScavTrap& other) : ClapTrap(other) { std::cout << GREY << "ScavTrap " << other.m_name << " has been copied!" << END << std::endl; }
 
-ScavTrap& ScavTrap::operator= (const ScavTrap& scavtrap)
+ScavTrap& ScavTrap::operator= (const ScavTrap& other)
 {
-	if (this != &scavtrap)
-		ClapTrap::operator=(scavtrap);
+	std::cout << GREY << "ScavTrap " << other.m_name << " has been copy assigned!" << END << std::endl;
+	if (this != &other)
+		ClapTrap::operator=(other);
 	return (*this);
 }
 

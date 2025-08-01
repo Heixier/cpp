@@ -14,10 +14,14 @@ class FragTrap: public virtual ClapTrap
 
 		FragTrap(void);
 		FragTrap(const std::string& name);
-		FragTrap(const FragTrap& fragtrap);
-		FragTrap& operator= (const FragTrap& fragtrap);
+		FragTrap(const FragTrap& other);
+		FragTrap& operator= (const FragTrap& other);
 		~FragTrap(void);
 
+	protected:
+		static const unsigned int hp = 100;
+		static const unsigned int energy = 100;
+		static const unsigned int damage = 30;
 };
 
 #endif

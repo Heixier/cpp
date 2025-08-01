@@ -17,6 +17,11 @@ class ScavTrap : public virtual ClapTrap
 		ScavTrap(const ScavTrap& scavtrap);
 		ScavTrap& operator= (const ScavTrap& scavtrap);
 		~ScavTrap(void);
+
+	protected:
+		static const unsigned int hp = 100;
+		static const unsigned int energy = 50;
+		static const unsigned int damage = 20;
 };
 
 #endif

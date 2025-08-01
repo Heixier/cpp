@@ -23,7 +23,7 @@ static void	move(ClapTrap& protagonist, std::string input)
 	}
 	else if (input == "ouch")
 	{
-		std::cout << "Damage taken: ";
+		std::cout << "Damage to take: ";
 		std::getline(std::cin, arg);
 		if (std::cin.eof())
 		{
@@ -41,7 +41,7 @@ static void	move(ClapTrap& protagonist, std::string input)
 	}
 	else if (input == "repair")
 	{
-		std::cout << "Damage repaired: ";
+		std::cout << "Damage to repair: ";
 		std::getline(std::cin, arg);
 		if (std::cin.eof())
 		{
@@ -73,6 +73,8 @@ int main(void)
 	if (std::cin.eof())
 		return (std::cout << "oi\n", 0);
 	ClapTrap claptrap(input);
+	ClapTrap clap_copy(claptrap);
+	claptrap = clap_copy;
 
 	while(true)
 	{

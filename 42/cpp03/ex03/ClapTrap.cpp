@@ -77,9 +77,15 @@ ClapTrap::ClapTrap(const std::string& name) : m_name(name), m_hp(10), m_energy(1
 	std::cout << YELLOW << "ClapTrap " << m_name << " has spawned!\nHP: " << m_hp << "\nEnergy: " << m_energy << "\nDamage: " << m_damage << END << std::endl;
 }
 
-ClapTrap::ClapTrap(const ClapTrap& copy) { *this = copy; }
+ClapTrap::ClapTrap(const ClapTrap& copy)
+{
+	std::cout << YELLOW << "ClapTrap " << copy.m_name << " has been copied!" << END << std::endl;
+	*this = copy;
+}
+
 ClapTrap& ClapTrap::operator= (const ClapTrap& copy)
 {
+	std::cout << YELLOW << "ClapTrap " << copy.m_name << " has been copy assigned!" << END << std::endl;
 	if (this != &copy)
 	{
 		m_name = copy.m_name;

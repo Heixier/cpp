@@ -81,10 +81,14 @@ int main(void)
 
 	if (!get_name("ClapTrap", input))
 		return (0);
-	ClapTrap	claptrap(input);
+	ClapTrap	clappy(input);
+
 	if (!get_name("FragTrap", input))
 		return (0);
-	FragTrap	FragTrap(input);
+	FragTrap	fraggy(input);
+	FragTrap	frag_copy(fraggy);
+	fraggy = frag_copy;
+
 	while(true)
 	{
 		std::cout << "Enter a move: (attack), (ouch), (repair), (five), (exit): ";
@@ -93,7 +97,7 @@ int main(void)
 			return (std::cout << GREY << "Game end!" << std::endl, 0);
 		if (std::cin.eof())
 			return (std::cout << "oi" << std::endl, 0);
-		battle(claptrap, FragTrap, input);
+		battle(clappy, fraggy, input);
 	}
 	return (0);
 }

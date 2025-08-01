@@ -85,26 +85,27 @@ void	FragTrap::beRepaired(unsigned int amount)
 
 FragTrap::FragTrap(void) : ClapTrap()
 {
-	m_hp = 100;
-	m_energy = 100;
-	m_damage = 30;
-	std::cout << ORANGE << "FragTrap " << get_name() << " has been spawned!\nHP: " << m_hp << "\nEnergy: " << m_energy << "\nDamage: " << m_damage << END << std::endl;
+	m_hp = hp;
+	m_energy = energy;
+	m_damage = damage;
+	std::cout << ORANGE << "FragTrap " << get_name() << " has spawned!\nHP: " << m_hp << "\nEnergy: " << m_energy << "\nDamage: " << m_damage << END << std::endl;
 }
 
 FragTrap::FragTrap(const std::string& name) : ClapTrap(name)
 {
-	m_hp = 100;
-	m_energy = 100;
-	m_damage = 30;
-	std::cout << ORANGE << "FragTrap " << get_name() << " has been spawned!\nHP: " << m_hp << "\nEnergy: " << m_energy << "\nDamage: " << m_damage << END << std::endl;
+	m_hp = hp;
+	m_energy = energy;
+	m_damage = damage;
+	std::cout << ORANGE << "FragTrap " << get_name() << " has spawned!\nHP: " << m_hp << "\nEnergy: " << m_energy << "\nDamage: " << m_damage << END << std::endl;
 }
 
-FragTrap::FragTrap(const FragTrap& fragtrap) : ClapTrap(fragtrap) { }
+FragTrap::FragTrap(const FragTrap& other) : ClapTrap(other) { std::cout << ORANGE << "FragTrap " << other.m_name << " has been copied!" << END << std::endl; }
 
-FragTrap& FragTrap::operator= (const FragTrap& fragtrap)
+FragTrap& FragTrap::operator= (const FragTrap& other)
 {
-	if (this != &fragtrap)
-		ClapTrap::operator=(fragtrap);
+	std::cout << ORANGE << "FragTrap " << other.m_name << " has been copy assigned!" << END << std::endl;
+	if (this != &other)
+		ClapTrap::operator=(other);
 	return (*this);
 }
 

@@ -86,9 +86,13 @@ int main(void)
 	if (!get_name("ClapTrap", input))
 		return (0);
 	ClapTrap	claptrap(input);
+
 	if (!get_name("DiamondTrap", input))
 		return (0);
 	DiamondTrap	diamondtrap(input);
+	DiamondTrap dia_copy(diamondtrap);
+	diamondtrap = dia_copy;
+
 	while(true)
 	{
 		std::cout << "Enter a move: (attack), (ouch), (repair), (guard), (five), (who), (exit): ";

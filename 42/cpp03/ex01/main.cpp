@@ -85,6 +85,9 @@ int main(void)
 	if (!get_name("ScavTrap", input))
 		return (0);
 	ScavTrap	scavtrap(input);
+	ScavTrap	scav_copy(scavtrap);
+	scavtrap = scav_copy;
+
 	while(true)
 	{
 		std::cout << "Enter a move: (attack), (ouch), (repair), (guard), (exit): ";

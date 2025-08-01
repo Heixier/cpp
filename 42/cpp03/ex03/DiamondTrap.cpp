@@ -43,7 +43,7 @@ void	DiamondTrap::highFiveGuys(void)
 
 void	DiamondTrap::attack(const std::string& target)
 {
-	FragTrap::attack(target);
+	ScavTrap::attack(target);
 }
 
 void	DiamondTrap::takeDamage(unsigned int amount)
@@ -98,27 +98,35 @@ const std::string& DiamondTrap::get_name(void) const { return (m_name); }
 DiamondTrap::DiamondTrap(void) : ClapTrap("Diamond_clap_name")
 {
 	m_name = "Diamond";
-	m_hp = FragTrap::m_hp;
-	m_energy = ScavTrap::m_energy;
-	m_damage = FragTrap::m_damage;
-	std::cout << BLUE << "DiamondTrap " << get_name() << " has been spawned!\nHP: " << m_hp << "\nEnergy: " << m_energy << "\nDamage: " << m_damage << END << std::endl;
+	m_hp = FragTrap::hp;
+	m_energy = ScavTrap::energy;
+	m_damage = FragTrap::damage;
+	std::cout << BLUE << "DiamondTrap " << get_name() << " has spawned!\nHP: " << m_hp << "\nEnergy: " << m_energy << "\nDamage: " << m_damage << END << std::endl;
 }
 
 DiamondTrap::DiamondTrap(const std::string &name) : ClapTrap(name + "_clap_name")
 {
 	m_name = name;
-	m_hp = FragTrap::m_hp;
-	m_energy = ScavTrap::m_energy;
-	m_damage = FragTrap::m_damage;
-	std::cout << BLUE << "DiamondTrap " << get_name() << " has been spawned!\nHP: " << m_hp << "\nEnergy: " << m_energy << "\nDamage: " << m_damage << END << std::endl;
+	m_hp = FragTrap::hp;
+	m_energy = ScavTrap::energy;
+	m_damage = FragTrap::damage;
+	std::cout << BLUE << "DiamondTrap " << get_name() << " has spawned!\nHP: " << m_hp << "\nEnergy: " << m_energy << "\nDamage: " << m_damage << END << std::endl;
 }
 
-DiamondTrap::DiamondTrap(const DiamondTrap& other) : ClapTrap(other), FragTrap(other), ScavTrap(other) { m_name = other.m_name; }
+DiamondTrap::DiamondTrap(const DiamondTrap& other) : ClapTrap(other), FragTrap(other), ScavTrap(other)
+{
+	*this = other;
+	std::cout << BLUE << "DiamondTrap " << other.m_name << " has been copied!" << END << std::endl;
+}
 
 DiamondTrap& DiamondTrap::operator= (const DiamondTrap& other)
 {
+	std::cout << BLUE << "DiamondTrap " << other.m_name << " has been copy assigned!" << END << std::endl;
 	if (this != &other)
+	{
 		ClapTrap::operator=(other);
+		m_name = other.m_name;
+	}
 	return (*this);
 }
 
