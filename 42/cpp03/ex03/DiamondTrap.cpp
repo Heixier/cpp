@@ -115,7 +115,10 @@ DiamondTrap::DiamondTrap(const std::string &name) : ClapTrap(name + "_clap_name"
 
 DiamondTrap::DiamondTrap(const DiamondTrap& other) : ClapTrap(other), FragTrap(other), ScavTrap(other)
 {
-	*this = other;
+	m_name = other.m_name;
+	m_hp = other.m_hp;
+	m_energy = other.m_energy;
+	m_damage = other.m_damage;
 	std::cout << BLUE << "DiamondTrap " << other.m_name << " has been copied!" << END << std::endl;
 }
 
@@ -124,8 +127,10 @@ DiamondTrap& DiamondTrap::operator= (const DiamondTrap& other)
 	std::cout << BLUE << "DiamondTrap " << other.m_name << " has been copy assigned!" << END << std::endl;
 	if (this != &other)
 	{
-		ClapTrap::operator=(other);
 		m_name = other.m_name;
+		m_hp = other.m_hp;
+		m_energy = other.m_energy;
+		m_damage = other.m_damage;
 	}
 	return (*this);
 }

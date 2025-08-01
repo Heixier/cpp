@@ -105,7 +105,12 @@ FragTrap& FragTrap::operator= (const FragTrap& other)
 {
 	std::cout << ORANGE << "FragTrap " << other.m_name << " has been copy assigned!" << END << std::endl;
 	if (this != &other)
-		ClapTrap::operator=(other);
+	{
+		m_name = other.m_name;
+		m_hp = other.m_hp;
+		m_energy = other.m_energy;
+		m_damage = other.m_damage;
+	}
 	return (*this);
 }
 
