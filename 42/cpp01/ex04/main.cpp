@@ -38,7 +38,7 @@ int main(int argc, char **argv)
 	
 	outfile.open(ofilename.c_str(), std::ios::out);
 	if (!outfile.is_open())
-		return std::cout << "Error creating/writing to output file!\n", 1;
+		return infile.close(), std::cout << "Error creating/writing to output file!\n", 1;
 	
 	std::string line;
 	while (getline(infile, line))
