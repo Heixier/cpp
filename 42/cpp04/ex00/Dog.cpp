@@ -2,25 +2,26 @@
 
 void Dog::makeSound(void) const
 {
-	std::cout << "Pant\n";
+	std::cout << getType() << ": Bark\n";
 }
 
 Dog::Dog(void) : Animal()
 {
 	type = "Dog";
-	std::cout << "An animal of type " << type << " has been created!\n";
+	std::cout << "An animal of type " << getType() << " has been created!\n";
 }
-Dog::Dog(const Dog& other) : Animal(other)
+Dog::Dog(const Dog& other) : Animal()
 {
-	std::cout << "An animal of type " << type << " has been copied!\n";
+	type = other.getType();
+	std::cout << "An animal of type " << getType() << " has been copied!\n";
 }
 
 Dog& Dog::operator= (const Dog& other)
 {
-	std::cout << "An animal of " << type << " has been copy assigned\n";
 	if (this != &other)
 		Animal::operator=(other);
+	std::cout << "An animal of " << getType() << " has been copy assigned\n";
 	return (*this);
 }
 
-Dog::~Dog(void) { std::cout << "An animal of " << type << " has been destroyed!\n"; }
+Dog::~Dog(void) { std::cout << "An Animal of type " << getType() << " has been destroyed!\n"; }
