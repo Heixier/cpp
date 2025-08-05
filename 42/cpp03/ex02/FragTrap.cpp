@@ -62,6 +62,11 @@ void	FragTrap::beRepaired(unsigned int amount)
 {
 	unsigned long long	result = static_cast<unsigned long long>(amount) + static_cast<unsigned long long>(m_hp);
 
+	if ((amount + m_hp) < m_hp)
+	{
+		std::cout << RED << "FAILED: " << ORANGE << "FragTrap " << get_name() << ": invalid repair amount (overflow)!\n" << END;
+		return ;
+	}
 	if (m_hp > 0)
 	{
 		if (m_energy)
