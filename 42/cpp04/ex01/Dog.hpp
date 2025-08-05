@@ -10,7 +10,8 @@ class Dog : public Animal
 	public:
 		void makeSound(void) const;
 		void show_thought(void) const;
-		void think_aloud(void) const;
+		void think_aloud(int amount) const;
+		void think_about(const std::string& thought);
 
 		Brain* brain;
 

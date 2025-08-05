@@ -11,7 +11,7 @@ class Brain
 		void think(const std::string thought);
 		void think(const std::string (&thoughts)[100]);
 		const std::string& get_thought(int idx);
-		void think_aloud(void) const;
+		void think_aloud(int amount) const;
 	
 		Brain(void);
 		Brain(const Brain& other);

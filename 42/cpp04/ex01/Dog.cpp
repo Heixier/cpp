@@ -10,9 +10,14 @@ void Dog::show_thought(void) const
 	std::cout << brain -> get_thought(0);
 }
 
-void Dog::think_aloud(void) const
+void Dog::think_aloud(int amount) const
 {
-	brain -> think_aloud();
+	brain -> think_aloud(amount);
+}
+
+void Dog::think_about(const std::string& thought)
+{
+	brain -> think(thought);
 }
 
 Dog::Dog(void) : Animal()
@@ -20,7 +25,7 @@ Dog::Dog(void) : Animal()
 	type = "Dog";
 	brain = new Brain();
 	brain -> think("walk!");
-	std::cout << "An animal of type " << getType() << " has been created!\n";
+	std::cout << "A " << getType() << " has been created!\n";
 }
 
 Dog::Dog(const Dog& other) : Animal()
@@ -28,7 +33,7 @@ Dog::Dog(const Dog& other) : Animal()
 	type = other.getType();
 	brain = new Brain();
 	*brain = *(other.brain);
-	std::cout << "An animal of type " << getType() << " has been copied!\n";
+	std::cout << "A " << getType() << " has been copied!\n";
 }
 
 Dog& Dog::operator= (const Dog& other)
@@ -38,8 +43,8 @@ Dog& Dog::operator= (const Dog& other)
 		Animal::operator=(other);
 		*brain = *(other.brain);
 	}
-	std::cout << "An animal of " << getType() << " has been copy assigned\n";
+	std::cout << "A " << getType() << " has been copy assigned\n";
 	return (*this);
 }
 
-Dog::~Dog(void) { delete brain, std::cout << "An Animal of type " << getType() << " has been destroyed!\n"; }
+Dog::~Dog(void) { delete brain, std::cout << "A " << getType() << " has been destroyed!\n"; }
