@@ -8,9 +8,6 @@ class FragTrap: public virtual ClapTrap
 {
 	public:
 		void	highFiveGuys(void);
-		void	attack(const std::string& target);
-		void	takeDamage(unsigned int amount);
-		void	beRepaired(unsigned int amount);
 
 		FragTrap(void);
 		FragTrap(const std::string& name);

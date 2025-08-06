@@ -7,16 +7,10 @@
 #include "ScavTrap.hpp"
 #include "FragTrap.hpp"
 
-class DiamondTrap: public virtual FragTrap, public virtual ScavTrap
+class DiamondTrap: public FragTrap, public ScavTrap
 {
 	public:
 		void	whoAmI(void);
-		void	attack(const std::string& target);
-		void	takeDamage(unsigned int amount);
-		void	beRepaired(unsigned int amount);
-		void	guardGate(void);
-		void	highFiveGuys(void);
-		
 
 		const unsigned int&	get_attack(void) const;
 		const unsigned int&	get_health(void) const;

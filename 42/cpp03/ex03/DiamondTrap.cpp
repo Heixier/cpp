@@ -2,97 +2,12 @@
 
 void	DiamondTrap::whoAmI(void)
 {
-	if (m_hp <= 0)
+	if (m_hp == 0)
 	{
 		std::cout << RED << "FAILED: " << BLUE << "DiamondTrap " << get_name() << " is dead!\n" << END;
 		return;
 	}
 	std::cout << BLUE << "Name: " << std::right << std::setw(8) << get_name() << YELLOW << "\nClap name: " << std::right << std::setw(8) << ClapTrap::m_name<< END << std::endl;
-}
-
-void	DiamondTrap::guardGate(void)
-{
-	if (this -> get_health() <= 0)
-	{
-		std::cout << RED << "FAILED: " << BLUE << "DiamondTrap " << get_name() << " is dead!\n" << END;
-		return ;
-	}
-	std::cout << BLUE << get_name() << " is now gatekeeping Serena, my love!\n" << END;
-}
-
-void	DiamondTrap::highFiveGuys(void)
-{
-	if (this -> get_health() <= 0)
-	{
-		std::cout << RED << "FAILED: " << BLUE << "DiamondTrap " << get_name() << " is dead!\n" << END;
-		return ;
-	}
-	int	choice = rand() % 4;
-	static const std::string choices[4] = { "Secret handshake!", "Up top!", "Gimme five!", "High five!" };
-
-	if (m_energy)
-	{
-		m_energy--;
-		std::cout << BLUE << get_name() << ": " << choices[choice] << END << std::endl;
-		std::cout << BLUE << get_name() << END <<" has " << m_energy << " energy left!\n";
-	}
-	else
-		std::cout << RED << "FAILED: " BLUE << "FragTrap " << get_name() << " is out of energy!\n" << END;
-
-}
-
-void	DiamondTrap::attack(const std::string& target)
-{
-	ScavTrap::attack(target);
-}
-
-void	DiamondTrap::takeDamage(unsigned int amount)
-{
-	if (m_hp > 0)
-	{
-		if (amount < m_hp)
-		{
-			m_hp -= amount;
-			std::cout << BLUE << "DiamondTrap " << get_name() << " took " << amount << " damage!\n" << END;
-			std::cout << BLUE << "Health left: " << GREEN << m_hp << END << '\n';
-		}
-		else
-		{
-			m_hp = 0;
-			std::cout << BLUE << "Health left: " << RED << m_hp << END << '\n';
-			std::cout << BLUE << "DiamondTrap " << get_name() << RED << " has died!\n" << END;
-		}
-	}
-}
-
-void	DiamondTrap::beRepaired(unsigned int amount)
-{
-	unsigned long long	result = static_cast<unsigned long long>(amount) + static_cast<unsigned long long>(m_hp);
-
-	if ((amount + m_hp) < m_hp)
-	{
-		std::cout << RED << "FAILED: " << BLUE << "DiamondTrap " << get_name() << ": invalid repair amount (overflow)!\n" << END;
-		return ;
-	}
-	if (m_hp > 0)
-	{
-		if (m_energy)
-			m_energy--;
-		else
-		{
-			std::cout << RED << "FAILED: " << BLUE << "DiamondTrap " << get_name() << " is out of energy!\n" << END;
-			return ;
-		}
-		if (result >= UINT_MAX)
-			m_hp = UINT_MAX;
-		else
-			m_hp += amount;
-		std::cout << BLUE << "DiamondTrap " << get_name() << " was repaired for " << GREEN << amount << " health!\n" << END;
-		std::cout << BLUE << "Health: " << GREEN << m_hp << END << '\n';
-		std::cout << BLUE << get_name() << END <<" has " << m_energy << " energy left!\n";
-	}
-	else
-		std::cout << RED << "FAILED: " << BLUE << "DiamondTrap " << get_name() << " is dead!\n" << END;
 }
 
 const unsigned int&	DiamondTrap::get_attack(void) const { return (m_damage); }
