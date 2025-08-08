@@ -1,4 +1,5 @@
 #include "AMateria.hpp"
+#include "ICharacter.hpp"
 
 AMateria::AMateria(void): m_type("???") { }
 AMateria::AMateria(const std::string& type): m_type(type) { }
@@ -14,5 +15,5 @@ AMateria& AMateria::operator= (const AMateria& other)
 
 const std::string& AMateria::getType(void) const { return m_type; }
 
-void AMateria::use(ICharacter& target) { std::cout << "???\n"; }
+void AMateria::use(ICharacter& target) { std::cout << "??? on " << target.getName() << "!\n"; }
 AMateria::~AMateria(void) { std::cout << getType() << " has been destroyed!\n"; }

@@ -12,6 +12,7 @@ void Character::equip(AMateria *m)
 			m_inventory[i] = m;
 			std::cout << "Equipped " << m -> getType() << " at slot " << i << "!\n";
 			equipped = true;
+			break;
 		}
 	}
 	if (!equipped)
@@ -36,12 +37,29 @@ void Character::use(int idx, ICharacter& target)
 		std::cout << idx << " is out of range!";
 		return;
 	}
+	if (!m_inventory[idx])
+	{
+		std::cout << "Nothing equipped at " << idx << "!\n";
+		return;
+	}
 	m_inventory[idx] -> use(target);
 }
 
-Character::Character(void): m_name("Bob") { }
-Character::Character(const std::string& name): m_name(name) { }
-Character::Character(const Character& other): m_name {other.getName()} { *this = other; }
+Character::Character(void): m_name("Bob")
+{
+	std::cout << m_name << " has been created!\n";
+	for (int i = 0; i < 4; i++)
+		m_inventory[i] = NULL;
+}
+
+Character::Character(const std::string& name): m_name(name)
+{
+	std::cout << m_name << " has been created!\n";
+	for (int i = 0; i < 4; i++)
+		m_inventory[i] = NULL;
+}
+
+Character::Character(const Character& other): m_name(other.getName()) { *this = other; }
 Character& Character::operator= (const Character& other)
 {
 	AMateria* temp = NULL;
@@ -59,10 +77,9 @@ Character& Character::operator= (const Character& other)
 		delete temp;
 		m_name = other.getName();
 	}
+	return (*this);
 }
 Character::~Character(void)
 {
-	for (int i = 0; i < 4; i++)
-		delete m_inventory[i];
-	std::cout << getName() << " has died/\n";
+	std::cout << getName() << " has died\n";
 }

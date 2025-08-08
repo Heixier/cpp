@@ -1,8 +1,8 @@
 CXX = c++
 CXXFLAGS = -std=c++98 -Wall -Wextra -Werror
-NAME = zoo1
+NAME = magic
 
-SRCS = main.cpp AMateria.cpp Character.cpp ICharacter.cpp Ice.cpp Cure.cpp
+SRCS = main.cpp AMateria.cpp Character.cpp Ice.cpp Cure.cpp
 OBJS = $(SRCS:.cpp=.o)
 
 %.o: %.cpp

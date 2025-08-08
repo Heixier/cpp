@@ -20,7 +20,6 @@ class Character: public ICharacter
 	
 	private:
 		AMateria* m_inventory[4];
-		int m_hotbar;
 		std::string m_name;
 };
 
