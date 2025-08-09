@@ -1,6 +1,17 @@
 #include "MateriaSource.hpp"
 #include "colors.hpp"
 
+// void MateriaSource::list_materia(void) const
+// {
+// 	for (int i = 0; i < 4; i++)
+// 	{
+// 		if (m_library[i])
+// 			std::cout << PURPLE << "MateriaSource: " << m_library[i] -> getType() << " is equipped in slot " << i << END;
+// 		else
+// 			std::cout << PURPLE << "MateriaSource: " << "nothing is equipped in slot " << i << END;
+// 	}
+// }
+
 void MateriaSource::learnMateria(AMateria *m)
 {
 	if (!m)
@@ -28,11 +39,11 @@ AMateria* MateriaSource::createMateria(const std::string& type)
 	{
 		if (m_library[i] && m_library[i] -> getType() == type)
 		{
-			std::cout << PURPLE << "Type " << type << " has been created from source!\n" << END;
+			std::cout << PURPLE << "Creating " << type << " from source...\n" << END;
 			return (m_library[i] -> clone());
 		}
 	}
-	std::cout << PURPLE << "MateriaSource: " << RED << "Forbidden knowledge of type \"" << type << "\" is not allowed.\n" << END;
+	std::cout << PURPLE << "MateriaSource: " << RED << "Unknown knowledge of type \"" << type << "\" cannot be created.\n" << END;
 	return (0); // WHY??? stupid pdf
 }
 
@@ -56,14 +67,17 @@ MateriaSource::MateriaSource(const MateriaSource& other)
 
 MateriaSource& MateriaSource::operator= (const MateriaSource& other)
 {
-	for (int i = 0; i < 4; i++)
+	if (this != &other)
 	{
-		delete m_library[i];
-		m_library[i] = NULL;
-		if (other.m_library[i])
-			m_library[i] = other.m_library[i] -> clone();
+		for (int i = 0; i < 4; i++)
+		{
+			delete m_library[i];
+			m_library[i] = NULL;
+			if (other.m_library[i])
+				m_library[i] = other.m_library[i] -> clone();
+		}
+		std::cout << PURPLE << "MateriaSource has been copy assigned!\n" << END;
 	}
-	std::cout << PURPLE << "MateriaSource has been copy assigned!\n" << END;
 	return *this;
 }
 

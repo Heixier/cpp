@@ -19,24 +19,59 @@ void eval(void)
 	// AMateria* tmpm = new AMateria("ice");
 
 	std::cout << LIGHT_GREEN << "< Default constructor tests >\n" << END;
-	std::cout << GREY << "IMateriaSource* src_dfl = new MateriaSource():\n";
 	IMateriaSource* src_dfl = new MateriaSource();
-	std::cout << GREY << "ICharacter* chr_dfl = new Character():\n";
 	ICharacter* chr_dfl = new Character();
-	std::cout << GREY << "Ice* ice_dfl = new Ice():\n";
 	Ice* ice_dfl = new Ice();
-	std::cout << GREY << "Cure* cure_dfl = new Cure():\n";
 	Cure* cure_dfl = new Cure();
 
-	std::cout << GREY << "delete cure_dfl:\n";
-	delete cure_dfl;
-	std::cout << GREY << "delete ice_dfl:\n";
-	delete ice_dfl;
-	std::cout << GREY << "delete chr_dfl:\n";
-	delete chr_dfl;
-	std::cout << GREY << "delete src_dfl:\n";
-	delete src_dfl;
+	std::cout << LIGHT_GREEN << "\n< Preparing for deep copy test (ignore output until next section)) >\n" << END;
+	src_dfl -> learnMateria(ice_dfl);
 
+	chr_dfl -> equip(src_dfl -> createMateria("ice"));
+	chr_dfl -> equip(src_dfl -> createMateria("ice"));
+
+	std::cout << LIGHT_GREEN << "\n< Copy constructor test > \n" << END;
+	IMateriaSource* src_copy = new MateriaSource(*static_cast<const MateriaSource *>(src_dfl));
+	ICharacter* chr_copy = new Character(*static_cast<const Character *>(chr_dfl));
+
+	std::cout << LIGHT_GREEN << "\n<< Only ice should be recognised >> \n" << END;
+	AMateria* tmp;
+	tmp = src_copy -> createMateria("ice"); // should be recognised
+	delete tmp;
+	tmp = src_copy -> createMateria("cure"); // should not be recognised
+	delete tmp;
+
+	std::cout << LIGHT_GREEN << "\n<< Each use attempt should match 1:1 >> \n" << END;
+	for (int i = 0; i < 4; i++)
+	{
+		chr_dfl -> use(i, *chr_copy);
+		chr_copy -> use(i, *chr_dfl);
+	}
+
+	std::cout << LIGHT_GREEN << "\n< Copy assignment operator tests > \n" << END;
+	std::cout << LIGHT_GREEN << "\n<< Make src_copy learn cure\n" << END;
+	src_copy -> learnMateria(cure_dfl);
+	std::cout << LIGHT_GREEN << "\n"<< "Assign src_copy to src_dfl\n" << END;
+	*static_cast<MateriaSource *>(src_dfl) = *static_cast<MateriaSource *>(src_copy);
+
+	std::cout << LIGHT_GREEN << "\n"<< "Add cure to chr_copy using src_dfl\n" << END;
+	chr_copy -> equip(src_dfl -> createMateria("cure"));
+	std::cout << LIGHT_GREEN << "\n"<< "Assign chr_copy to chr_dfl\n" << END;
+	*static_cast<Character *>(chr_dfl) = *static_cast<Character *>(chr_copy);
+	std::cout << LIGHT_GREEN << "\n"<< "Test all skills again\n" << END;
+
+	std::cout << LIGHT_GREEN << "\n<< Each use attempt should match 1:1 >> \n" << END;
+	for (int i = 0; i < 4; i++)
+	{
+		chr_dfl -> use(i, *chr_copy);
+		chr_copy -> use(i, *chr_dfl);
+	}
+
+	std::cout << ORANGE << "\n< Destructor tests >\n" << END;
+	delete chr_copy;
+	delete src_copy;
+	delete chr_dfl;
+	delete src_dfl;
 }
 
 #endif

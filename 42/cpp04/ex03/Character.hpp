@@ -9,10 +9,11 @@
 class Character: public ICharacter
 {
 	public:
-		virtual std::string const & getName() const;
-		virtual void equip(AMateria* m);
-		virtual void unequip(int idx);
-		virtual void use(int idx, ICharacter& target);
+		// void check_inventory(void) const; // cannot use because cannot modify interface
+		std::string const & getName() const;
+		void equip(AMateria* m);
+		void unequip(int idx);
+		void use(int idx, ICharacter& target);
 
 		Character(void);
 		Character(const std::string& name);

@@ -1,6 +1,17 @@
 #include "Character.hpp"
 #include "colors.hpp"
 
+// void Character::check_inventory(void) const
+// {
+// 	for (int i = 0; i < 4; i++)
+// 	{
+// 		if (m_inventory[i])
+// 			std::cout << PEACH << getName() << ": " << m_inventory[i] -> getType() << " is equipped in slot " << i << END;
+// 		else
+// 			std::cout << PEACH << getName() << ": nothing is equipped in slot " << i << END;
+// 	}
+// }
+
 std::string const & Character::getName() const { return m_name; }
 
 void Character::equip(AMateria *m)
@@ -97,6 +108,7 @@ Character& Character::operator= (const Character& other)
 	std::cout << PEACH << other.getName() << " has been copy assigned!\n";
 	return (*this);
 }
+
 Character::~Character(void)
 {
 	for (int i = 0; i < 4; i++)
