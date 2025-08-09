@@ -1,6 +1,8 @@
 #ifndef CHARACTER_HPP
 #define CHARACTER_HPP
 
+#include <iostream>
+
 #include "AMateria.hpp"
 #include "ICharacter.hpp"
 

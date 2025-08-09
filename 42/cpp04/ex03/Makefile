@@ -13,8 +13,8 @@ all: $(NAME)
 $(NAME): $(OBJS)
 	$(CXX) $(CXXFLAGS) $(OBJS) -o $(NAME)
 
-debug:
-	make CXXFLAGS="$(CXXFLAGS) -D DEBUG"
+eval:
+	make CXXFLAGS="$(CXXFLAGS) -D EVAL"
 
 clean:
 	rm -rf $(OBJS)
