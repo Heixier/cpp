@@ -26,9 +26,11 @@ void eval(void)
 
 	std::cout << LIGHT_GREEN << "\n< Preparing for deep copy test (ignore output until next section)) >\n" << END;
 	src_dfl -> learnMateria(ice_dfl);
+	src_dfl -> learnMateria(NULL); // just in case
 
 	chr_dfl -> equip(src_dfl -> createMateria("ice"));
 	chr_dfl -> equip(src_dfl -> createMateria("ice"));
+	chr_dfl -> equip(NULL); // just in case
 
 	std::cout << LIGHT_GREEN << "\n< Copy constructor test > \n" << END;
 	IMateriaSource* src_copy = new MateriaSource(*static_cast<const MateriaSource *>(src_dfl));
@@ -42,7 +44,7 @@ void eval(void)
 	delete tmp;
 
 	std::cout << LIGHT_GREEN << "\n<< Each use attempt should match 1:1 >> \n" << END;
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 5; i++)
 	{
 		chr_dfl -> use(i, *chr_copy);
 		chr_copy -> use(i, *chr_dfl);
@@ -61,7 +63,7 @@ void eval(void)
 	std::cout << LIGHT_GREEN << "\n"<< "Test all skills again\n" << END;
 
 	std::cout << LIGHT_GREEN << "\n<< Each use attempt should match 1:1 >> \n" << END;
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 5; i++)
 	{
 		chr_dfl -> use(i, *chr_copy);
 		chr_copy -> use(i, *chr_dfl);
