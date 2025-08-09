@@ -17,10 +17,7 @@ Ice::Ice(void): AMateria("ice") { std::cout << "Ice has been created!\n"; }
 
 Ice::Ice(const std::string& type): AMateria(type) { std::cout << getType() << " has been created!\n"; }
 
-Ice::Ice(const Ice& other): AMateria(other.getType())
-{
-	*this = other;
-}
+Ice::Ice(const Ice& other): AMateria(other) { }
 
 Ice& Ice::operator= (const Ice& other)
 {

@@ -2,7 +2,7 @@ CXX = c++
 CXXFLAGS = -std=c++98 -Wall -Wextra -Werror
 NAME = magic
 
-SRCS = main.cpp AMateria.cpp Character.cpp Ice.cpp Cure.cpp
+SRCS = main.cpp AMateria.cpp Character.cpp Ice.cpp Cure.cpp MateriaSource.cpp
 OBJS = $(SRCS:.cpp=.o)
 
 %.o: %.cpp
@@ -12,6 +12,9 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	$(CXX) $(CXXFLAGS) $(OBJS) -o $(NAME)
+
+debug:
+	make CXXFLAGS="$(CXXFLAGS) -D DEBUG"
 
 clean:
 	rm -rf $(OBJS)
