@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 
 #include "AMateria.hpp"
 #include "ICharacter.hpp"
@@ -8,6 +9,32 @@
 #include "IMateriaSource.hpp"
 #include "MateriaSource.hpp"
 #include "colors.hpp"
+
+static bool get_name(const std::string& type, std::string &input)
+{
+        std::cout << type << " name: " << ORANGE;
+        std::getline(std::cin, input);
+        std::cout << END;
+        if (std::cin.eof())
+                return (std::cout << RED << "\noi\n" << END, false);
+        return (true);
+}
+
+static int get_int_from_char(void)
+{
+	std::string input;
+	
+	std::cout << "Enter a character: ";
+	std::getline(std::cin, input);
+	if (std::cin.eof())
+		return (-1);
+	if (input.length() != 1)
+	{
+		std::cout << "Invalid character!\n";
+		return (-1);
+	}
+	return (input[0]);
+}
 
 #ifdef EVAL
 void eval(void)
@@ -78,42 +105,155 @@ void eval(void)
 
 #endif
 
+static bool learn(IMateriaSource* src)
+{
+	AMateria* to_learn = NULL;
+
+	std::cout << "What would you like to learn? [ (i)ce, (c)ure ]\n";
+	if (std::cin.eof())
+		return (false);
+	int choice = get_int_from_char();
+	switch (choice)
+	{
+		case 'i':
+		{
+			to_learn = new Ice();
+			break;
+		}
+		case 'c':
+		{
+			to_learn = new Cure();
+			break;
+		}
+		default:
+			break;
+	}
+	src -> learnMateria(to_learn);
+	return (true);
+}
+
+static bool equip(IMateriaSource* src, ICharacter* player)
+{
+	std::cout << "What would you like to equip? [ (i)ce, (c)ure ]\n";
+	int choice = get_int_from_char();
+	if (std::cin.eof())
+		return (false);
+	switch (choice)
+	{
+		case 'i':
+		{
+			player -> equip(src -> createMateria("ice"));
+			break;
+		}
+		case 'c':
+		{
+			player -> equip(src -> createMateria("cure"));
+			break;
+		}
+		default:
+		{
+			player -> equip(src -> createMateria("???"));
+			break;
+		}
+	}
+	return (true);
+}
+
+static bool use(ICharacter *player, ICharacter *target)
+{
+	std::cout << "What would you like to equip? [ q, w, e, r ]\n";
+
+	int choice = get_int_from_char();
+	switch (choice)
+	{
+		case 'q':
+		{
+			choice = 0;
+			break;
+		}
+		case 'w':
+		{
+			choice = 1;
+			break;
+		}
+		case 'e':
+		{
+			choice = 2;
+			break;
+		}
+		case 'r':
+		{
+			choice = 3;
+			break;
+		}
+		default:
+			break;
+	}
+	player -> use(choice, *target);
+	return (true);
+}
+
 int main(void)
 {
+	std::string player1_name;
+	std::string player2_name;
+
 	#ifdef EVAL
 	eval();
 	return (0);
 	#endif
 
-	IMateriaSource* lib = new MateriaSource();
-	ICharacter* me = new Character("me");
-	ICharacter* dummy = new Character();
+	if (!get_name("Player 1", player1_name) || !get_name("Player 2", player2_name))
+		return (0);
+	IMateriaSource* lib1 = new MateriaSource();
+	IMateriaSource* lib2 = new MateriaSource();
+	ICharacter* p1 = new Character(player1_name);
+	ICharacter* p2 = new Character(player2_name);
 
-	lib -> learnMateria(new Ice());
-	lib -> learnMateria(new Ice());
-	lib -> learnMateria(new Ice());
-	lib -> learnMateria(new Ice());
-	lib -> learnMateria(new Ice());
+	std::string input;
+	bool running = true;
+	int	turn = 0;
+	int option = 0;
+	while (running)
+	{
+		if (std::cin.eof())
+			break;
+		std::cout << (turn == 0 ? p1 -> getName() : p2 -> getName()) << "'s turn!\n";
+		std::cout << "Options: (l)earn, (e)quip, (u)se, e(x)it\n";
+		option = get_int_from_char();
+		if (option == -1)
+			continue;
+		switch (option)
+		{
+			case 'l':
+			{
+				learn(turn == 0 ? lib1 : lib2);
+				break;
+			}
+			case 'e':
+			{
+				equip(turn == 0 ? lib1 : lib2, turn == 0 ? p1 : p2);
+				break;
+			}
+			case 'u':
+			{
+				use(turn == 0 ? p1 : p2, turn == 0 ? p2 : p1);
+				break;
+			}
+			case 'x':
+			{
+				std::cout << "Game end.\n";
+				running = false;
+				break;
+			}
+			default:
+				std::cout << "Invalid choice!\n";
+		}
+		turn = (turn + 1) % 2;
+	}
 
-	lib -> learnMateria(NULL);
-
-	me -> equip(lib -> createMateria("ice"));
-	me -> equip(lib -> createMateria("cure"));
-	me -> equip(lib -> createMateria("ice"));
-	me -> equip(lib -> createMateria("ice"));
-	me -> equip(lib -> createMateria("ice"));
-	me -> equip(lib -> createMateria("ice"));
-
-
-	me->use(0, *dummy);
-	me->use(1, *dummy);
-	me->use(2, *dummy);
-	me->use(3, *dummy);
-	me->use(4, *dummy);
-
-
-
-	delete lib;
-	delete me;
-	delete dummy;
+	delete p2;
+	delete p1;
+	delete lib2;
+	delete lib1;
 }
