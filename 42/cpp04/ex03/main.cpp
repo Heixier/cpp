@@ -10,32 +10,6 @@
 #include "MateriaSource.hpp"
 #include "colors.hpp"
 
-static bool get_name(const std::string& type, std::string &input)
-{
-        std::cout << type << " name: " << ORANGE;
-        std::getline(std::cin, input);
-        std::cout << END;
-        if (std::cin.eof())
-                return (std::cout << RED << "\noi\n" << END, false);
-        return (true);
-}
-
-static int get_int_from_char(void)
-{
-	std::string input;
-	
-	std::cout << "Enter a character: ";
-	std::getline(std::cin, input);
-	if (std::cin.eof())
-		return (-1);
-	if (input.length() != 1)
-	{
-		std::cout << "Invalid character!\n";
-		return (-1);
-	}
-	return (input[0]);
-}
-
 #ifdef EVAL
 void eval(void)
 {
@@ -105,11 +79,38 @@ void eval(void)
 
 #endif
 
+
+static bool get_name(const std::string& type, std::string &input)
+{
+        std::cout << type << " name: " << ORANGE;
+        std::getline(std::cin, input);
+        std::cout << END;
+        if (std::cin.eof())
+                return (std::cout << RED << "\noi\n" << END, false);
+        return (true);
+}
+
+static int get_int_from_char(void)
+{
+	std::string input;
+	
+	std::cout << GREY << "Enter a character: " << END;
+	std::getline(std::cin, input);
+	if (std::cin.eof())
+		return (-1);
+	if (input.length() != 1)
+	{
+		std::cout << RED << "Invalid character!\n" << END;
+		return (-1);
+	}
+	return (input[0]);
+}
+
 static bool learn(IMateriaSource* src)
 {
 	AMateria* to_learn = NULL;
 
-	std::cout << "What would you like to learn? [ (i)ce, (c)ure ]\n";
+	std::cout << LIGHT_GREEN << "What would you like to learn? [ " << ICE_BLUE << "(i)ce," << GREEN << " (c)ure " << LIGHT_GREEN "]\n" << END;
 	if (std::cin.eof())
 		return (false);
 	int choice = get_int_from_char();
@@ -134,7 +135,7 @@ static bool learn(IMateriaSource* src)
 
 static bool equip(IMateriaSource* src, ICharacter* player)
 {
-	std::cout << "What would you like to equip? [ (i)ce, (c)ure ]\n";
+	std::cout << LIGHT_GREEN << "What would you like to equip? [ " << ICE_BLUE << "(i)ce," << GREEN << " (c)ure " << LIGHT_GREEN "]\n" << END;
 	int choice = get_int_from_char();
 	if (std::cin.eof())
 		return (false);
@@ -161,7 +162,7 @@ static bool equip(IMateriaSource* src, ICharacter* player)
 
 static bool use(ICharacter *player, ICharacter *target)
 {
-	std::cout << "What would you like to equip? [ q, w, e, r ]\n";
+	std::cout << LIGHT_GREEN << "What would you like to equip? [ q, w, e, r ]\n" << END;
 
 	int choice = get_int_from_char();
 	switch (choice)
@@ -218,8 +219,8 @@ int main(void)
 	{
 		if (std::cin.eof())
 			break;
-		std::cout << (turn == 0 ? p1 -> getName() : p2 -> getName()) << "'s turn!\n";
-		std::cout << "Options: (l)earn, (e)quip, (u)se, e(x)it\n";
+		std::cout << PEACH << '\n' << (turn == 0 ? p1 -> getName() : p2 -> getName()) << "'s turn!\n" << END;
+		std::cout << LIGHT_GREEN << "Options: (l)earn, (e)quip, (u)se, e(x)it\n" << END;
 		option = get_int_from_char();
 		if (option == -1)
 			continue;
@@ -242,12 +243,12 @@ int main(void)
 			}
 			case 'x':
 			{
-				std::cout << "Game end.\n";
+				std::cout << ORANGE << "Game end.\n" << END;
 				running = false;
 				break;
 			}
 			default:
-				std::cout << "Invalid choice!\n";
+				std::cout << RED << "Invalid choice!\n" << END;
 		}
 		turn = (turn + 1) % 2;
 	}
