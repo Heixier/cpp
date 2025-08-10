@@ -158,6 +158,9 @@ Character& Character::operator= (const Character& other)
 Character::~Character(void)
 {
 	for (int i = 0; i < 4; i++)
+	{
 		delete m_inventory[i];
-	std::cout << FF0 << getName() << " has died\n" << END;
+		delete m_stock[i];
+	}
+	std::cout << FF0 << getName() << " has perished\n" << END;
 }

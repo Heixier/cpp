@@ -49,34 +49,43 @@ void eval(void)
 	std::cout << FF4 << "\n<< Each use attempt should match 1:1 >> \n" << END;
 	for (int i = 0; i < 5; i++)
 	{
+		std::cout << i << ": [chr_dfl ] ";
 		chr_dfl -> use(i, *chr_copy);
+		std::cout << i << ": [chr_copy] ";
 		chr_copy -> use(i, *chr_dfl);
 	}
 
 	std::cout << LIGHT_GREEN << "\n|| Copy assignment operator tests ||\n" << END;
 	std::cout << FF4 << "\n<< Make src_copy learn cure >>\n" << END;
 	src_copy -> learnMateria(cure_dfl);
-	std::cout << FF4 << "\n"<< "Assign src_copy to src_dfl\n" << END;
+	std::cout << FF4 << "\n<< Assign src_copy to src_dfl\n" << END;
 	*static_cast<MateriaSource *>(src_dfl) = *static_cast<MateriaSource *>(src_copy);
 
-	std::cout << FF4 << "\n"<< "Add cure to chr_copy using src_dfl\n" << END;
+	std::cout << ORANGE << "\n<< Add cure to chr_copy using src_dfl\n" << END;
 	chr_copy -> equip(src_dfl -> createMateria("cure"));
 
-	std::cout << FF4 << "\n<< The first one should" << RED << " NOT " << FF4 << "have cure >> \n" << END;
+	std::cout << ORANGE << "\n<< Unequip slot 0 from chr_copy >>\n" << END;
+	chr_copy -> unequip(0);
+
+	std::cout << FF4 << "\n<< Should reflect the" << ORANGE << " changes " << FF4 << "that were made >> \n" << END;
 	for (int i = 0; i < 5; i++)
 	{
+		std::cout << i << ": [chr_dfl ] ";
 		chr_dfl -> use(i, *chr_copy);
+		std::cout << i << ": [chr_copy] ";
 		chr_copy -> use(i, *chr_dfl);
 	}
 
-	std::cout << FF4 << "\n"<< "Assign chr_copy to chr_dfl\n" << END;
+	std::cout << FF4 << "\n<< Assign chr_copy to chr_dfl >>\n" << END;
 	*static_cast<Character *>(chr_dfl) = *static_cast<Character *>(chr_copy);
-	std::cout << FF4 << "\n"<< "Test all skills again\n" << END;
+	std::cout << FF4 << "\n<< Test all skills again >>\n" << END;
 
-	std::cout << FF4 << "\n<< Each use attempt should match 1:1 >> \n" << END;
+	std::cout << FF4 << "\n<< Each use attempt should match 1:1 >>\n" << END;
 	for (int i = 0; i < 5; i++)
 	{
+		std::cout << i << ": [chr_dfl ] ";
 		chr_dfl -> use(i, *chr_copy);
+		std::cout << i << ": [chr_copy] ";
 		chr_copy -> use(i, *chr_dfl);
 	}
 
@@ -267,7 +276,7 @@ int main(void)
 			}
 			case 'x':
 			{
-				std::cout << ORANGE << "Game end.\n" << END;
+				std::cout << RED << "World destroyed.\n" << END;
 				running = false;
 				break;
 			}
