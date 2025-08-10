@@ -1,18 +1,10 @@
 #include "Dog.hpp"
 
+const std::string Dog::m_sound = "Bark";
+
 void Dog::makeSound(void) const
 {
-	std::cout << getType() << ": Bark\n";
-}
-
-void Dog::show_thought(void) const
-{
-	std::cout << brain -> get_thought(0);
-}
-
-const std::string& Dog::getType(void) const
-{
-	return (type);
+	std::cout << getType() << ": " << m_sound << '\n';
 }
 
 void Dog::think_aloud(int amount) const
@@ -25,11 +17,20 @@ void Dog::think_about(const std::string& thought)
 	brain -> think(thought);
 }
 
+void Dog::think_about(const int idx, const std::string& thought)
+{
+	brain -> think(idx, thought);
+}
+
+const std::string& Dog::get_thought(const int idx) const
+{
+	return(brain -> get_thought(idx));
+}
+
 Dog::Dog(void) : AAnimal()
 {
 	type = "Dog";
 	brain = new Brain();
-	brain -> think("walk!");
 	std::cout << "A " << getType() << " has been created!\n";
 }
 

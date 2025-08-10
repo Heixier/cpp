@@ -14,6 +14,7 @@ $(NAME): $(OBJS)
 	$(CXX) $(CXXFLAGS) $(OBJS) -o $(NAME)
 
 eval:
+	make fclean
 	make CXXFLAGS="$(CXXFLAGS) -D EVAL"
 
 clean:

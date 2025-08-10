@@ -1,5 +1,6 @@
 #include "Harl.hpp"
 
+
 static size_t	get_element(std::string element)
 {
 	const std::string	array[4] = {"DEBUG", "INFO", "WARNING", "ERROR"};
@@ -28,7 +29,7 @@ void	Harl::complain(std::string level) const
 			// fall through
 		case 2:
 			warning();
-			// FALL THROUGH
+			// fall thRu
 		case 3:
 			error();
 			// FALLTHROUGH
