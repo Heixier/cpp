@@ -18,7 +18,7 @@ void Ice::use(ICharacter& target)
 Ice::Ice(void): AMateria("ice")
 {
 	m_color = ICE_BLUE;
-	std::cout << get_color() << "ice has been created!\n" << END;
+	std::cout << get_color() << getType() << " has been created!\n" << END;
 }
 
 Ice::Ice(const std::string& type): AMateria(type)

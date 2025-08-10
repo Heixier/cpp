@@ -2,7 +2,10 @@ CXX = c++
 CXXFLAGS = -std=c++98 -Wall -Wextra -Werror
 NAME = ff_XLII
 
-SRCS = main.cpp AMateria.cpp Character.cpp Ice.cpp Cure.cpp MateriaSource.cpp
+GOODS = $(addprefix smuggled_goods/, Fire.cpp Bolt.cpp Demi.cpp Quake.cpp)
+
+SRCS = main.cpp AMateria.cpp Character.cpp Ice.cpp Cure.cpp MateriaSource.cpp $(GOODS)
+
 OBJS = $(SRCS:.cpp=.o)
 
 %.o: %.cpp

@@ -98,6 +98,11 @@ void eval(void)
 
 #endif
 
+#include "smuggled_goods/Bolt.hpp"
+#include "smuggled_goods/Demi.hpp"
+#include "smuggled_goods/Fire.hpp"
+#include "smuggled_goods/Quake.hpp"
+
 static bool get_name(const std::string& type, std::string &input)
 {
         std::cout << FF4 << type << " name: " << FF1;
@@ -129,12 +134,16 @@ static int get_int_from_char(const std::string& allowed)
 
 static bool learn(IMateriaSource* src)
 {
-	const static std::string keys = "ic";
+	const static std::string keys = "bcdfiq";
 	AMateria* to_learn = NULL;
 
 	std::cout << FF4 << "\nWhat would you like to produce?\n"
-	<< ICE_BLUE << "(i)ce\n" 
+	<< YELLOW << "(b)olt\n"
 	<< GREEN << "(c)ure\n"
+	<< GREY << "(d)emi\n"
+	<< ORANGE << "(f)ire\n"
+	<< ICE_BLUE << "(i)ce\n" 
+	<< BROWN << "(q)uake\n"
 	<< FF4 "\n" << END;
 
 	int choice = get_int_from_char(keys);
@@ -142,14 +151,34 @@ static bool learn(IMateriaSource* src)
 		return (false);
 	switch (choice)
 	{
-		case 'i':
+		case 'b':
 		{
-			to_learn = new Ice();
+			to_learn = new Bolt();
 			break;
 		}
 		case 'c':
 		{
 			to_learn = new Cure();
+			break;
+		}
+		case 'd':
+		{
+			to_learn = new Demi();
+			break;
+		}
+		case 'f':
+		{
+			to_learn = new Fire();
+			break;
+		}
+		case 'i':
+		{
+			to_learn = new Ice();
+			break;
+		}
+		case 'q':
+		{
+			to_learn = new Quake();
 			break;
 		}
 		default:
@@ -161,25 +190,50 @@ static bool learn(IMateriaSource* src)
 
 static bool equip(IMateriaSource* src, ICharacter* player)
 {
-	const static std::string keys = "ic";
+	const static std::string keys = "bcdfiq";
 
 	std::cout << FF4 << "\nWhat would you like to equip?\n"
-	<< ICE_BLUE << "(i)ce\n" 
+	<< YELLOW << "(b)olt\n"
 	<< GREEN << "(c)ure\n"
+	<< GREY << "(d)emi\n"
+	<< ORANGE << "(f)ire\n"
+	<< ICE_BLUE << "(i)ce\n" 
+	<< BROWN << "(q)uake\n"
 	<< FF4 "\n" << END;
+	
 	int choice = get_int_from_char(keys);
 	if (choice < 0)
 		return (false);
 	switch (choice)
 	{
-		case 'i':
+		case 'b':
 		{
-			player -> equip(src -> createMateria("ice"));
+			player -> equip(src -> createMateria("bolt"));
 			break;
 		}
 		case 'c':
 		{
 			player -> equip(src -> createMateria("cure"));
+			break;
+		}
+		case 'd':
+		{
+			player -> equip(src -> createMateria("demi"));
+			break;
+		}
+		case 'f':
+		{
+			player -> equip(src -> createMateria("fire"));
+			break;
+		}
+		case 'i':
+		{
+			player -> equip(src -> createMateria("ice"));
+			break;
+		}
+		case 'q':
+		{
+			player -> equip(src -> createMateria("quake"));
 			break;
 		}
 		default:

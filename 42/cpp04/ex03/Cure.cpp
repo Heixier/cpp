@@ -18,7 +18,7 @@ void Cure::use(ICharacter& target)
 Cure::Cure(void): AMateria("cure")
 {
 	m_color = GREEN;
-	std::cout << get_color() << "Cure has been created!\n" << END;
+	std::cout << get_color() << getType() << " has been created!\n" << END;
 }
 
 Cure::Cure(const std::string& type): AMateria(type)
