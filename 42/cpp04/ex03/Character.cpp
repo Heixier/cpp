@@ -3,11 +3,25 @@
 
 void Character::check_inventory(void) const
 {
+	const static std::string keys = "qwer";
+
 	std::cout << FF0 << getName() << "'s inventory:\n";
 	for (int i = 0; i < 4; i++)
 	{
 		if (m_inventory[i])
-			std::cout << GREY << i << ": " << m_inventory[i] -> get_color() << m_inventory[i] -> getType() << '\n' << END;
+			std::cout << GREY << keys[i] << ": " << m_inventory[i] -> get_color() << m_inventory[i] -> getType() << '\n' << END;
+		else
+			std::cout << GREY << keys[i] << ": <empty>\n" << END;
+	}
+}
+
+void Character::check_sell_inventory(void) const
+{
+	std::cout << FF0 << getName() << "'s sell inventory:\n";
+	for (int i = 0; i < 4; i++)
+	{
+		if (m_stock[i])
+			std::cout << GREY << i << ": " << m_stock[i] -> get_color() << m_stock[i] -> getType() << YELLOW <<  " (" << m_stock[i] -> get_price() << ")\n" << END;
 		else
 			std::cout << GREY << i << ": <empty>\n" << END;
 	}
@@ -41,11 +55,11 @@ void Character::equip(AMateria *m)
 		{
 			if (!m)
 			{
-				std::cout << FF0 << getName() << GREY << ": Equipped literally nothing at slot " << i << "!\n" << END;
+				std::cout << FF0 << getName() << GREY << ": Equipped literally nothing in slot " << i << "!\n" << END;
 				return;
 			}
 			m_inventory[i] = m;
-			std::cout << FF0 << getName() << ": Equipped " << m_inventory[i] -> getType() << " at slot " << i << "!\n" << END;
+			std::cout << FF0 << getName() << ": Equipped " << m_inventory[i] -> getType() << " in slot " << i << "!\n" << END;
 			return;
 		}
 	}
@@ -68,7 +82,7 @@ void Character::unequip(int idx)
 	}
 	if (!m_inventory[idx])
 	{
-		std::cout << FF0 << getName() << ": Nothing to unequip at idx " << idx << "!\n" << END;
+		std::cout << FF0 << getName() << ": Nothing to unequip at slot " << idx << "!\n" << END;
 		return;
 	}
 	std::cout << m_inventory[idx] -> get_color() << m_inventory[idx] -> getType() << " has been unequipped!\n" << END;
@@ -92,7 +106,7 @@ void Character::use(int idx, ICharacter& target)
 	}
 	if (!m_inventory[idx])
 	{
-		std::cout << FF0 << getName() << ": " << GREY << "Nothing equipped at " << idx << "!\n" << END;
+		std::cout << FF0 << getName() << ": " << GREY << "Nothing equipped at slot " << idx << "!\n" << END;
 		return;
 	}
 	m_inventory[idx] -> use(target);

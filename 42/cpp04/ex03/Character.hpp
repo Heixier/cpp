@@ -10,6 +10,7 @@ class Character: public ICharacter
 {
 	public:
 		void check_inventory(void) const;
+		void check_sell_inventory(void) const;
 		void sell(void);
 		std::string const & getName() const;
 		void equip(AMateria* m);

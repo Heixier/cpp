@@ -44,7 +44,7 @@ AMateria* MateriaSource::createMateria(const std::string& type)
 			return (m_library[i] -> clone());
 		}
 	}
-	std::cout << FF2 << "MateriaSource: " << RED << "Unknown type \"" << type << "\" cannot be synthesised.\n" << END;
+	std::cout << FF2 << "MateriaSource:" << RED << " \"" << type << "\" is not being produced!\n" << END;
 	return (0); // WHY??? stupid pdf
 }
 

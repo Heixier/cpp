@@ -135,7 +135,7 @@ static bool learn(IMateriaSource* src)
 	std::cout << FF4 << "\nWhat would you like to produce?\n"
 	<< ICE_BLUE << "(i)ce\n" 
 	<< GREEN << "(c)ure\n"
-	<< FF4 "\n\n" << END;
+	<< FF4 "\n" << END;
 
 	int choice = get_int_from_char(keys);
 	if (choice < 0)
@@ -163,7 +163,10 @@ static bool equip(IMateriaSource* src, ICharacter* player)
 {
 	const static std::string keys = "ic";
 
-	std::cout << FF4 << "\nWhat would you like to equip? [ " << ICE_BLUE << "(i)ce," << GREEN << " (c)ure " << FF4 "]\n\n" << END;
+	std::cout << FF4 << "\nWhat would you like to equip?\n"
+	<< ICE_BLUE << "(i)ce\n" 
+	<< GREEN << "(c)ure\n"
+	<< FF4 "\n" << END;
 	int choice = get_int_from_char(keys);
 	if (choice < 0)
 		return (false);
@@ -271,6 +274,7 @@ int main(void)
 			case 'i':
 			{
 				static_cast<Character *>(turn == 0 ? p1 : p2) -> check_inventory();
+				static_cast<Character *>(turn == 0 ? p1 : p2) -> check_sell_inventory();
 				static_cast<MateriaSource *>(turn == 0 ? src1 : src2) -> list_materia();
 				continue;
 			}
