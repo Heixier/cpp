@@ -10,6 +10,14 @@
 #define BROWN "\e[38;5;137;1m"
 #define RED "\e[38;5;160;1m"
 #define GREY "\e[38;5;248;1m"
+#define YELLOW "\e[38;5;226;1m"
+
+#define FF0 "\e[38;2;22;82;65;1m"
+#define FF1 "\e[38;2;84;153;181;1m"
+#define FF2 "\e[38;2;78;129;142;1m"
+#define FF3 "\e[38;2;159;200;242;1m"
+#define FF4 "\e[38;2;206;218;222;1m"
+
 #define END "\e[0m"
 
 #endif

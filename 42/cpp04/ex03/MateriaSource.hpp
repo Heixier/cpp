@@ -9,7 +9,7 @@
 class MateriaSource: public IMateriaSource
 {
 	public:
-		// void list_materia(void) const; // cannot use because cannot modify interface
+		void list_materia(void) const;
 		void learnMateria(AMateria* m);
 		AMateria* createMateria(const std::string& type);
 

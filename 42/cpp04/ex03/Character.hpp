@@ -9,7 +9,8 @@
 class Character: public ICharacter
 {
 	public:
-		// void check_inventory(void) const; // cannot use because cannot modify interface
+		void check_inventory(void) const;
+		void sell(void);
 		std::string const & getName() const;
 		void equip(AMateria* m);
 		void unequip(int idx);
@@ -23,6 +24,7 @@ class Character: public ICharacter
 	
 	private:
 		AMateria* m_inventory[4];
+		AMateria* m_stock[4];
 		std::string m_name;
 };
 
