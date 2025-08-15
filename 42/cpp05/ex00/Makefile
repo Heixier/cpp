@@ -2,7 +2,7 @@ CXX = c++
 CXXFLAGS = -std=c++98 -Wall -Wextra -Werror -MMD
 NAME = bureau
 
-SRCS = main.cpp ClapTrap.cpp FragTrap.cpp
+SRCS = main.cpp Bureaucrat.cpp
 OBJS = $(SRCS:.cpp=.o)
 DEPS = $(OBJS:.o=.d)
 
