@@ -3,6 +3,8 @@ CXXFLAGS = -std=c++98 -Wall -Wextra -Werror -MMD
 NAME = bureau
 
 SRCS = main.cpp Bureaucrat.cpp
+
+s
 OBJS = $(SRCS:.cpp=.o)
 DEPS = $(OBJS:.o=.d)
 
