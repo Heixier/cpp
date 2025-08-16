@@ -1,5 +1,5 @@
 #include "Bureaucrat.hpp"
-#include "Form.hpp"
+#include "AForm.hpp"
 
 static void check_grade(int grade)
 {
@@ -33,8 +33,13 @@ int Bureaucrat::getGrade() const
 	return (m_grade);
 }
 
-bool Bureaucrat::signForm(Form& form)
+bool Bureaucrat::signForm(AForm& form)
 {
+	if (form.is_signed())
+	{
+		std::cout << ORANGE << form.get_name() << " is already signed!\n" << END;
+		return (false);
+	}
 	try
 	{
 		form.beSigned(*this);
@@ -48,6 +53,22 @@ bool Bureaucrat::signForm(Form& form)
 	}
 }
 
+bool Bureaucrat::executeForm(const AForm& form)
+{
+	if (!form.is_signed())
+		return (std::cout << ORANGE << "Form not signed!\n" << END, false);
+	try
+	{
+		form.execute(*this);
+		std::cout << LIGHT_GREEN << *this << " executed " << form << '\n' << END;
+	}
+	catch (const std::exception &e)
+	{
+		std::cout << RED << *this << " couldn't execute\n" << form << " because " << e.what() << '\n' << END;
+		return (false);
+	}
+	return (true);
+}
 
 Bureaucrat::Bureaucrat(): m_name("Snoopy"), m_grade(150)
 {
