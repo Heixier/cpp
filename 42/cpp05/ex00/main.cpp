@@ -39,6 +39,17 @@ static void work(Bureaucrat& worker, bool increment)
 
 int main(void)
 {
+	try
+	{
+		Bureaucrat original;
+		Bureaucrat copy(original);
+		original = copy;
+	}
+	catch (const std::exception &e)
+	{
+		std::cerr << RED << e.what() << '\n' << END;
+	}
+
 	test_create("John", 2);
 	test_create("Alex", 150);
 	test_create("James", -5);

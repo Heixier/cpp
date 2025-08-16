@@ -4,11 +4,16 @@
 #include <iostream>
 #include <exception>
 
+#include "colors.hpp"
+
+class Form;
+
 class Bureaucrat
 {
 	public:
 		const std::string& getName() const;
 		int getGrade() const;
+		bool signForm(Form& form); // MODIFY SOMETHING THAT DOESN'T EXIST1?????
 
 		void increment();
 		void decrement();
@@ -25,7 +30,7 @@ class Bureaucrat
 				const char* what() const throw();
 		};
 
-		class CannotBeCopiedException: public std::exception
+		class CannotBeModifiedException: public std::exception
 		{
 			public:
 				const char* what() const throw();

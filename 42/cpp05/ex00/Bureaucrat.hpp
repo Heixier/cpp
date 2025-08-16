@@ -25,7 +25,7 @@ class Bureaucrat
 				const char* what() const throw();
 		};
 
-		class CannotBeCopiedException: public std::exception
+		class CannotBeModifiedException: public std::exception
 		{
 			public:
 				const char* what() const throw();

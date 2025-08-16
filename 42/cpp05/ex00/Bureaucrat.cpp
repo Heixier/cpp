@@ -39,7 +39,7 @@ Bureaucrat::Bureaucrat(const Bureaucrat& other): m_name(other.m_name), m_grade(o
 
 Bureaucrat& Bureaucrat::operator= (const Bureaucrat& other)
 {
-	throw CannotBeCopiedException();
+	throw CannotBeModifiedException();
 	if (this != &other)
 	{
 		// copying just grade is confusing behaviour because users will righfully assume the whole thing was copied
@@ -55,17 +55,17 @@ Bureaucrat::~Bureaucrat()
 
 const char* Bureaucrat::GradeTooHighException::what() const throw()
 {
-	return ("Grade too high exception thrown");
+	return ("Exception: grade too high!");
 }
 
 const char* Bureaucrat::GradeTooLowException::what() const throw()
 {
-	return ("Grade too low exception thrown");
+	return ("Exception: grade too low!");
 }
 
-const char* Bureaucrat::CannotBeCopiedException::what() const throw()
+const char* Bureaucrat::CannotBeModifiedException::what() const throw()
 {
-	return ("This object cannot be copy assigned (usually due to const attributes)!");
+	return ("Exception: object has unmodifiable attributes!");
 }
 
 void Bureaucrat::increment()
@@ -94,6 +94,6 @@ int Bureaucrat::getGrade() const
 
 std::ostream& operator<< (std::ostream& os, const Bureaucrat& bureaucrat)
 {
-	os << bureaucrat.getName() << ", " << bureaucrat.getGrade() << ".\n";
+	os << bureaucrat.getName() << ", " << bureaucrat.getGrade() << '.';
 	return (os);
 }

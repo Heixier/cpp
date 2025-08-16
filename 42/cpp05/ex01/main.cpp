@@ -3,14 +3,15 @@
 #include <unistd.h>
 
 #include "Bureaucrat.hpp"
+#include "Form.hpp"
 #include "colors.hpp"
 
-static void test_create(const std::string& name, int grade)
+static void test_create(const std::string& name, int sign_grade, int exec_grade)
 {
 	try
 	{
-		std::cout << "\nTrying to create a Bureaucrat named " << name << " with a grade of " << grade << ":\n";
-		Bureaucrat test(name, grade);
+		std::cout << "\nTrying to create a Form " << name << " with a signing grade of " <<sign_grade << " and an execute grade of " << exec_grade << ":\n";
+		Form test(name, sign_grade, exec_grade);
 		std::cout << LIGHT_GREEN << "Success!\n" << END;
 	}
 	catch (const std::exception &e)
@@ -19,13 +20,15 @@ static void test_create(const std::string& name, int grade)
 	}
 }
 
-static void work(Bureaucrat& worker, bool increment)
+static void work_and_sign(Bureaucrat& worker, Form& form, bool increment)
 {
 	while (true)
 	{
-		std::cout << ICE_BLUE << worker << END;
+		std::cout << ICE_BLUE << worker << '\n' << END;
 		try
 		{
+			if (worker.signForm(form))
+				break;
 			increment == true ? worker.increment() : worker.decrement();
 		}
 		catch(const std::exception& e)
@@ -39,15 +42,23 @@ static void work(Bureaucrat& worker, bool increment)
 
 int main(void)
 {
-	test_create("John", 2);
-	test_create("Alex", 150);
-	test_create("James", -5);
-	test_create("Jane", 1000000);
+	try
+	{
+		Form original;
+		Form copy(original);
+		original = copy;
+	}
+	catch (const std::exception &e)
+	{
+		std::cerr << RED << e.what() << '\n' << END;
+	}
 
-	Bureaucrat mary("Mary", 5);
-	work(mary, true);
+	test_create("Loan", 2, 150);
+	test_create("Rent", 75, 150);
+	test_create("Tax", -5, -1);
+	test_create("Bill", 100000, 1000000);
 
-	Bureaucrat alex("Alex", 145);
-	work(alex, false);
-
+	Bureaucrat alex("Alex", 135);
+	Form mortgage("Mortgage", 130, 150);
+	work_and_sign(alex, mortgage, true);
 }
