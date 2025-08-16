@@ -15,7 +15,7 @@ static void test_create(const std::string& name, int grade)
 	}
 	catch (const std::exception &e)
 	{
-		std::cerr << RED << e.what() << '\n' << END;
+		std::cerr << RED << e.what() << END << std::endl;
 	}
 }
 
@@ -23,14 +23,14 @@ static void work(Bureaucrat& worker, bool increment)
 {
 	while (true)
 	{
-		std::cout << ICE_BLUE << worker << END;
+		std::cout << ICE_BLUE << worker << END << std::endl;
 		try
 		{
 			increment == true ? worker.increment() : worker.decrement();
 		}
 		catch(const std::exception& e)
 		{
-			std::cerr << RED << e.what() << '\n' << END;
+			std::cerr << RED << e.what() << END << std::endl;
 			break;
 		}
 		sleep(1);
@@ -47,7 +47,7 @@ int main(void)
 	}
 	catch (const std::exception &e)
 	{
-		std::cerr << RED << e.what() << '\n' << END;
+		std::cerr << RED << e.what() << END << std::endl;
 	}
 
 	test_create("John", 2);

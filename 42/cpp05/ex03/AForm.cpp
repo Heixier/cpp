@@ -53,7 +53,7 @@ AForm::AForm(const std::string& name, int sign_grade, int execute_grade): m_name
 
 AForm::AForm(const AForm& other): m_name(other.m_name), m_signed(other.m_signed), m_sign_grade(other.m_sign_grade), m_execute_grade(other.m_execute_grade)
 {
-	// std::cout << *this << "has been copied.\n";
+	// std::cout << * this << "has been copied.\n";
 }
 
 AForm& AForm::operator= (const AForm& other)

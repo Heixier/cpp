@@ -42,6 +42,7 @@ static void work_and_sign(Bureaucrat& worker, Form& form, bool increment)
 
 int main(void)
 {
+	std::cout << YELLOW << "\n>>> TEST: COPY CONSTRUCTOR AND COPY ASSIGNMENT OPERATOR\n" << END;
 	try
 	{
 		Form original;
@@ -53,11 +54,13 @@ int main(void)
 		std::cerr << RED << e.what() << '\n' << END;
 	}
 
+	std::cout << YELLOW << "\n>>> FORM GRADE BOUNDARY TEST\n" << END;
 	test_create("Loan", 2, 150);
 	test_create("Rent", 75, 150);
 	test_create("Tax", -5, -1);
 	test_create("Bill", 100000, 1000000);
 
+	std::cout << YELLOW << "\n>>>BUREAUCRAT SIGNING TEST\n" << END;
 	Bureaucrat alex("Alex", 135);
 	Form mortgage("Mortgage", 130, 150);
 	work_and_sign(alex, mortgage, true);

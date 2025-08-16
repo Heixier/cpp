@@ -14,10 +14,15 @@ void RobotomyRequestForm::execute(const Bureaucrat& executor) const
 		std::cout << ORANGE << "Robotomy has failed\n";
 }
 
-AForm* RobotomyRequestForm::clone(const std::string& target) const
+// AForm* RobotomyRequestForm::clone(const std::string& target) const
+// {
+// 	AForm* copy = new RobotomyRequestForm(target);
+// 	return (copy);
+// }
+
+RobotomyRequestForm::RobotomyRequestForm(): AForm(), m_target("the author of this subject")
 {
-	AForm* copy = new RobotomyRequestForm(target);
-	return (copy);
+	std::cout << "the author probably got a real lobotomy in order to write this subject\n";
 }
 
 RobotomyRequestForm::RobotomyRequestForm(const std::string& target): AForm("RobotomyRequestForm", 72, 45), m_target(target)
