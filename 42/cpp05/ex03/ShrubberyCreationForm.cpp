@@ -10,6 +10,11 @@ void ShrubberyCreationForm::execute(const Bureaucrat& executor) const
 		throw GradeTooLowException();
 	std::ofstream shrubbery;
 	shrubbery.open((m_target + "_shrubbery").c_str());
+	if (!shrubbery)
+	{
+		std::cout << RED << "ShrubberyCreationForm: ERROR: HostileTakeoverForm required to proceed.\n" << END;
+		return;
+	}
 	shrubbery << "$> tree\n\
 .\n\
 ├── ex00\n\
@@ -134,6 +139,7 @@ jgs \\/ ._\\//_/__/  ,\\_//__\\/.  \\_//__/_\n\
        |.|        | |         | |\n\
 jgs \\/ ._\\//_/__/  ,\\_//__\\/.  \\_//__/_\n";
 
+	std::cout << GREEN << "Shrubbery has been created in " << m_target << "!\n";
 	shrubbery.close();
 }
 
