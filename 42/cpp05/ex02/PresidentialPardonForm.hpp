@@ -10,11 +10,13 @@ class PresidentialPardonForm: public AForm
 
 		PresidentialPardonForm(const std::string& target); // OCF unless explicitly stated otherwise. ONE parameter in their constructor (SINGULAR)
 		PresidentialPardonForm(const PresidentialPardonForm& other);
-		PresidentialPardonForm& operator= (const PresidentialPardonForm& other);
 		~PresidentialPardonForm();
 
 	private:
 		std::string m_target;
+
+		PresidentialPardonForm();
+		PresidentialPardonForm& operator= (const PresidentialPardonForm& other);
 };
 
 #endif

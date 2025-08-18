@@ -4,8 +4,6 @@
 #include <iostream>
 #include <exception>
 
-#include "colors.hpp"
-
 class AForm;
 
 class Bureaucrat
@@ -13,7 +11,7 @@ class Bureaucrat
 	public:
 		const std::string& getName() const;
 		int getGrade() const;
-		bool signForm(AForm& form); // MODIFY SOMETHING THAT DOESN'T EXIST1?????
+		bool signForm(AForm& form);
 		bool executeForm(const AForm& form);
 
 		void increment();

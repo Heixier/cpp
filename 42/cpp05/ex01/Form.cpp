@@ -1,6 +1,8 @@
 #include "Form.hpp"
 #include "Bureaucrat.hpp"
 
+#include "colors.hpp"
+
 static void check_grade(int grade)
 {
 	if (grade > 150)
@@ -58,17 +60,7 @@ Form::Form(const Form& other): m_name(other.m_name), m_signed(other.m_signed), m
 
 Form& Form::operator= (const Form& other)
 {
-	// yeah that's not how it works
-
-	if (this != &other)
-	{
-	// 	m_name = other.m_name;
-	// 	m_signed = other.m_signed;
-	// 	m_sign_grade = other.m_sign_grade;
-	// 	m_execute_grade = other.m_execute_grade;
-	}
-
-	// throwing an exception instead
+	(void)other;
 	throw Form::CannotBeModifiedException();
 }
 

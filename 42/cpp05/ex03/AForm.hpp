@@ -4,8 +4,6 @@
 #include <iostream>
 #include <exception>
 
-#include "colors.hpp"
-
 class Bureaucrat;
 
 class AForm
@@ -17,7 +15,6 @@ class AForm
 		int get_execute_grade() const;
 		void beSigned(const Bureaucrat& signee);
 		virtual void execute(const Bureaucrat& executor) const = 0;
-		// virtual AForm* clone(const std::string& target) const = 0;
 	
 		class GradeTooHighException: public std::exception
 		{
@@ -41,8 +38,8 @@ class AForm
 	protected:
 		AForm();
 		AForm(const std::string& name, int sign_grade, int execute_grade);
-		AForm(const AForm& other);
 		AForm& operator= (const AForm& other);
+		AForm(const AForm& other);
 
 	private:
 		const std::string m_name;

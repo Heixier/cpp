@@ -1,5 +1,4 @@
-#include <iostream>
-#include <exception>
+// #include <iostream>
 #include <unistd.h>
 
 #include "Bureaucrat.hpp"
@@ -7,8 +6,6 @@
 #include "PresidentialPardonForm.hpp"
 #include "ShrubberyCreationForm.hpp"
 #include "RobotomyRequestForm.hpp"
-
-#include "colors.hpp"
 
 int main(void)
 {
@@ -24,14 +21,14 @@ int main(void)
 	max.signForm(*form);
 
 	AForm* copy = new ShrubberyCreationForm(*static_cast<ShrubberyCreationForm *>(form));
-	try
-	{
-		*static_cast<ShrubberyCreationForm *>(form) = *static_cast<ShrubberyCreationForm *>(copy);
-	}
-	catch (const std::exception &e)
-	{
-		std::cerr << RED << e.what() << '\n' << END;
-	}
+	// try
+	// {
+	// 	*static_cast<ShrubberyCreationForm *>(form) = *static_cast<ShrubberyCreationForm *>(copy);
+	// }
+	// catch (const std::exception &e)
+	// {
+	// 	std::cerr << RED << e.what() << "\n\n" << END;
+	// }
 
 	alex.executeForm(*copy);
 	max.executeForm(*copy);
@@ -46,14 +43,14 @@ int main(void)
 	max.signForm(*form);
 
 	copy = new RobotomyRequestForm(*static_cast<RobotomyRequestForm *>(form));
-	try
-	{
-		*static_cast<RobotomyRequestForm *>(form) = *static_cast<RobotomyRequestForm *>(copy);
-	}
-	catch (const std::exception &e)
-	{
-		std::cerr << RED << e.what() << '\n' << END;
-	}
+	// try
+	// {
+	// 	*static_cast<RobotomyRequestForm *>(form) = *static_cast<RobotomyRequestForm *>(copy);
+	// }
+	// catch (const std::exception &e)
+	// {
+	// 	std::cerr << RED << e.what() << "\n\n" << END;
+	// }
 
 	alex.executeForm(*copy);
 	max.executeForm(*copy);
@@ -68,14 +65,14 @@ int main(void)
 	max.signForm(*form);
 
 	copy = new PresidentialPardonForm(*static_cast<PresidentialPardonForm *>(form));
-	try
-	{
-		*static_cast<PresidentialPardonForm *>(form) = *static_cast<PresidentialPardonForm *>(copy);
-	}
-	catch (const std::exception &e)
-	{
-		std::cerr << RED << e.what() << '\n' << END;
-	}
+	// try
+	// {
+	// 	*static_cast<PresidentialPardonForm *>(form) = *static_cast<PresidentialPardonForm *>(copy);
+	// }
+	// catch (const std::exception &e)
+	// {
+	// 	std::cerr << RED << e.what() << "\n\n" << END;
+	// }
 
 	alex.executeForm(*copy);
 	max.executeForm(*copy);

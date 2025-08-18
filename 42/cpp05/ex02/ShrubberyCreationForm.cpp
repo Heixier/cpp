@@ -1,14 +1,21 @@
 #include "Bureaucrat.hpp"
 #include "ShrubberyCreationForm.hpp"
+#include "AForm.hpp"
 #include <cstdlib>
 #include <fstream>
+
+#include "colors.hpp"
 
 void ShrubberyCreationForm::execute(const Bureaucrat& executor) const
 {
 	if (executor.getGrade() > get_execute_grade())
 		throw GradeTooLowException();
-	std::ofstream shrubbery;
-	shrubbery.open((m_target + "_shrubbery").c_str());
+	std::ofstream shrubbery((m_target + "_shrubbery").c_str());
+	if (!shrubbery)
+	{
+		std::cout << RED << "ShrubberyCreationForm: ERROR: HostileTakeoverForm (or chmod) required to proceed.\n" << END;
+		return;
+	}
 	shrubbery << "$> tree\n\
 .\n\
 ├── ex00\n\
@@ -133,7 +140,12 @@ jgs \\/ ._\\//_/__/  ,\\_//__\\/.  \\_//__/_\n\
        |.|        | |         | |\n\
 jgs \\/ ._\\//_/__/  ,\\_//__\\/.  \\_//__/_\n";
 
-	shrubbery.close();
+	std::cout << GREEN << "Shrubbery has been created in " << m_target << "!\n";
+}
+
+ShrubberyCreationForm::ShrubberyCreationForm(): AForm(), m_target("graveyard of the dementia patient who wrote this subject")
+{
+	std::cout << "I hope you never rest in peace\n";
 }
 
 ShrubberyCreationForm::ShrubberyCreationForm(const std::string& target): AForm("ShrubberyCreationForm", 145, 137), m_target(target)

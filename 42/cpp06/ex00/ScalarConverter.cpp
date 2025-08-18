@@ -4,6 +4,13 @@
 #include <cctype>
 #include <iostream>
 
+#define ll long long
+#define ld long double
+
+#define print(str) std::cout << str
+
+#define LIM(THolder, val, op, TTarget) static_cast<THolder>(val) op std::numeric_limits<TTarget>::max()
+
 static bool char_convert(const std::string& input)
 {
 	std::istringstream iss;
@@ -12,7 +19,6 @@ static bool char_convert(const std::string& input)
 	iss.str(input);
 	iss >> output;
 	if (iss.fail() || !iss.eof())
-
 		return (false);
 	
 	if (std::isprint(output))
@@ -20,7 +26,7 @@ static bool char_convert(const std::string& input)
 	else
 		std::cout << "char: Non displayable\n";
 
-	if (static_cast<long long>(output) > std::numeric_limits<int>::max() || static_cast<long long>(output) < std::numeric_limits<int>::min())
+	if (LIM(ll, output, >, int) || LIM(ll, output, <, int))
 		std::cout << "int: impossible\n";
 	else
 		std::cout << "int: " << static_cast<int>(output) << '\n';
@@ -34,6 +40,7 @@ static bool char_convert(const std::string& input)
 		std::cout << "double: nan\n";
 	else
 		std::cout << "double: " << static_cast<double>(output) << '\n';
+	return (true);
 }
 
 static bool int_convert(const std::string& input)
@@ -43,7 +50,7 @@ static bool int_convert(const std::string& input)
 
 	iss.str(input);
 	iss >> output;
-	if (iss.fail())
+	if (iss.fail() || iss.eof())
 		return (false);
 
 	if (std::isprint(output))
@@ -65,6 +72,7 @@ static bool int_convert(const std::string& input)
 		std::cout << "double: nan\n";
 	else
 		std::cout << "double: " << static_cast<double>(output) << '\n';
+	return (true);
 }
 
 static bool float_convert(const std::string &input)
@@ -72,12 +80,11 @@ static bool float_convert(const std::string &input)
 	std::istringstream iss;
 	float output;
 
-	if (input.back() == 'f')
-		;sdsdada
 	iss.str(input);
 	iss >> output;
 	if (iss.fail())
 		return (false);
+	
 	if (std::isprint(output))
 		std::cout << "char: " << output << '\n';
 	else
@@ -118,6 +125,8 @@ void ScalarConverter::convert(const std::string& input)
 		return;
 	if (int_convert(input))
 		return;
+	if (input.back() == 'f')
+
 	if (float_convert(input))
 		return;
 	if (double_convert(input))

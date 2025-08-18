@@ -4,8 +4,6 @@
 #include <iostream>
 #include <exception>
 
-#include "colors.hpp"
-
 class AForm;
 
 class Bureaucrat

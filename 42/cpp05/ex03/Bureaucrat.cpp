@@ -1,6 +1,8 @@
 #include "Bureaucrat.hpp"
 #include "AForm.hpp"
 
+#include "colors.hpp"
+
 static void check_grade(int grade)
 {
 	if (grade > 150)

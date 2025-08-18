@@ -2,7 +2,6 @@
 #define INTERN_HPP
 
 #include <exception>
-#include <iostream>
 
 #include "AForm.hpp"
 
@@ -17,17 +16,17 @@ class Intern
 		AForm* create_presidential_form(const std::string &target) const;
 
 		Intern();
-		Intern(const Intern& other);
-		Intern& operator= (const Intern& other);
+
 		~Intern();
 
-		// class InvalidFormException: public std::exception
-		// {
-		// 	const char* what() const throw();
-		// };
-		
+		class InvalidFormException: public std::exception
+		{
+			const char* what() const throw();
+		};
+
 	private:
-		// AForm* learned_forms[3];
+		Intern(const Intern& other);
+		Intern& operator= (const Intern& other);
 };
 
 #endif

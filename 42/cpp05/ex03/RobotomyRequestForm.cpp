@@ -2,6 +2,8 @@
 #include "RobotomyRequestForm.hpp"
 #include <cstdlib>
 
+#include "colors.hpp"
+
 void RobotomyRequestForm::execute(const Bureaucrat& executor) const
 {
 	if (executor.getGrade() > get_execute_grade())
@@ -14,15 +16,9 @@ void RobotomyRequestForm::execute(const Bureaucrat& executor) const
 		std::cout << ORANGE << "Robotomy has failed\n";
 }
 
-// AForm* RobotomyRequestForm::clone(const std::string& target) const
-// {
-// 	AForm* copy = new RobotomyRequestForm(target);
-// 	return (copy);
-// }
-
 RobotomyRequestForm::RobotomyRequestForm(): AForm(), m_target("the author of this subject")
 {
-	std::cout << "the author probably got a real lobotomy in order to write this subject\n";
+	std::cout << "the author probably got a real lobotomy before writing this subject\n";
 }
 
 RobotomyRequestForm::RobotomyRequestForm(const std::string& target): AForm("RobotomyRequestForm", 72, 45), m_target(target)

@@ -4,15 +4,16 @@
 #include <cstdlib>
 #include <fstream>
 
+#include "colors.hpp"
+
 void ShrubberyCreationForm::execute(const Bureaucrat& executor) const
 {
 	if (executor.getGrade() > get_execute_grade())
 		throw GradeTooLowException();
-	std::ofstream shrubbery;
-	shrubbery.open((m_target + "_shrubbery").c_str());
+	std::ofstream shrubbery((m_target + "_shrubbery").c_str());
 	if (!shrubbery)
 	{
-		std::cout << RED << "ShrubberyCreationForm: ERROR: HostileTakeoverForm required to proceed.\n" << END;
+		std::cout << RED << "ShrubberyCreationForm: ERROR: HostileTakeoverForm (or chmod) required to proceed.\n" << END;
 		return;
 	}
 	shrubbery << "$> tree\n\
@@ -140,15 +141,7 @@ jgs \\/ ._\\//_/__/  ,\\_//__\\/.  \\_//__/_\n\
 jgs \\/ ._\\//_/__/  ,\\_//__\\/.  \\_//__/_\n";
 
 	std::cout << GREEN << "Shrubbery has been created in " << m_target << "!\n";
-	shrubbery.close();
 }
-
-
-// AForm* ShrubberyCreationForm::clone(const std::string &target) const
-// {
-// 	AForm* copy = new ShrubberyCreationForm(target);
-// 	return (copy);
-// }
 
 ShrubberyCreationForm::ShrubberyCreationForm(): AForm(), m_target("graveyard of the dementia patient who wrote this subject")
 {

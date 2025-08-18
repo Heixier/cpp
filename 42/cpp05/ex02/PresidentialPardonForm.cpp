@@ -8,6 +8,11 @@ void PresidentialPardonForm::execute(const Bureaucrat& executor) const
 	std::cout << m_target << " has been pardoned by Zaphod Beeblebrox.\n";
 }
 
+PresidentialPardonForm::PresidentialPardonForm(): AForm(), m_target("the assassin who killed the author of this subject")
+{
+	std::cout << "die\n";
+}
+
 PresidentialPardonForm::PresidentialPardonForm(const std::string& target): AForm("PresidentialPardonForm", 25, 5), m_target(target)
 {
 	std::cout << "Presidential Pardon Form has been created!\n";

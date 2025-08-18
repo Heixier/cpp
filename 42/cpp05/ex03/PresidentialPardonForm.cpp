@@ -8,12 +8,6 @@ void PresidentialPardonForm::execute(const Bureaucrat& executor) const
 	std::cout << m_target << " has been pardoned by Zaphod Beeblebrox.\n";
 }
 
-// AForm* PresidentialPardonForm::clone(const std::string& target) const
-// {
-// 	AForm* copy = new PresidentialPardonForm(target);
-// 	return (copy);
-// }
-
 PresidentialPardonForm::PresidentialPardonForm(): AForm(), m_target("the assassin who killed the author of this subject")
 {
 	std::cout << "die\n";

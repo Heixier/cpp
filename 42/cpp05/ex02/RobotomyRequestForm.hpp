@@ -10,11 +10,13 @@ class RobotomyRequestForm: public AForm
 
 		RobotomyRequestForm(const std::string& target); // OCF unless explicitly stated otherwise. ONE parameter in their constructor (SINGULAR)
 		RobotomyRequestForm(const RobotomyRequestForm& other);
-		RobotomyRequestForm& operator= (const RobotomyRequestForm& other);
 		~RobotomyRequestForm();
 
 	private:
 		std::string m_target;
+
+		RobotomyRequestForm();
+		RobotomyRequestForm& operator= (const RobotomyRequestForm& other);
 };
 
 #endif

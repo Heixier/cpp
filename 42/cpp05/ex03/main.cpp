@@ -5,9 +5,6 @@
 #include "Bureaucrat.hpp"
 #include "AForm.hpp"
 #include "Intern.hpp"
-#include "PresidentialPardonForm.hpp"
-#include "ShrubberyCreationForm.hpp"
-#include "RobotomyRequestForm.hpp"
 
 #include "colors.hpp"
 
@@ -26,12 +23,12 @@ int main(void)
 	std::cout << YELLOW << "\n>>> HIRING UNI KID FOR \"WORK EXPERIENCE\"/h\n" << END;
 	Intern* bro = new Intern();
 
-	std::cout << YELLOW << "\n>>> COPYING INTERN BECAUSE MORE IS BETTER\n" << END;
-	Intern* copy = new Intern(*bro);
+	// std::cout << YELLOW << "\n>>> COPYING INTERN BECAUSE MORE IS BETTER\n" << END;
+	// Intern* copy = new Intern(*bro);
 
-	std::cout << YELLOW << "\n>>> ACTUALLY WE CAN'T AFFORD THIS FREE INTERN\n" << END;
-	*bro = *copy;
-	delete copy;
+	// std::cout << YELLOW << "\n>>> ACTUALLY WE CAN'T AFFORD THIS FREE INTERN\n" << END;
+	// *bro = *copy;
+	// delete copy;
 
 	std::cout << YELLOW << "\n>>> TEST: CAN SIGN BUT CANNOT EXECUTE:\n\n" << END;
 	temp = bro -> makeForm("shrubbery creation", "Munich");
@@ -60,10 +57,16 @@ int main(void)
 	delete temp;
 	
 	std::cout << YELLOW << "\n>>> ASK INTERN TO MAKE NON_EXISTENT FORMS\n" << END;
-	temp = bro -> makeForm("lmao", "so funny");
-	temp = bro -> makeForm("your head", "in space");
-	temp = bro -> makeForm("la", "walao");
-	
+	try
+	{
+		temp = bro -> makeForm("lmao", "so funny");
+		temp = bro -> makeForm("your head", "in space");
+		temp = bro -> makeForm("la", "walao");
+	}
+	catch (const std::exception &e)
+	{
+		std::cerr << RED << e.what() << '\n';
+	}
 	std::cout << YELLOW << "\n>>> INTERN FAILED AND GETS A ROBOTOMY\n" << END;
 	temp = bro -> makeForm("robotomy request", "intern");
 
