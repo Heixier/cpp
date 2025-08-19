@@ -92,6 +92,7 @@ static int get_type(const std::string& input)
 
 	if (input[input.size() -1] == 'f')
 	{
+		// Remove the f
 		std::string float_str(input);
 		float_str.erase(float_str.size() - 1);
 
@@ -143,6 +144,7 @@ static void print_float(const std::string &input)
 	std::istringstream iss;
 	float target;
 
+	// Remove the f
 	std::string float_str(input);
 	float_str.erase(float_str.size() - 1);
 
