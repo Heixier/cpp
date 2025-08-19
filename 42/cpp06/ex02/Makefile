@@ -1,8 +1,8 @@
 CXX = c++
 CXXFLAGS = -std=c++98 -Wall -Wextra -Werror -MMD
-NAME = serializer
+NAME = real
 
-SRCS = main.cpp Serializer.cpp
+SRCS = main.cpp Base.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 DEPS = $(OBJS:.o=.d)
@@ -15,10 +15,6 @@ all: $(NAME)
 $(NAME): $(OBJS)
 	$(CXX) $(CXXFLAGS) $(OBJS) -o $(NAME)
 
-segfault:
-	make fclean
-	make CXXFLAGS="$(CXXFLAGS) -D SEGFAULT"
-
 clean:
 	rm -rf $(OBJS) $(DEPS)
 
@@ -29,4 +25,4 @@ re: fclean all
 
 -include $(DEPS)
 
-.PHONY: all clean fclean re segfault
+.PHONY: all clean fclean re
