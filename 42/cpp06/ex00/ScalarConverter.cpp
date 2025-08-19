@@ -127,7 +127,7 @@ static void print_int(const std::string &input)
 
 	iss.str(input);
 	iss >> target;
-	if (std::isprint(static_cast<char>(target)) && target <= 128)
+	if (std::isprint(static_cast<char>(target)) && target >= -127 && target <= 128)
 		std::cout << "char: " << static_cast<char>(target) << '\n';
 	else
 		std::cout << "char: Non displayable\n";
@@ -160,7 +160,7 @@ static void print_float(const std::string &input)
 
 	std::cout << "print float: " << target << '\n';
 
-	if (std::isprint(static_cast<char>(target)) && target <= 128)
+	if (std::isprint(static_cast<char>(target)) && target >= -127 && target <= 128)
 		std::cout << "char: " << static_cast<char>(target) << '\n';
 	else
 		std::cout << "char: Non displayable\n";
@@ -188,7 +188,7 @@ static void print_double(const std::string &input)
 	// 	return;
 	// }
 
-	if (std::isprint(static_cast<char>(target)) && target <= 128)
+	if (std::isprint(static_cast<char>(target)) && target >= -127 && target <= 128)
 		std::cout << "char: " << static_cast<char>(target) << '\n';
 	else
 		std::cout << "char: Non displayable\n";
