@@ -1,4 +1,5 @@
 #include "ScalarConverter.hpp"
+#include <cfloat>
 #include <limits>
 #include <sstream>
 #include <cctype>
@@ -11,7 +12,16 @@ typedef struct s_pseudo
 {
 	const std::string& p_float;
 	const std::string& p_double;
-}	t_pseudo;
+} t_pseudo;
+
+typedef enum e_types
+{
+	CHAR = 0,
+	INT,
+	FLOAT,
+	DOUBLE,
+	ERROR
+} e_types;
 
 static bool empty_str(const std::string& input)
 {
@@ -49,60 +59,135 @@ static bool pseudo(const std::string &input)
 	return (false);
 }
 
-static bool try_char(const std::string &input)
+static int get_type(const std::string& input)
 {
-	if (input.length() != 1)
-		return (false);
-	char c = input[0];
-	
-	std::cout << "char: " << (std::isprint(c) ? input : "Non displayable") << "\n";
+	if (input.length() == 1 && !(input[0] >= '0' && input[0] <= '9')) // Digits will be treated as ints. PDF did not specify.
+		return (CHAR);
 
-	if (c >= '0' && c <= '9')
-		c -= '0';
+	std::istringstream iss;
+	iss.str(input);
 
-	std::cout << "int: " << static_cast<int>(c) << '\n';
-	std::cout << std::fixed << std::setprecision(1);
-	std::cout << "float: " << static_cast<float>(c) << "f\n";
-	std::cout << "double: " << static_cast<double>(c) << '\n';
-	return (true);
+	size_t float_dot_pos = input.find_first_of('.');
+	if (float_dot_pos + 1 == input.size()) // '.' with nothing behind will be considered invalid. PDF did not specify.
+		return (ERROR);
+
+	if (float_dot_pos == std::string::npos)
+	{
+		int target;
+		iss >> target;
+		if (iss.fail() || iss.peek() != EOF)
+			return (ERROR);
+		return (INT);	
+	}
+
+	long double target;
+	iss >> target;
+	if (iss.fail() || iss.peek() != EOF)
+		return (ERROR);
+
+	if (input[input.size() -1] == 'f')
+		return (FLOAT);
+	return (DOUBLE);
 }
 
-static bool try_int(const std::string &input)
+static void print_char(const std::string &input)
+{
+	std::cout << "char: " << (std::isprint(input[0]) ? input : "Non displayable") << "\n";
+
+	std::cout << "int: " << static_cast<int>(input[0]) << '\n';
+
+	std::cout << std::fixed << std::setprecision(1);
+	std::cout << "float: " << static_cast<float>(input[0]) << "f\n";
+	std::cout << "double: " << static_cast<double>(input[0]) << '\n';
+}
+
+static void print_int(const std::string &input)
 {
 	std::istringstream iss;
 	int target;
 
 	iss.str(input);
 	iss >> target;
-	if (iss.fail() || iss.peek() != EOF)
-		return (false);
-	
 	if (std::isprint(static_cast<char>(target)) && target <= 128)
 		std::cout << "char: " << static_cast<char>(target) << '\n';
 	else
 		std::cout << "char: Non displayable\n";
+
 	std::cout << "int: " << target << '\n';
 
-	// int will never overflow a float
 	std::cout << std::fixed << std::setprecision(1);
 	std::cout << "float: " << static_cast<float>(target) << "f\n";
 	std::cout << "double: " << static_cast<double>(target) << '\n';
-	return (true);
+}
+
+static void print_float(const std::string &input)
+{
+	std::istringstream iss;
+	float target;
+
+	iss.str(input);
+	iss >> target;
+
+	if (std::isprint(static_cast<char>(target)) && target <= 128)
+		std::cout << "char: " << static_cast<char>(target) << '\n';
+	else
+		std::cout << "char: Non displayable\n";
+
+	if (static_cast<long long>(target) > std::numeric_limits<int>::max() || static_cast<long long>(target) < std::numeric_limits<int>::min())
+		std::cout << "int: impossible\n";
+	else
+		std::cout << "int: " << static_cast<int>(target) << '\n';
+
+	std::cout << std::fixed << std::setprecision(1);
+	std::cout << "float: " << target << "f\n";
+	std::cout << "double: " << static_cast<double>(target) << '\n';
+}
+
+static void print_double(const std::string &input)
+{
+	std::istringstream iss;
+	double target;
+
+	iss.str(input);
+	iss >> target;
+
+	if (std::isprint(static_cast<char>(target)) && target <= 128)
+		std::cout << "char: " << static_cast<char>(target) << '\n';
+	else
+		std::cout << "char: Non displayable\n";
+
+	if (static_cast<long long>(target) > std::numeric_limits<int>::max() || static_cast<long long>(target) < std::numeric_limits<int>::min())
+		std::cout << "int: impossible\n";
+	else
+		std::cout << "int: " << static_cast<int>(target) << '\n';
+
+	std::cout << std::fixed << std::setprecision(1);
+	std::cout << "float: " << static_cast<float>(target) << "f\n";
+	std::cout << "double: " << target << '\n';
+}
+
+static void print_error(const std::string &dummy)
+{
+	(void)dummy;
+	static const std::string types[4] = { "char", "int", "float", "double" };
+	for (int i = 0; i < 4; i++)
+		std::cout << types[i] << ": impossible\n";
 }
 
 void ScalarConverter::convert(const std::string& input)
 {
+	static void (*print_type[5])(const std::string& input) = {
+		&print_char,
+		&print_int,
+		&print_float,
+		&print_double,
+		&print_error
+	};
+
 	if (empty_str(input) || pseudo(input))
 		return;
 
-	if (try_char(input))
-		return;
-	if (try_int(input))
-		return;
-
-	static const std::string types[4] = { "char", "int", "float", "double" };
-	for (int i = 0; i < 4; i++)
-		std::cout << types[i] << ": impossible\n";
+	print_type[get_type(input)](input);
 }
 
 ScalarConverter::ScalarConverter() { }
