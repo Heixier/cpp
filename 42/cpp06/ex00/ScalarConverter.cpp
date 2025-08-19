@@ -59,6 +59,14 @@ static bool pseudo(const std::string &input)
 	return (false);
 }
 
+static void print_error(const std::string &dummy)
+{
+	(void)dummy;
+	static const std::string types[4] = { "char", "int", "float", "double" };
+	for (int i = 0; i < 4; i++)
+		std::cout << types[i] << ": impossible\n";
+}
+
 static int get_type(const std::string& input)
 {
 	if (input.length() == 1 && !(input[0] >= '0' && input[0] <= '9')) // Digits will be treated as ints. PDF did not specify.
@@ -68,7 +76,7 @@ static int get_type(const std::string& input)
 	iss.str(input);
 
 	size_t float_dot_pos = input.find_first_of('.');
-	if (float_dot_pos + 1 == input.size()) // '.' with nothing behind will be considered invalid. PDF did not specify.
+	if (float_dot_pos + 1 == input.size()) // dot '.' with nothing behind will be considered invalid. PDF did not specify.
 		return (ERROR);
 
 	if (float_dot_pos == std::string::npos)
@@ -77,16 +85,26 @@ static int get_type(const std::string& input)
 		iss >> target;
 		if (iss.fail() || iss.peek() != EOF)
 			return (ERROR);
-		return (INT);	
+		return (INT);
 	}
 
 	long double target;
+
+	if (input[input.size() -1] == 'f')
+	{
+		std::string float_str(input);
+		float_str.erase(float_str.size() - 1);
+
+		iss.str(float_str);
+		iss >> target;
+		if (iss.fail() || iss.peek() != EOF)
+			return (ERROR);
+		return (FLOAT);
+	}
+
 	iss >> target;
 	if (iss.fail() || iss.peek() != EOF)
 		return (ERROR);
-
-	if (input[input.size() -1] == 'f')
-		return (FLOAT);
 	return (DOUBLE);
 }
 
@@ -125,8 +143,20 @@ static void print_float(const std::string &input)
 	std::istringstream iss;
 	float target;
 
-	iss.str(input);
+	std::string float_str(input);
+	float_str.erase(float_str.size() - 1);
+
+	iss.str(float_str);
 	iss >> target;
+	// if (iss.fail() || iss.peek() != EOF)
+	// {
+	// 	print_error(input);
+	// 	return;
+	// }
+
+	// Just let it do whatever it wants, loss of precision handling not specified in PDF
+
+	std::cout << "print float: " << target << '\n';
 
 	if (std::isprint(static_cast<char>(target)) && target <= 128)
 		std::cout << "char: " << static_cast<char>(target) << '\n';
@@ -150,6 +180,11 @@ static void print_double(const std::string &input)
 
 	iss.str(input);
 	iss >> target;
+	// if (iss.fail() || iss.peek() != EOF)
+	// {
+	// 	print_error(input);
+	// 	return;
+	// }
 
 	if (std::isprint(static_cast<char>(target)) && target <= 128)
 		std::cout << "char: " << static_cast<char>(target) << '\n';
@@ -164,14 +199,6 @@ static void print_double(const std::string &input)
 	std::cout << std::fixed << std::setprecision(1);
 	std::cout << "float: " << static_cast<float>(target) << "f\n";
 	std::cout << "double: " << target << '\n';
-}
-
-static void print_error(const std::string &dummy)
-{
-	(void)dummy;
-	static const std::string types[4] = { "char", "int", "float", "double" };
-	for (int i = 0; i < 4; i++)
-		std::cout << types[i] << ": impossible\n";
 }
 
 void ScalarConverter::convert(const std::string& input)
