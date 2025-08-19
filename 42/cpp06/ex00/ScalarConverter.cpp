@@ -66,6 +66,27 @@ static bool try_char(const std::string &input)
 	return (true);
 }
 
+static bool try_int(const std::string &input)
+{
+	std::istringstream iss;
+	int target;
+
+	iss.str(input);
+	iss >> target;
+	if (iss.fail() || iss.peek() != EOF)
+		return (false);
+	
+	if (std::isprint(target))
+		std::cout << "char: " << static_cast<char>(target) << '\n';
+	else
+		std::cout << "char: Non displayable\n";
+	std::cout << "int: " << target << '\n';
+
+	// int will never overflow a float
+	std::cout << "float: " << static_cast<float>(target) << "f\n";
+	std::cout << "double: " << static_cast<double>(target) << '\n';
+	return (true);
+}
 
 void ScalarConverter::convert(const std::string& input)
 {
@@ -74,7 +95,9 @@ void ScalarConverter::convert(const std::string& input)
 
 	if (try_char(input))
 		return;
-	
+	if (try_int(input))
+		return;
+
 	static const std::string types[4] = { "char", "int", "float", "double" };
 	for (int i = 0; i < 4; i++)
 		std::cout << types[i] << ": impossible\n";
