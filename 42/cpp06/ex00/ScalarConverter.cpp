@@ -61,7 +61,8 @@ static bool try_char(const std::string &input)
 		c -= '0';
 
 	std::cout << "int: " << static_cast<int>(c) << '\n';
-	std::cout << "float: " << std::fixed << std::setprecision(1) << static_cast<float>(c) << "f\n";
+	std::cout << std::fixed << std::setprecision(1);
+	std::cout << "float: " << static_cast<float>(c) << "f\n";
 	std::cout << "double: " << static_cast<double>(c) << '\n';
 	return (true);
 }
@@ -76,13 +77,14 @@ static bool try_int(const std::string &input)
 	if (iss.fail() || iss.peek() != EOF)
 		return (false);
 	
-	if (std::isprint(target))
+	if (std::isprint(static_cast<char>(target)) && target <= 128)
 		std::cout << "char: " << static_cast<char>(target) << '\n';
 	else
 		std::cout << "char: Non displayable\n";
 	std::cout << "int: " << target << '\n';
 
 	// int will never overflow a float
+	std::cout << std::fixed << std::setprecision(1);
 	std::cout << "float: " << static_cast<float>(target) << "f\n";
 	std::cout << "double: " << static_cast<double>(target) << '\n';
 	return (true);
