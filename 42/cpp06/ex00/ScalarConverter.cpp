@@ -13,6 +13,19 @@ typedef struct s_pseudo
 	const std::string& p_double;
 }	t_pseudo;
 
+static bool empty_str(const std::string& input)
+{
+	if (input.empty())
+	{
+		std::cout << "char: \n";
+		std::cout << "int: 0\n";
+		std::cout << "float: 0f\n";
+		std::cout << "double: 0\n";
+		return (true);
+	}
+	return (false);
+}
+
 static void print_pseudo(const t_pseudo& pseudos)
 {
 	std::cout << "char: impossible\n";
@@ -23,7 +36,10 @@ static void print_pseudo(const t_pseudo& pseudos)
 
 static bool pseudo(const std::string &input)
 {
-	static const t_pseudo pseudos[3] = { "-inff" , "-inf" , "+inff", "+inf", "nanf", "nan" };
+	static const t_pseudo pseudos[3] = {
+	{"-inff" , "-inf"},
+	{"+inff", "+inf"},
+	{"nanf", "nan"} };
 
 	for (size_t i = 0; i < (sizeof(pseudos)/sizeof(*pseudos)); i++)
 	{
@@ -35,18 +51,27 @@ static bool pseudo(const std::string &input)
 
 static bool try_char(const std::string &input)
 {
-	(void)input;
-	return (false);
+	if (input.length() != 1)
+		return (false);
+	char c = input[0];
+	
+	std::cout << "char: " << (std::isprint(c) ? input : "Non displayable") << "\n";
+
+	if (c >= '0' && c <= '9')
+		c -= '0';
+
+	std::cout << "int: " << static_cast<int>(c) << '\n';
+	std::cout << "float: " << std::fixed << std::setprecision(1) << static_cast<float>(c) << "f\n";
+	std::cout << "double: " << static_cast<double>(c) << '\n';
+	return (true);
 }
+
 
 void ScalarConverter::convert(const std::string& input)
 {
-	// Check if special case
-	if (pseudo(input))
+	if (empty_str(input) || pseudo(input))
 		return;
 
-	// If not special case
-	// Check which type it is
 	if (try_char(input))
 		return;
 	
