@@ -205,7 +205,7 @@ static void print_double(const std::string &input)
 
 void ScalarConverter::convert(const std::string& input)
 {
-	static void (*print_type[5])(const std::string& input) = {
+	static void (*const print_type[5])(const std::string& input) = {
 		&print_char,
 		&print_int,
 		&print_float,

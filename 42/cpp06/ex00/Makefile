@@ -14,6 +14,7 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	$(CXX) $(CXXFLAGS) $(OBJS) -o $(NAME)
+	@printf "\033[38;5;117;1m%s has been compiled!\n\033[0m" $(NAME)
 
 clean:
 	rm -rf $(OBJS) $(DEPS)
