@@ -7,13 +7,15 @@
 
 typedef struct Data
 {
-	std::string literally;
-	int anything_you;
-	struct Data* want;
-	bool not_like;
-	size_t you_should;
-	uintptr_t ever_use;
-	float this_thing;
+	std::string first;
+	uintptr_t second;
+	std::string third;
 } Data;
+
+typedef struct SmallerData
+{
+	std::string first;
+	// missing second and third
+} SmallerData;
 
 #endif
