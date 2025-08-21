@@ -41,6 +41,10 @@ int main(void)
 	int array[5] = {0, 1, 2, 3, 4};
 	const char const_test[6] = "hello";
 
+	int *nothing = NULL;
+
+	iter(nothing, 0, increment);
+
 	std::cout << "Regular int array:\n";
 	info(array, 5);
 
