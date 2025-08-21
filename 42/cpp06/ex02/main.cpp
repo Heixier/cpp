@@ -52,7 +52,7 @@ void identify(Base &p)
 {
 	try
 	{
-		dynamic_cast<A&>(p);
+		(void)(dynamic_cast<A&>(p));
 		std::cout << "Identified as A!\n";
 		return;
 	}
@@ -63,7 +63,7 @@ void identify(Base &p)
 
 	try
 	{
-		dynamic_cast<B&>(p);
+		(void)(dynamic_cast<B&>(p));
 		std::cout << "Identified as B!\n";
 		return;
 	}
@@ -74,7 +74,7 @@ void identify(Base &p)
 
 	try
 	{
-		dynamic_cast<C&>(p);
+		(void)(dynamic_cast<C&>(p));
 		std::cout << "Identified as C!\n";
 		return;
 	}
@@ -84,8 +84,6 @@ void identify(Base &p)
 	}
 	return;
 }
-
- 
 
 int main(void)
 {
