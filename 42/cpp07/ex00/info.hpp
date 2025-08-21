@@ -1,6 +1,8 @@
 #ifndef INFO_HPP
 #define INFO_HPP
 
+#include <iostream>
+
 #include "whatever.hpp"
 
 template <typename T>
