@@ -49,6 +49,7 @@ int main(void)
 
 	std::cout << "Use print_each function on const array:\n";
 	iter(const_arr, 5, print_each);
+	// iter(const array, 5, increment);
 
 	info(array, 5);
 	info(const_arr, 5);
