@@ -13,9 +13,9 @@ int main(void)
 	std::cout << ICE_BLUE << "Initialising some values" << '\n' << END;
 	std::cout << std::left << std::setw(32) << "original_ptr -> first = " << ICE_BLUE << "forty two\n" << END;
 	original_ptr -> first = "forty two";
-	std::cout << std::left << std::setw(32) << "original_ptr -> second = " << ICE_BLUE << "42.0f\n\n" << END;
+	std::cout << std::left << std::setw(32) << "original_ptr -> second = " << ICE_BLUE << "42.0f\n" << END;
 	original_ptr -> second = 42.0f;
-	std::cout << std::left << std::setw(32) << "original_ptr -> third = " << ICE_BLUE << "extra\n" << END;
+	std::cout << std::left << std::setw(32) << "original_ptr -> third = " << ICE_BLUE << "extra\n\n" << END;
 	original_ptr -> third = "extra";
 
 	std::cout << std::left << std::setw(32) << "Original Data ptr address: " << &data_ptr << '\n';

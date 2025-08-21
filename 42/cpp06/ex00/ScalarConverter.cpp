@@ -158,8 +158,6 @@ static void print_float(const std::string &input)
 
 	// Just let it do whatever it wants, loss of precision handling not specified in PDF
 
-	std::cout << "print float: " << target << '\n';
-
 	if (std::isprint(static_cast<char>(target)) && target >= -127 && target <= 128)
 		std::cout << "char: " << static_cast<char>(target) << '\n';
 	else
