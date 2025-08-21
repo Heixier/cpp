@@ -1,8 +1,8 @@
 CXX = c++
 CXXFLAGS = -std=c++98 -Wall -Wextra -Werror -MMD
-NAME = basic
+NAME = iter
 
-SRCS = main.cpp Fixed.cpp
+SRCS = main.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 DEPS = $(OBJS:.o=.d)
