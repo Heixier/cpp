@@ -4,14 +4,18 @@
 #include "iter.hpp"
 #include "info.hpp"
 
+#define LIGHT_GREEN "\e[38;5;118;1m"
+#define YELLOW "\e[38;5;226;1m"
+#define END "\e[0m"
+
 static void increment(int& num)
 {
 	num += 1;
 }
 
-static void print_each(const int& num)
+static void print_char(const char& c)
 {
-	std::cout << num << '\n';
+	std::cout << c << '\n';
 }
 
 static void rot13(char& element)
@@ -35,28 +39,32 @@ static void rot13(char& element)
 int main(void)
 {
 	int array[5] = {0, 1, 2, 3, 4};
-	const int const_arr[5] = {9, 8, 7, 6, 5};
+	const char const_test[6] = "hello";
 
-	std::cout << "Regular array:\n";
+	std::cout << "Regular int array:\n";
 	info(array, 5);
-
-	std::cout << "\nConst array:\n";
-	info(const_arr, 5);
 
 	std::cout << "Use increment function on regular array:\n";
 	iter(array, 5, increment);
 	info(array, 5);
 
-	std::cout << "Use print_each function on const array:\n";
-	iter(const_arr, 5, print_each);
-	// iter(const array, 5, increment);
+	std::cout << "\nConst char* array: " << const_test << '\n';
+	info(const_test, 5);
 
-	info(array, 5);
-	info(const_arr, 5);
+	#ifdef NO_CONST_OVERLOAD
+	std::cout << "\nUse print_char function on const char* array with no overload" << '\n';
+	iter(const_test, 6, print_char);
+	std::cout << LIGHT_GREEN << "It works perfectly fine because T resolves to const char\n" << END;
+
+	#else
+	std::cout << YELLOW << "\nUse print_char function on const char* array with const overload\n(compile again with 'make overload' for other demo)\n" << END;
+	iter(const_test, 6, print_char);
+
+	#endif
 
 	char code[7] = "caesar";
 
-	std::cout << "\nUse rot13 on char array: \"" << code << "\"\n";
+	std::cout << "Use rot13 on char array: \"" << code << "\"\n";
 	iter(code, 7, rot13);
 	std::cout << "Result: \"" << code << "\"\n";
 
