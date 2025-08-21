@@ -71,13 +71,29 @@ int main(void)
 
 	std::string temp_str_arr[9] = {"the", "quick", "brown", "fox", "jumps", "over", "the", "lazy", "dog"};
 	Array<std::string> string_arr(9);
-
 	for (int i = 0; i < 9; i++)
 		string_arr[i] = temp_str_arr[i];
 
 	std::cout << LIGHT_GREEN << "\nstring_arr: \n" << END;
 	for (unsigned int i = 0 ; i < string_arr.size(); i++)
 		std::cout << "Arr: [" << i << "] " << string_arr[i] << '\n';
+
+	std::cout << "\nInitialising small_string_arr(3) and assigning it to the bigger string_arr(9)\n";
+	std::string small_temp_str_arr[3] = {"the", "clouds", "blow"};
+	Array<std::string> small_string_arr(3);
+	for (int i = 0; i < 3; i++)
+		small_string_arr[i] = small_temp_str_arr[i];
+
+	std::cout << LIGHT_GREEN << "\nsmall_string_arr: \n" << END;
+	for (unsigned int i = 0 ; i < small_string_arr.size(); i++)
+		std::cout << "Arr: [" << i << "] " << small_string_arr[i] << '\n';
+
+	std::cout << LIGHT_GREEN << "\nsmall_string_arr = string_arr; \n" << END;
+	small_string_arr = string_arr;
+
+	std::cout << LIGHT_GREEN << "\nsmall_string_arr: \n" << END;
+	for (unsigned int i = 0 ; i < small_string_arr.size(); i++)
+		std::cout << "Arr: [" << i << "] " << small_string_arr[i] << '\n';
 
 	std::cout << "\nIncrement string_arr until out of bounds\n";
 
@@ -95,7 +111,7 @@ int main(void)
 		std::cout << RED << "Exception triggered!\n" << END;
 	}
 
-	std::cout << ORANGE << "\nMaking a fun (cursed) array using fun_arr[0] = uintarr and fun_arr[1] = copyarr\n" << END;
+	std::cout << ORANGE << "\nMaking a fun array using fun_arr[0] = uintarr and fun_arr[1] = copyarr\n" << END;
 	Array<Array<unsigned int> > fun_array(2);
 	fun_array[0] = uintarr;
 	fun_array[1] = copyarr;
@@ -107,4 +123,20 @@ int main(void)
 	std::cout << YELLOW << "Copy: \n" << END;
 	for (unsigned int i = 0 ; i < fun_array[1].size(); i++)
 		std::cout << "Arr: [" << i << "] " << fun_array[1][i] << '\n';
+
+
+	std::cout << ORANGE << "\nMaking a const copy of it to see if attempts to modify elements will still compile (check the code)\n" << END;
+	
+	const Array<Array<unsigned int> > const_fun_array(fun_array);
+
+	std::cout << ICE_BLUE << "Original: \n" << END;
+	for (unsigned int i = 0 ; i < const_fun_array[0].size(); i++)
+		std::cout << "Arr: [" << i << "] " << const_fun_array[0][i] << '\n';
+
+	std::cout << YELLOW << "Copy: \n" << END;
+	for (unsigned int i = 0 ; i < const_fun_array[1].size(); i++)
+		std::cout << "Arr: [" << i << "] " << const_fun_array[1][i] << '\n';
+
+	fun_array[0] = uintarr; // will compile
+	// const_fun_array[1] = uintarr; // will not compile
 }

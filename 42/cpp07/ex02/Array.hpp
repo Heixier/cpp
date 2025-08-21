@@ -7,19 +7,26 @@ template <typename T>
 class Array
 {
 	public:
-		unsigned int size()
+		unsigned int size() const
 		{
 			return (m_elements);
 		}
 
-		T& operator[] (unsigned int index)
+		T& operator[] (const unsigned int index)
 		{
 			if (index >= m_elements)
 				throw std::exception();
 			return (m_data[index]);
 		}
 
-		Array(): m_data(new T[0]()), m_elements(0) { }
+		const T& operator[] (const unsigned int index) const
+		{
+			if (index >= m_elements)
+				throw std::exception();
+			return (m_data[index]);
+		}
+
+		Array(): m_data(NULL), m_elements(0) { }
 
 		Array(unsigned int n): m_data(new T[n]()), m_elements(n) { }
 

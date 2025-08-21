@@ -43,10 +43,6 @@ $(NAME): $(OBJS)
 	$(CXX) $(CXXFLAGS) $(OBJS) -o $(NAME)
 	@echo "$(LIGHT_BLUE)"$(NAME) has been compiled!"$(END)"
 
-no_overload:
-	@make -s fclean
-	@make -s CXXFLAGS="$(CXXFLAGS) -D NO_CONST_OVERLOAD"
-
 clean:
 	rm -rf $(OBJS) $(DEPS)
 
@@ -57,4 +53,4 @@ re: fclean all
 
 -include $(DEPS)
 
-.PHONY: all clean fclean re no_overload
+.PHONY: all clean fclean re

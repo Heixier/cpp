@@ -51,16 +51,8 @@ int main(void)
 	std::cout << "\nConst char* array: " << const_test << '\n';
 	info(const_test, 5);
 
-	#ifdef NO_CONST_OVERLOAD
-	std::cout << "\nUse print_char function on const char* array with no overload" << '\n';
+	std::cout << YELLOW << "\nUse print_char function on const char* array\n" << END;
 	iter(const_test, 6, print_char);
-	std::cout << LIGHT_GREEN << "It works perfectly fine because T resolves to const char\n" << END;
-
-	#else
-	std::cout << YELLOW << "\nUse print_char function on const char* array with const overload\n(compile again with 'make overload' for other demo)\n" << END;
-	iter(const_test, 6, print_char);
-
-	#endif
 
 	char code[7] = "caesar";
 
