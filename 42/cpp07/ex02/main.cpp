@@ -109,31 +109,32 @@ int main(void)
 	catch (std::exception&)
 	{
 		std::cout << RED << "Exception triggered!\n" << END;
+		sleep(1);
 	}
 
-	std::cout << ORANGE << "\nMaking a fun array using fun_arr[0] = uintarr and fun_arr[1] = copyarr\n" << END;
+	std::cout << ORANGE << "\nMaking a meta array using fun_arr[0] = uintarr and fun_arr[1] = copyarr\n" << END;
 	Array<Array<unsigned int> > fun_array(2);
 	fun_array[0] = uintarr;
 	fun_array[1] = copyarr;
 
-	std::cout << ICE_BLUE << "Original: \n" << END;
+	std::cout << ICE_BLUE << "fun_array[0]: \n" << END;
 	for (unsigned int i = 0 ; i < fun_array[0].size(); i++)
 		std::cout << "Arr: [" << i << "] " << fun_array[0][i] << '\n';
 
-	std::cout << YELLOW << "Copy: \n" << END;
+	std::cout << YELLOW << "fun_array[1]: \n" << END;
 	for (unsigned int i = 0 ; i < fun_array[1].size(); i++)
 		std::cout << "Arr: [" << i << "] " << fun_array[1][i] << '\n';
 
 
-	std::cout << ORANGE << "\nMaking a const copy of it to see if attempts to modify elements will still compile (check the code)\n" << END;
+	std::cout << ORANGE << "\nMaking a const copy below (modify the code)\n" << END;
 	
 	const Array<Array<unsigned int> > const_fun_array(fun_array);
 
-	std::cout << ICE_BLUE << "Original: \n" << END;
+	std::cout << ICE_BLUE << "fun_array[0]: \n" << END;
 	for (unsigned int i = 0 ; i < const_fun_array[0].size(); i++)
 		std::cout << "Arr: [" << i << "] " << const_fun_array[0][i] << '\n';
 
-	std::cout << YELLOW << "Copy: \n" << END;
+	std::cout << YELLOW << "fun_array[1]: \n" << END;
 	for (unsigned int i = 0 ; i < const_fun_array[1].size(); i++)
 		std::cout << "Arr: [" << i << "] " << const_fun_array[1][i] << '\n';
 
