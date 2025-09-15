@@ -1,7 +1,6 @@
 #include "easyfind.hpp"
 #include <iostream>
 #include <vector>
-#include <algorithm>
 
 void print_vect(const std::vector<int>& vect)
 {
