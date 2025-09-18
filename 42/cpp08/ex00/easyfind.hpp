@@ -1,3 +1,6 @@
+#ifndef EASYFIND_HPP
+#define EASYFIND_HPP
+
 #include <exception>
 #include <algorithm>
 
@@ -8,3 +11,5 @@ int easyfind(const T& int_container, const int target)
 		throw std::exception();
 	return (target);
 }
+
+#endif
