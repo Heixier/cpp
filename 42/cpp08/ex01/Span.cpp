@@ -7,22 +7,21 @@
 void Span::addNumber(int num)
 {
 	if (idx == num_elements)
-		throw std::out_of_range("no more space left in array");
+		throw std::out_of_range("Any attempt to add a new element if there are already N elements stored should throw an exception");
 	array[idx++] = num;
 }
 
 int Span::shortestSpan()
 {
-	int smallest_gap = Span::longestSpan();
-	int gap = 0;
-
-	if (idx == 1)
-		return (0);
+	if (idx <= 1)
+		throw std::runtime_error("If there are no numbers stored, or only one, no span can be found. Thus, throw an exception");
 	std::sort(array, array + idx);
-	for (int i = 0; i + 1 < num_elements; i++)
+
+	int smallest_gap = array[1] - array[0];
+	for (int i = 0; i + 1 < idx; i++)
 	{
-		gap = array[i + 1] - array[i];
-		if (gap <= smallest_gap)
+		int gap = array[i + 1] - array[i];
+		if (gap < smallest_gap)
 			smallest_gap = gap;
 	}
 	return (smallest_gap);
@@ -30,6 +29,8 @@ int Span::shortestSpan()
 
 int Span::longestSpan()
 {
+	if (idx <= 1)
+		throw std::runtime_error("If there are no numbers stored, or only one, no span can be found. Thus, throw an exception");
 	int shortest = *std::min_element(&(array[0]), &(array[idx]));
 	int longest = *std::max_element(&(array[0]), &(array[idx]));
 
@@ -40,7 +41,7 @@ void Span::print_array()
 {
 	std::cout << "Array length: " << num_elements << "\nArray idx: " << idx << "\n\n";
 	for (int i = 0; i < idx; i++)
-		std::cout << array[i] << '\n';
+		std::cout << i + 1 << ": " << array[i] << '\n';
 }
 
 Span::Span(): num_elements(0), idx(0), array(NULL) { }

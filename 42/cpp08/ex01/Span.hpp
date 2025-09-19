@@ -9,6 +9,18 @@ class Span
 		int longestSpan();
 		void print_array();
 
+		template <typename InputIt>
+		void extend(InputIt first, InputIt last)
+		{
+			InputIt idx = first;
+			
+			while (idx != last)
+			{
+				addNumber(*idx);
+				idx++;				
+			}
+		}
+		
 		Span();
 		Span(unsigned int N);
 		Span(const Span& other);
