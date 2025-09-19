@@ -6,35 +6,26 @@
 
 void Span::addNumber(int num)
 {
-	if (idx + 1 == num_elements)
+	if (idx == num_elements)
 		throw std::out_of_range("no more space left in array");
 	array[idx++] = num;
 }
 
 int Span::shortestSpan()
 {
-	int shortest = *std::min_element(&(array[0]), &(array[idx]));
-	int candidate = shortest;
-	int dup_flag = 0;
-	for (int i = 0; i < idx; i++)
+	int smallest_gap = Span::longestSpan();
+	int gap = 0;
+
+	if (idx == 1)
+		return (0);
+	std::sort(array, array + idx);
+	for (int i = 0; i + 1 < num_elements; i++)
 	{
-		if (array[i] == shortest && dup_flag == 0)
-		{
-			dup_flag = 1;
-			continue;
-		}
-		if (array[i] == shortest && dup_flag)
-			return (0); sdasd logic bad broke need sleep not difficult 
-		if (array[i] > shortest)
-		{
-			if (!candidate)
-				candidate = array[i];
-			else if (array[i] < candidate)
-				candidate = array[i];
-		}
+		gap = array[i + 1] - array[i];
+		if (gap <= smallest_gap)
+			smallest_gap = gap;
 	}
-	std::cout << "shortestSpan shortest: " << shortest << "\nshortestSpan candidate: " << candidate << '\n';
-	return (candidate - shortest);
+	return (smallest_gap);
 }
 
 int Span::longestSpan()
