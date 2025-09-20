@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <stdlib.h>
-#include <time.h>
 #include <sstream>
 #include "Span.hpp"
 #include "colors.hpp"
