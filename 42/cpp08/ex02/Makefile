@@ -1,8 +1,8 @@
 CXX = c++
 CXXFLAGS = -std=c++98 -Wall -Wextra -Werror -MMD
-NAME = span
+NAME = mstack
 
-SRCS = main.cpp Span.cpp
+SRCS = main.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 DEPS = $(OBJS:.o=.d)
