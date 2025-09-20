@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <stdexcept>
 #include <iostream>
+#include <unistd.h>
 
 #include "Span.hpp"
 
@@ -37,11 +38,22 @@ int Span::longestSpan()
 	return (longest - shortest);
 }
 
+unsigned int Span::space_left()
+{
+	return (num_elements - idx);
+}
+
 void Span::print_array()
 {
-	std::cout << "Array length: " << num_elements << "\nArray idx: " << idx << "\n\n";
+	std::cout << "Array length: " << num_elements << "\nSpace left: " << Span::space_left() << '\n';
 	for (int i = 0; i < idx; i++)
+	{
 		std::cout << i + 1 << ": " << array[i] << '\n';
+		usleep(150);
+	}
+
+	std::cout << "Smallest: " << (idx > 0 ? *std::min_element(&array[0], &(array[idx])) : 0) << '\n';
+	std::cout << "Largest: " << (idx > 0 ? *std::max_element(&array[0], &(array[idx])) : 0) << "\n\n";
 }
 
 Span::Span(): num_elements(0), idx(0), array(NULL) { }

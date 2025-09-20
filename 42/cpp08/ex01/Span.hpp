@@ -7,10 +7,11 @@ class Span
 		void addNumber(int num);
 		int shortestSpan();
 		int longestSpan();
+		unsigned int space_left();
 		void print_array();
 
 		template <typename InputIt>
-		void extend(InputIt first, InputIt last)
+		void fill(InputIt first, InputIt last)
 		{
 			InputIt idx = first;
 			

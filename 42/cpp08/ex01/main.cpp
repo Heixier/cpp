@@ -7,6 +7,7 @@
 #include "colors.hpp"
 
 static bool	ft_aredigits(const std::string& input) { return (input.find_first_not_of("0123456789") == std::string::npos ? true : false); }
+static void ft_newline(int size) { for (int i = 0; i < size; i++) { std::cout << '\n'; }; }
 
 static std::vector<int> generate_random_vector(int size)
 {
@@ -40,11 +41,26 @@ static int get_number_input(const std::string& prompt)
 static void test_small()
 {
 	std::cout << LIGHT_GREEN << "TEST: Small Spans >> \n" << END;
+
+	std::cout << ICE_BLUE << "Created pdf array of size 5!\n" << END;
+	Span pdf(5);
+	pdf.addNumber(6);
+	pdf.addNumber(3);
+	pdf.addNumber(17);
+	pdf.addNumber(9);
+	pdf.addNumber(11);
+
+	std::cout << "Checking pdf array: \n";
+	pdf.print_array();
+
+	std::cout << "Shortest span: " << pdf.shortestSpan() << "\n";
+	std::cout << "Longest span: " << pdf.longestSpan() << "\n";
+
 	static const int intarr[] = {1, 3, 5, 7, 9};
 	std::vector<int> intvect(intarr, intarr + sizeof(intarr) / sizeof(intarr[0]));
 	Span small(5);
 
-	small.extend(intvect.begin(), intvect.end());
+	small.fill(intvect.begin(), intvect.end());
 
 	std::cout << ICE_BLUE << "Created small array of size 5!\n" << END;
 	small.print_array();
@@ -58,20 +74,20 @@ static void test_small()
 	}
 	catch (const std::exception& e)
 	{
-		std::cerr << RED << "Exception caught: " << e.what() << '\n' << END;
+		std::cerr << RED << "Exception caught: " << e.what() << END << '\n';
 	}
 
 
 	Span triangle(3);
 	std::cout << ICE_BLUE << "Created triangle array of size 3!\n" << END;
-	std::cout << "Trying to extend triangle array using the previous vector of size 5!\n";
+	std::cout << "Trying to fill triangle array using the previous vector of size 5!\n";
 	try
 	{
-		triangle.extend(intvect.begin(), intvect.end());
+		triangle.fill(intvect.begin(), intvect.end());
 	}
 	catch(const std::exception& e)
 	{
-		std::cerr << RED << "Exception caught: " << e.what() << '\n' << END;
+		std::cerr << RED << "Exception caught: " << e.what() << END << '\n';
 	}
 }
 
@@ -111,7 +127,7 @@ static void test_insufficient()
 	}
 	catch (const std::exception& e)
 	{
-		std::cerr << RED << "Exception caught: " << e.what() << '\n' << END;
+		std::cerr << RED << "Exception caught: " << e.what() << END << '\n';
 	}
 	try
 	{
@@ -119,10 +135,10 @@ static void test_insufficient()
 	}
 	catch (const std::exception& e)
 	{
-		std::cerr << RED << "Exception caught: " << e.what() << '\n' << END;
+		std::cerr << RED << "Exception caught: " << e.what() << END << '\n';
 	}
 
-	std::cout << ICE_BLUE << "Adding 42 to insufficient vector...\n" << END;
+	std::cout << ICE_BLUE << "Adding one number to insufficient vector...\n" << END;
 	insufficient.addNumber(42);
 
 	try
@@ -132,7 +148,7 @@ static void test_insufficient()
 	}
 	catch (const std::exception& e)
 	{
-		std::cerr << RED << "Exception caught: " << e.what() << '\n' << END;
+		std::cerr << RED << "Exception caught: " << e.what() << END << '\n';
 	}
 
 	try
@@ -141,47 +157,47 @@ static void test_insufficient()
 	}
 	catch (const std::exception& e)
 	{
-		std::cerr << RED << "Exception caught: " << e.what() << '\n' << END;
+		std::cerr << RED << "Exception caught: " << e.what() << END << '\n';
 	}
 }
 
 static void test_big()
 {
-	std::cout << LIGHT_GREEN << "TEST: Big Span >> \n" << END;
-
-	std::cout << ICE_BLUE << "Created big array of size 10000!\n" << END;
-	Span big(10000);
-	big.addNumber(6);
-	big.addNumber(3);
-	big.addNumber(17);
-	big.addNumber(9);
-	big.addNumber(11);
-
-	std::cout << "Checking big array: \n";
-	big.print_array();
-
-	std::cout << "Shortest span: " << big.shortestSpan() << "\n";
-	std::cout << "Longest span: " << big.longestSpan() << "\n";
-
 	try
 	{
+		std::cout << LIGHT_GREEN << "TEST: Big Span >>" << END << '\n';
+		int size = get_number_input("Enter size of big vector: " );
+		if (size > 100000)
+		{
+			std::cerr << RED << size << " is too large!\n" << END;
+			return;
+		}
+	
+		Span big(size);
+		std::cout << ICE_BLUE << "Created big vector of size: " << size << "!\n" << END;
+
+		std::cout << YELLOW << "Space left: " << big.space_left() << END << '\n';
 		std::vector<int> randvect = generate_random_vector(get_number_input("Enter size of random vector to append: "));
-		big.extend(randvect.begin(), randvect.end());
+		big.fill(randvect.begin(), randvect.end());
 		big.print_array();
+		std::cout << "Shortest span: " << big.shortestSpan() << "\n";
+		std::cout << "Longest span: " << big.longestSpan() << "\n";
 	}
 	catch (const std::exception &e)
 	{
-		std::cerr << RED << "Exception caught: " << e.what() << '\n' << END;
+		std::cerr << RED << "Exception caught: " << e.what() << END << '\n';
 	}
+
+
 }
 
 int main()
 {
 	test_small();
-	std::cout << "\n\n\n\n\n";
+	ft_newline(5);
 	test_duplicate();
-	std::cout << "\n\n\n\n\n";
+	ft_newline(5);
 	test_insufficient();
-	std::cout << "\n\n\n\n\n";
+	ft_newline(5);
 	test_big();
 }
