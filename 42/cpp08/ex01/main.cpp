@@ -186,8 +186,6 @@ static void test_big()
 	{
 		std::cerr << RED << "Exception caught: " << e.what() << END << '\n';
 	}
-
-
 }
 
 int main()
