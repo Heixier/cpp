@@ -103,13 +103,13 @@ static void mstack_random()
 	std::cout << LIGHT_GREEN << "Backup stack contents (size: " << backup.size() << ", last: " << (backup.empty() ? 0 : backup.top()) << "): " << END << '\n';
 	std::copy(backup.begin(), backup.end(), std::ostream_iterator<long long>(std::cout, "\n"));
 
-	std::cout << YELLOW << "Assigning original stack to backup stack..." << END << '\n';
+	std::cout << YELLOW << "Assigning original stack to backup stack... (they should match now)" << END << '\n';
 	backup = rand_mstack;
 
 	std::cout << LIGHT_GREEN << "Backup stack contents (size: " << backup.size() << ", last: " << (backup.empty() ? 0 : backup.top()) << "): " << END << '\n';
 	std::copy(backup.begin(), backup.end(), std::ostream_iterator<long long>(std::cout, "\n"));
 
-	std::cout << LIGHT_GREEN << "Original remaining stack contents (size: " << rand_mstack.size() << ", last: " << (rand_mstack.empty() ? 0 : rand_mstack.top()) << "): " << END << '\n';
+	std::cout << LIGHT_GREEN << "Original stack contents after assign (size: " << rand_mstack.size() << ", last: " << (rand_mstack.empty() ? 0 : rand_mstack.top()) << "): " << END << '\n';
 	std::copy(rand_mstack.begin(), rand_mstack.end(), std::ostream_iterator<long long>(std::cout, "\n"));
 }
 

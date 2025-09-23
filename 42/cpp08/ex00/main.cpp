@@ -5,7 +5,7 @@
 #include <unistd.h>
 
 template<typename T>
-void print_vect(const std::vector<T>& vect, const char* color)
+static void print_vect(const std::vector<T>& vect, const char* color)
 {
 	std::cout << color << "Vector contents: {";
 	for (size_t i = 0; i < vect.size(); i++)
@@ -16,7 +16,7 @@ void print_vect(const std::vector<T>& vect, const char* color)
 }
 
 template<typename T>
-void search_vect(const std::vector<T>& vect)
+static void search_vect(const std::vector<T>& vect)
 {
 	for (int i = *std::min_element(vect.begin(), vect.end()); i < (*std::max_element(vect.begin(), vect.end()) + 1); i++)
 	{
