@@ -17,7 +17,6 @@ class BitcoinExchange
 	private:
 		BitcoinExchange();
 		std::map<std::string, float> m_c;
-		const std::string m_database;
 		std::string m_filename;
 };
 

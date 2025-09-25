@@ -22,7 +22,7 @@ BitcoinExchange::BitcoinExchange()
 {
 	throw std::invalid_argument("No filename provided!");
 }
-BitcoinExchange::BitcoinExchange(const std::string& filename): m_database(DATABASE), m_filename(filename)
+BitcoinExchange::BitcoinExchange(const std::string& filename): m_filename(filename)
 {
 	std::ifstream file(m_filename.c_str());
 	if (!file)
@@ -36,17 +36,18 @@ BitcoinExchange::BitcoinExchange(const std::string& filename): m_database(DATABA
 	if (!file)
 	{
 		std::cout << RED << "Failed to open " << m_filename << " for reading!\n" << END;
-		throw std::invalid_argument("Invalid file!");
+		throw std::invalid_argument("Invalid database!");
 	}
 	db.close();
 }
 
-BitcoinExchange::BitcoinExchange(const BitcoinExchange& other): m_filename(other.m_filename) { }
+BitcoinExchange::BitcoinExchange(const BitcoinExchange& other): m_c(other.m_c), m_filename(other.m_filename) { }
 
 BitcoinExchange& BitcoinExchange::operator= (const BitcoinExchange& other)
 {
 	if (this != &other)
 	{
+		m_c = other.m_c;
 		m_filename = other.m_filename;
 	}
 	return (*this);
