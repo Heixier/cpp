@@ -8,7 +8,7 @@ class BitcoinExchange
 {
 	public:
 		void dump_database();
-		void validate_database();
+		void read_database();
 
 		BitcoinExchange(const std::string& filename);
 		BitcoinExchange(const BitcoinExchange& other);

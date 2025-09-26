@@ -7,7 +7,7 @@
 
 #define DATABASE "data.csv"
 
-void BitcoinExchange::validate_database()
+void BitcoinExchange::read_database()
 {
 	std::ifstream file(DATABASE);
 	std::string line;
@@ -78,7 +78,7 @@ BitcoinExchange::BitcoinExchange(const std::string& filename): m_filename(filena
 		throw std::invalid_argument("File read error!");
 	}
 	file.close();
-	validate_database();
+	read_database();
 }
 
 BitcoinExchange::BitcoinExchange(const BitcoinExchange& other): m_c(other.m_c), m_filename(other.m_filename) { }
