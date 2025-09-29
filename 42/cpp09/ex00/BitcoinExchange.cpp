@@ -6,6 +6,7 @@
 #include <sstream>
 #include <cstdlib>
 
+
 #include "colors.hpp"
 #include "BitcoinExchange.hpp"
 
@@ -41,17 +42,18 @@ static bool validate_date_format(const std::string& date)
 	return (true);
 }
 
+
 static bool validate_date(const std::string& date)
 {
 	if (!validate_date_format(date))
 		return (false);
 
 	int year = std::atoi(date.substr(0, 4).c_str());
-	int month = std::atoi(date.substr(6, 2).c_str());
+	int month = std::atoi(date.substr(5, 2).c_str());
 	int day = std::atoi(date.substr(8, 2).c_str());
 
 	std::tm tm = {};
-	tm.tm_year = year;
+	tm.tm_year = year - 1900;
 	tm.tm_mon = month - 1;
 	tm.tm_mday = day;
 	tm.tm_isdst = -1;
@@ -60,6 +62,10 @@ static bool validate_date(const std::string& date)
 	if (t == -1)
 		return (false);
 
+	if (tm.tm_year != year - 1900 ||
+		tm.tm_mon != month - 1 ||
+		tm.tm_mday != day)
+		return (false);
 	return (true);
 };
 
@@ -86,7 +92,6 @@ static void validate_input_line(const std::string& line)
 	}
 	validate_amount(line.substr(13));
 }
-
 
 void BitcoinExchange::reference_database()
 {
