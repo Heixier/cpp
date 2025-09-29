@@ -17,6 +17,7 @@ static bool	ft_aredigits(const std::string& input) { return (input.find_first_no
 static bool validate_date_format(const std::string& date)
 {
 
+	// USE STRINGP TIME
 	if (date.length() != 10)
 		return (false);
 
@@ -30,7 +31,7 @@ static bool validate_date_format(const std::string& date)
 		return (false);
 
 	// Check MM
-	std::string month = date.substr(6, 2);
+	std::string month = date.substr(5, 2);
 	if (!ft_aredigits(year))
 		return (false);
 
