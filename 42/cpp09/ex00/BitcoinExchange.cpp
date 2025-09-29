@@ -1,11 +1,96 @@
 #include <iostream>
 #include <fstream>
 #include <stdexcept>
-#include "colors.hpp"
+#include <ctime>
+#include <string>
+#include <sstream>
 
+#include "colors.hpp"
 #include "BitcoinExchange.hpp"
 
 #define DATABASE "data.csv"
+
+static bool	ft_aredigits(const std::string& input) { return (input.find_first_not_of("0123456789") == std::string::npos ? true : false); }
+
+static bool validate_date_format(const std::string& date)
+{
+	if (date.length() != 10)
+		return (false);
+
+	// Check separators
+	if (date[4] != '-' || date[7] != '-')
+		return (false);
+
+	// Check YYYY
+	std::string year = date.substr(0, 4);
+	if (!ft_aredigits(year))
+		return (false);
+
+	// Check MM
+	std::string month = date.substr(6, 2);
+	if (!ft_aredigits(year))
+		return (false);
+
+	// Check DD
+	std::string day = date.substr(8, 2);
+	if (!ft_aredigits(year))
+		return (false);
+
+	return (true);
+}
+
+static bool validate_date(const std::string& date)
+{
+	if (!validate_date_format(date))
+		return (false);
+
+	std::tm tm;
+	tm.tm_year = 42;
+	// check date 
+
+	return (true);
+};
+
+static bool validate_amount(const std::string& amount)
+{
+	std::istringstream iss(amount);
+	float value;
+	iss >> value;
+	if (iss.fail() || !iss.eof())
+		return (false);
+	if (value < 0 || value > 1000)
+		return (false);
+	return (true);
+}
+
+static void validate_input_line(const std::string& line)
+{
+	if ( line.length() < 14 ||
+	!validate_date(line.substr(0, 10)) ||
+	line.substr(11, 3) != " | ")
+	{
+		std::string err_str = "bad input => ";
+		err_str.append(line);
+		throw (std::runtime_error(err_str));
+	}
+	std::string amount = line.substr(14, line.size());
+	if (!ft_aredigits(amount))
+		throw (std::runtime_error("not a positive number."));
+	if (!validate_amount(amount))
+		throw ("too large a number.");
+}
+
+
+void BitcoinExchange::reference_database()
+{
+	std::ifstream file(m_filename);
+	std::string line;
+	
+	while (std::getline(file, line))
+	{
+
+	}
+}
 
 void BitcoinExchange::read_database()
 {
@@ -19,7 +104,7 @@ void BitcoinExchange::read_database()
 	bool skip_header = true;
 
 	if (!file.is_open())
-		throw std::runtime_error("Cannot open database for reading!");
+		throw std::runtime_error("could not read database.");
 
 	while (std::getline(file, line))
 	{
@@ -29,7 +114,7 @@ void BitcoinExchange::read_database()
 			|| line.find_first_of(" \t\r\v\f") != std::string::npos)
 		{
 			file.close();
-			throw std::runtime_error("Database format error!");
+			throw std::runtime_error("invalid database format.");
 		}
 		try
 		{
@@ -38,7 +123,7 @@ void BitcoinExchange::read_database()
 			if (key == "" || value == "")
 			{
 				file.close();
-				throw std::runtime_error("Database format error!");
+				throw std::runtime_error("invalid database format.");
 			}
 		}
 		catch (...)
@@ -67,16 +152,13 @@ void BitcoinExchange::dump_database()
 
 BitcoinExchange::BitcoinExchange()
 {
-	throw std::invalid_argument("No filename provided!");
+	throw std::invalid_argument("could not open file.");
 }
 BitcoinExchange::BitcoinExchange(const std::string& filename): m_filename(filename)
 {
 	std::ifstream file(m_filename.c_str());
 	if (!file)
-	{
-		std::cerr << RED << "Failed to open " << m_filename << " for reading!\n" << END;
-		throw std::invalid_argument("File read error!");
-	}
+		throw std::invalid_argument("could not open file.");
 	file.close();
 	read_database();
 }

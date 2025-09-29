@@ -8,7 +8,14 @@ int main(int argc, char **argv)
 {
 	if (argc != 2)
 	{
-		std::cout << RED << "Invalid arguments! Provided: " << argc - 1 << " Expected: 1\n" << END;
+		try
+		{
+			BitcoinExchange btc;
+		}
+		catch (const std::exception& e)
+		{
+			std::cerr << RED << "Error: " << e.what() << '\n' << END;
+		}
 		return (1);
 	}
 	try
@@ -19,7 +26,7 @@ int main(int argc, char **argv)
 	}
 	catch (const std::exception& e)
 	{
-		std::cerr << RED << e.what() << '\n' << END;
+		std::cerr << RED << "Error: " << e.what() << '\n' << END;
 	}
 
 }
