@@ -12,62 +12,23 @@
 
 #define DATABASE "data.csv"
 
-static bool	ft_aredigits(const std::string& input) { return (input.find_first_not_of("0123456789") == std::string::npos ? true : false); }
-
-static bool validate_date_format(const std::string& date)
-{
-
-	// USE STRINGP TIME
-	if (date.length() != 10)
-		return (false);
-
-	// Check separators
-	if (date[4] != '-' || date[7] != '-')
-		return (false);
-
-	// Check YYYY
-	std::string year = date.substr(0, 4);
-	if (!ft_aredigits(year))
-		return (false);
-
-	// Check MM
-	std::string month = date.substr(5, 2);
-	if (!ft_aredigits(year))
-		return (false);
-
-	// Check DD
-	std::string day = date.substr(8, 2);
-	if (!ft_aredigits(year))
-		return (false);
-
-	return (true);
-}
-
-
 static bool validate_date(const std::string& date)
 {
-	if (!validate_date_format(date))
-		return (false);
-
-	int year = std::atoi(date.substr(0, 4).c_str());
-	int month = std::atoi(date.substr(5, 2).c_str());
-	int day = std::atoi(date.substr(8, 2).c_str());
 
 	std::tm tm = {};
-	tm.tm_year = year - 1900;
-	tm.tm_mon = month - 1;
-	tm.tm_mday = day;
-	tm.tm_isdst = -1;
+	const char * result = strptime(date.c_str(), "%Y-%m-%d", &tm);
+	if (!result || *result != '\0')
+		return (false);
+
+	int year = tm.tm_year;
+	int month = tm.tm_mon;
+	int day = tm.tm_mday;
 
 	std::time_t t = std::mktime(&tm);
-	if (t == -1)
-		return (false);
-
-	if (tm.tm_year != year - 1900 ||
-		tm.tm_mon != month - 1 ||
-		tm.tm_mday != day)
-		return (false);
-	return (true);
+	return (t != -1 &&
+		tm.tm_year == year &&
+		tm.tm_mon == month &&
+		tm.tm_mday == day);
 };
 
 static void validate_amount(const std::string& amount)
