@@ -21,8 +21,7 @@ int main(int argc, char **argv)
 	try
 	{
 		BitcoinExchange btc(argv[1]);
-		btc.reference_database();
-		// btc.dump_database(); // temp just dump database to demonstrate and ignore input
+		btc.exchange();
 	}
 	catch (const std::exception& e)
 	{

@@ -6,7 +6,6 @@
 #include <sstream>
 #include <cstdlib>
 
-
 #include "colors.hpp"
 #include "BitcoinExchange.hpp"
 
@@ -14,7 +13,6 @@
 
 static bool validate_date(const std::string& date)
 {
-
 	std::tm tm = {};
 	const char * result = strptime(date.c_str(), "%Y-%m-%d", &tm);
 	if (!result || *result != '\0')
@@ -31,18 +29,7 @@ static bool validate_date(const std::string& date)
 		tm.tm_mday == day);
 };
 
-static void validate_amount(const std::string& amount)
-{
-	std::istringstream iss(amount);
-	float value;
-	iss >> value;
-	if (iss.fail() || !iss.eof() || value < 0)
-		throw (std::runtime_error("not a positive number."));
-	if (value > 1000)
-		throw (std::runtime_error("too large a number."));
-}
-
-static void validate_input_line(const std::string& line)
+static void validate_line_format(const std::string& line)
 {
 	if ( line.length() < 14 ||
 	!validate_date(line.substr(0, 10)) ||
@@ -52,10 +39,35 @@ static void validate_input_line(const std::string& line)
 		err_str.append(line);
 		throw (std::runtime_error(err_str));
 	}
-	validate_amount(line.substr(13));
 }
 
-void BitcoinExchange::reference_database()
+static double get_double(const std::string& amount)
+{
+	std::istringstream iss(amount);
+	double value;
+	iss >> value;
+	if (iss.fail() || !iss.eof() || value < 0)
+		throw (std::runtime_error("not a positive number."));
+	return (value);
+}
+
+void BitcoinExchange::reference_database(const std::string& line)
+{
+	std::string date = line.substr(0, 10);
+	float amount = get_double(line.substr(13)); // here is your float
+	if (amount > 1000)
+		throw (std::runtime_error("too large a number."));
+
+	std::map<std::string, double>::iterator match;
+
+	match = m_c.lower_bound(date);
+
+	if ((match == m_c.end() || match -> first != date) && match != m_c.begin())
+		--match;
+	std::cout << ICE_BLUE << date << " => " << amount << " = " << amount * match -> second << '\n';
+}
+
+void BitcoinExchange::exchange()
 {
 	std::ifstream file(m_filename.c_str());
 	std::string line;
@@ -70,15 +82,14 @@ void BitcoinExchange::reference_database()
 		}
 		try
 		{
-			validate_input_line(line);
-			std::cout << LIGHT_GREEN << "Line: " << line << '\n' << END;
+			validate_line_format(line);
+			reference_database(line);
 		}
 		catch (const std::exception& e)
 		{
 			std::cout << RED << "Error: " << e.what() << '\n' << END;
 		}
 	}
-	file.close();
 }
 
 void BitcoinExchange::read_database()
@@ -101,42 +112,30 @@ void BitcoinExchange::read_database()
 		if (comma_pos == std::string::npos  // no comma or more than one comma or whitespace
 			|| comma_pos != line.find_last_of(',')
 			|| line.find_first_of(" \t\r\v\f") != std::string::npos)
-		{
-			file.close();
 			throw std::runtime_error("invalid database format.");
-		}
-		try
-		{
-			key = line.substr(0, comma_pos);
-			value = line.substr(comma_pos + 1, std::string::npos);
-			if (key == "" || value == "")
-			{
-				file.close();
-				throw std::runtime_error("invalid database format.");
-			}
-		}
-		catch (...)
-		{
-			file.close();
-			throw;
-		}
+		key = line.substr(0, comma_pos);
+		value = line.substr(comma_pos + 1, std::string::npos);
+		if (key == "" || value == "")
+			throw std::runtime_error("invalid database format.");
+
 		if (skip_header)
 		{
 			skip_header = false;
 			continue;
 		}
-		m_c.insert(std::make_pair(key, value));
+
+		if (!validate_date(key))
+			throw std::runtime_error("invalid database format.");
+
+		m_c.insert(std::make_pair(key, get_double(value)));
 	}
-	file.close();
 }
 
 void BitcoinExchange::dump_database()
 {
-	std::map<std::string, std::string>::iterator it;
+	std::map<std::string, double>::iterator it;
 	for (it = m_c.begin(); it != m_c.end(); ++it)
-	{
 		std::cout << ICE_BLUE << "Key: " << it -> first << LIGHT_GREEN << " Value: " << it -> second << '\n' << END;
-	}
 }
 
 BitcoinExchange::BitcoinExchange()
@@ -148,7 +147,6 @@ BitcoinExchange::BitcoinExchange(const std::string& filename): m_filename(filena
 	std::ifstream file(m_filename.c_str());
 	if (!file)
 		throw std::invalid_argument("could not open file.");
-	file.close();
 	read_database();
 }
 

@@ -8,8 +8,8 @@ class BitcoinExchange
 {
 	public:
 		void dump_database();
-		void read_database();
-		void reference_database();
+
+		void exchange();
 
 		BitcoinExchange();
 		BitcoinExchange(const std::string& filename);
@@ -18,7 +18,10 @@ class BitcoinExchange
 		~BitcoinExchange();
 
 	private:
-		std::map<std::string, std::string> m_c;
+		void read_database();
+		void reference_database(const std::string& date);
+
+		std::map<std::string, double> m_c;
 		std::string m_filename;
 };
 
