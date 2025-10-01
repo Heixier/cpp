@@ -7,6 +7,7 @@ class ShuntingYard
 {
 	public:
 		void generate();
+		void display();
 		
 		ShuntingYard(const char* infix);
 		~ShuntingYard();

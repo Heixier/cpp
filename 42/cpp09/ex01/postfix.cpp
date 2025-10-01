@@ -11,6 +11,7 @@ int main(int argc, char **argv)
 	{
 		ShuntingYard generator(argv[1]);
 		generator.generate();
+		generator.display();
 	}
 	catch (const std::exception& e)
 	{

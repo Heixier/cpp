@@ -7,7 +7,7 @@
 
 static bool is_operator(int token)
 {
-	const char* operators = "+-/*()";
+	const char* operators = "+-/*";
 	for (int i = 0; operators[i]; i++)
 	{
 		if (token == operators[i])
@@ -16,13 +16,18 @@ static bool is_operator(int token)
 	return (false);
 }
 
+static bool is_bracket(int token)
+{
+	return (token == '(' || token == ')');
+}
+
 void ShuntingYard::generate()
 {
 	for (int i = 0; m_infix[i]; i++)
 	{
 		if (isdigit(m_infix[i]))
 			push_digit(m_infix[i]);
-		else if (is_operator(m_infix[i]))
+		else if (is_operator(m_infix[i]) || is_bracket(m_infix[i]))
 			push_operator(m_infix[i]);
 	}
 
@@ -32,8 +37,8 @@ void ShuntingYard::generate()
 		m_operators.erase(m_operators.size() - 1);
 	}
 
-	std::cout << LIGHT_GREEN << "Operator stack: " << m_operators << '\n' << END;
-	std::cout << ICE_BLUE << "Postfix stack: " << m_postfix << '\n' << END;
+	// std::cout << LIGHT_GREEN << "Operator stack: " << m_operators << '\n' << END;
+	// std::cout << ICE_BLUE << "Postfix stack: " << m_postfix << '\n' << END;
 }
 
 void ShuntingYard::push_operator(const char& c)
@@ -57,8 +62,13 @@ void ShuntingYard::push_operator(const char& c)
 			m_operators.push_back(c);
 		else // same precedence found
 		{
-			m_postfix.push_back(m_operators[m_operators.size() - 1]);
-			m_operators.erase(m_operators.size() - 1);
+			while (!m_operators.empty() &&
+					(m_operators[m_operators.size() - 1] == '*' ||
+					m_operators[m_operators.size() - 1] == '/'))
+			{
+				m_postfix.push_back(m_operators[m_operators.size() - 1]);
+				m_operators.erase(m_operators.size() - 1);
+			}
 			m_operators.push_back(c);
 		}
 	}
@@ -86,6 +96,8 @@ void ShuntingYard::push_digit(const char& c)
 static bool validate_infix(const char* infix)
 {
 	bool digit_flag = false;
+	bool operator_flag = false;
+	bool bracket_flag = false;
 	for (int i = 0; infix[i]; i++)
 	{
 		if (isdigit(infix[i]))
@@ -93,15 +105,36 @@ static bool validate_infix(const char* infix)
 			if (digit_flag)
 				return (false);
 			else
-				digit_flag = true;
+				digit_flag = true, operator_flag = false;
 		}
-		else if (!is_operator(infix[i]))
-			return (false);
+		else if (is_operator(infix[i]))
+		{
+			if (!digit_flag && bracket_flag)
+				return (std::cout << "No digit preceding: " << infix[i] << '\n', false);
+			if (operator_flag)
+				return (std::cout << "Duplicate operator\n", false);
+			else
+				digit_flag = false, operator_flag = true;
+		}
+		else if (infix[i] == '(')
+			digit_flag = false, operator_flag = false, bracket_flag = true;
+		else if (infix[i] == ')')
+		{
+			if (!bracket_flag)
+				return (std::cout << "Unmatched brackets\n", false);
+			digit_flag = true, operator_flag = false;
+		}
 		else
-			digit_flag = false;
-		
+			return (std::cout << "Unrecognised tokens\n", false);
 	}
 	return (true);
+}
+
+void ShuntingYard::display()
+{
+	for (size_t i = 0; m_postfix[i]; ++i)
+		std::cout << m_postfix[i] << ' ';
+	std::cout << '\n';
 }
 
 ShuntingYard::ShuntingYard(const char* infix): m_infix(infix)

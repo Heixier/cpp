@@ -4,7 +4,7 @@ NAME = RPN
 POSTFIX_NAME = postfix
 
 SRCS = main.cpp RPN.cpp
-POSTFIX_SRCS = POSTFIX.cpp ShuntingYard.cpp
+POSTFIX_SRCS = postfix.cpp ShuntingYard.cpp
 
 POSTFIX_OBJS = $(POSTFIX_SRCS:.cpp=.o)
 POSTFIX_DEPS = $(POSTFIX_OBJS:.o=.d)

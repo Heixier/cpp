@@ -59,19 +59,38 @@ void RPN::calculate()
 			int first = m_result.top();
 			m_result.pop();
 
+			long long overflow_check;
+			int result;
+
 			switch (op)
 			{
 				case '+':
-					m_result.push(first + second);
+					overflow_check = static_cast<long long>(first) + static_cast<long long>(second);
+					result = first + second;
+					if (result != overflow_check)
+						throw std::runtime_error("Error"); // Overflow
+					m_result.push(result);
 					break;
 				case '-':
-					m_result.push(first - second);
+					overflow_check = static_cast<long long>(first) - static_cast<long long>(second);
+					result = first - second;
+					if (result != overflow_check)
+						throw std::runtime_error("Error"); // Overflow
+					m_result.push(result);
 					break;
 				case '*':
-					m_result.push(first * second);
+					overflow_check = static_cast<long long>(first) * static_cast<long long>(second);
+					result = first * second;
+					if (result != overflow_check)
+						throw std::runtime_error("Error"); // Overflow
+					m_result.push(result);
 					break;
 				case '/':
-					m_result.push(first / second);
+					overflow_check = static_cast<long long>(first) / static_cast<long long>(second);
+					result = first / second;
+					if (result != overflow_check)
+						throw std::runtime_error("Error"); // Overflow
+					m_result.push(result);
 					break;
 				default:
 					throw std::runtime_error("Error"); // Someone broke my code

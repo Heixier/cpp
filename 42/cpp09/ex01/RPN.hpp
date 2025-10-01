@@ -3,8 +3,6 @@
 
 #include <stack>
 
-// Display error and overflow accordingly; use just ints
-
 class RPN
 {
 	public:
