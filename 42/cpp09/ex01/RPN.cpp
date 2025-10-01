@@ -49,7 +49,7 @@ void RPN::calculate()
 		else
 		{
 			if (m_result.size() < 2)
-				throw std::runtime_error(""); // Invalid calculation
+				throw std::runtime_error("Error"); // Invalid calculation
 			
 			char op = m_postfix.top();
 			m_postfix.pop();
@@ -62,33 +62,28 @@ void RPN::calculate()
 			switch (op)
 			{
 				case '+':
-					std::cout << "Pushing " << first << " + " << second << '\n';
 					m_result.push(first + second);
 					break;
 				case '-':
-					std::cout << "Pushing " << first << " - " << second << '\n';
 					m_result.push(first - second);
 					break;
 				case '*':
-					std::cout << "Pushing " << first << " * " << second << '\n';
 					m_result.push(first * second);
 					break;
 				case '/':
-					std::cout << "Pushing " << first << " / " << second << '\n';
 					m_result.push(first / second);
 					break;
 				default:
 					throw std::runtime_error("Error"); // Someone broke my code
 			}
 		}
-		std::cout << "Result stack: " << m_result.top() << '\n';
 	}
 }
 
 void RPN::evaluate()
 {
 	if (!m_postfix.empty() || m_result.size() != 1)
-		throw (std::runtime_error("")); // Invalid calculation (not enough operators)
+		throw (std::runtime_error("Error")); // Invalid calculation (not enough operators)
 	std::cout << m_result.top() << '\n';
 }
 
