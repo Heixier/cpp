@@ -1,8 +1,8 @@
 CXX = c++
 CXXFLAGS = -std=c++98 -Wall -Wextra -Werror -MMD
-NAME = btc
+NAME = RPN
 
-SRCS = main.cpp
+SRCS = main.cpp RPN.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 DEPS = $(OBJS:.o=.d)

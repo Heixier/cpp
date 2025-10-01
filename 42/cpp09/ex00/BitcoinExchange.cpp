@@ -87,7 +87,7 @@ void BitcoinExchange::exchange()
 		}
 		catch (const std::exception& e)
 		{
-			std::cout << RED << "Error: " << e.what() << '\n' << END;
+			std::cerr << RED << "Error: " << e.what() << '\n' << END;
 		}
 	}
 }
