@@ -1,8 +1,13 @@
 CXX = c++
 CXXFLAGS = -std=c++98 -Wall -Wextra -Werror -MMD
 NAME = RPN
+POSTFIX_NAME = postfix
 
 SRCS = main.cpp RPN.cpp
+POSTFIX_SRCS = POSTFIX.cpp ShuntingYard.cpp
+
+POSTFIX_OBJS = $(POSTFIX_SRCS:.cpp=.o)
+POSTFIX_DEPS = $(POSTFIX_OBJS:.o=.d)
 
 OBJS = $(SRCS:.cpp=.o)
 DEPS = $(OBJS:.o=.d)
@@ -16,17 +21,21 @@ $(NAME): $(OBJS)
 	$(CXX) $(CXXFLAGS) $(OBJS) -o $(NAME)
 	@echo "$(LIGHT_BLUE)"$(NAME) has been compiled!"$(END)"
 
+postfix: $(POSTFIX_OBJS)
+	$(CXX) $(CXXFLAGS) $(POSTFIX_OBJS) -o $(POSTFIX_NAME)
+	@echo "$(LIGHT_GREEN)"$(POSTFIX_NAME) has been compiled!"$(END)"
+
 clean:
-	rm -rf $(OBJS) $(DEPS)
+	rm -rf $(OBJS) $(DEPS) $(POSTFIX_OBJS) $(POSTFIX_DEPS)
 
 fclean: clean
-	rm -rf $(NAME)
+	rm -rf $(NAME) $(POSTFIX_NAME)
 
 re: fclean all
 
--include $(DEPS)
+-include $(DEPS) $(POSTFIX_DEPS)
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re POSTFIX
 
 BLACK = \033[0;30m
 RED = \033[0;31m
