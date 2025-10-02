@@ -2,7 +2,6 @@
 #include <iostream>
 #include <stdexcept>
 
-#include "colors.hpp"
 #include "ShuntingYard.hpp"
 
 static bool is_operator(int token)
@@ -133,6 +132,8 @@ static bool validate_infix(const char* infix)
 			if (state == expecting_digit)
 				return (false);
 		}
+		else
+			return (false);
 	}
 	if (state == expecting_digit)
 		return (false);

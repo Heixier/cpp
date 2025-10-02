@@ -4,7 +4,6 @@
 #include <stdexcept>
 
 #include "RPN.hpp"
-#include "colors.hpp"
 
 static bool valid_token(int token)
 {
