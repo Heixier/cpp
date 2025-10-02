@@ -93,40 +93,49 @@ void ShuntingYard::push_digit(const char& c)
 	m_postfix.push_back(c);
 }
 
+// Equivalent
+// After a digit, only allowed tokens are ) or operator
+// After a ), only allowed tokens are operator or )
+
+// Equivalent
+// After a (, only allowed tokens are digit or (
+// After an operator, only allowed tokens are digit or (
+
+// Must end on either digit or )
+
 static bool validate_infix(const char* infix)
 {
-	bool digit_flag = false;
-	bool operator_flag = false;
-	bool bracket_flag = false;
-	for (int i = 0; infix[i]; i++)
+	enum State {expecting_operator, expecting_digit};
+
+	State state = expecting_digit;
+
+	for (int i = 0; infix[i]; ++i)
 	{
 		if (isdigit(infix[i]))
 		{
-			if (digit_flag)
+			if (state == expecting_operator)
 				return (false);
-			else
-				digit_flag = true, operator_flag = false;
+			state = expecting_operator;
 		}
 		else if (is_operator(infix[i]))
 		{
-			if (!digit_flag && bracket_flag)
-				return (std::cout << "No digit preceding: " << infix[i] << '\n', false);
-			if (operator_flag)
-				return (std::cout << "Duplicate operator\n", false);
-			else
-				digit_flag = false, operator_flag = true;
+			if (state == expecting_digit)
+				return (false);
+			state = expecting_digit;
 		}
 		else if (infix[i] == '(')
-			digit_flag = false, operator_flag = false, bracket_flag = true;
+		{
+			if (state == expecting_operator)
+				return (false);
+		}
 		else if (infix[i] == ')')
 		{
-			if (!bracket_flag)
-				return (std::cout << "Unmatched brackets\n", false);
-			digit_flag = true, operator_flag = false;
+			if (state == expecting_digit)
+				return (false);
 		}
-		else
-			return (std::cout << "Unrecognised tokens\n", false);
 	}
+	if (state == expecting_digit)
+		return (false);
 	return (true);
 }
 
