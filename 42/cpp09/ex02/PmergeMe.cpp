@@ -94,8 +94,8 @@ PmergeMe::PmergeMe(int argc, char **argv): m_elements(0), m_list_compares(0), m_
 
 PmergeMe::PmergeMe(): m_elements(0), m_list_compares(0), m_vect_compares(0)
 {
-	m_vect.empty();
-	m_list.empty();
+	m_vect.clear();
+	m_list.clear();
 }
 
 PmergeMe::PmergeMe(const PmergeMe& other): m_elements(other.m_elements), m_list_compares(other.m_list_compares), m_vect_compares(other.m_list_compares), m_list(other.m_list), m_vect(other.m_vect) { }
@@ -110,3 +110,4 @@ PmergeMe& PmergeMe::operator= (const PmergeMe& other)
 }
 
 PmergeMe::~PmergeMe() { }
+
