@@ -2,9 +2,18 @@
 #include <iostream>
 #include <cstring>
 #include <cstdlib>
+#include <cmath>
 
 #include "colors.hpp"
 #include "PmergeMe.hpp"
+
+void PmergeMe::v_print(std::vector<int> vect)
+{
+	std::cout << "Vector: ";
+	for (std::vector<int>::iterator iter = vect.begin(); iter != vect.end(); iter++)
+		std::cout << '[' << *iter << ']';
+	std::cout << '\n';
+}
 
 static bool are_integers(int argc, char **argv)
 {
@@ -21,40 +30,40 @@ static bool are_integers(int argc, char **argv)
 	return (true);
 }
 
-// Idx starts from 0
-void PmergeMe::swap_vector_pair(int pair_idx, int pair_size)
+// Idx starts from 0; recursion
+void PmergeMe::v_swap_pairs(int level)
 {
-	int buffer = 0;
-	int left_idx = pair_idx + pair_size * 2; // wrong
-	int right_idx = left_idx + pair_size;
 
-	std::cout << "Attempting to swap idx " << pair_idx << " of pair_size " << pair_size << " with idx + pair_size = " << pair_idx + pair_size << '\n';
-
-	++m_vect_compares;
-	if (m_vect[left_idx] <= m_vect[right_idx])
-		return;
-
-	for (int i = pair_idx; i < pair_size; i++)
+	int group_size = std::pow(2, level); // How many numbers in each half of the pair
+	int pair_size = group_size * 2; // How big the pair is overall
+	if (pair_size > m_elements)
 	{
-		buffer = m_vect[i];
-		m_vect[i] = m_vect[i + pair_size];
-		m_vect[i + pair_size] = buffer;
+		std::cout << "Not enough elements to make a pair at level " << level << "! Needed: " << pair_size << " Provided: " << m_elements << '\n';
+		return;
+	}
+
+	// std::cout << ICE_BLUE << "Swapping\n" << END;
+
+	int pairs_created = m_elements / pair_size;
+
+	std::cout << "Pair size: " << pair_size << " Group size: " << group_size << '\n';
+	std::cout << "Pairs created: " << pairs_created << '\n';
+
+	
+	v_swap_pairs(level + 1);
+}
+
+void PmergeMe::handle_straggler(int argc, char **argv)
+{
+	if (m_elements % 2)
+	{
+		m_straggler = atoi(argv[argc - 1]);
+		std::cout << LIGHT_GREEN << "Straggler caught: " << m_straggler << '\n' << END;
+		--m_elements;
 	}
 }
 
-// Starts from level 1
-int PmergeMe::max_pairs(int level)
-{
-	int pair_size = level * 2;
-	
-	int num_pairs = m_elements / pair_size;
-
-	std::cout << "Max pairs for level " << level << ": " << num_pairs << '\n';
-
-	return (num_pairs);
-}
-
-PmergeMe::PmergeMe(int argc, char **argv): m_elements(0), m_list_compares(0), m_vect_compares(0)
+PmergeMe::PmergeMe(int argc, char **argv): m_elements(0), m_deque_compares(0), m_vect_compares(0)
 {
 	if (argc < 2)
 		throw std::runtime_error("Not enough arguments!");
@@ -62,49 +71,76 @@ PmergeMe::PmergeMe(int argc, char **argv): m_elements(0), m_list_compares(0), m_
 	argv = &argv[1];
 	if (!are_integers(argc, argv))
 		throw std::runtime_error("Invalid digits!");
-	m_list.clear();
-	m_vect.clear();
 
-	for (int i = 0; i < argc; i++)
+	m_vect.clear();
+	m_v_main.clear();
+	m_v_pend.clear();
+	m_v_rem.clear();
+
+	m_deque.clear();
+	m_d_main.clear();
+	m_d_pend.clear();
+	m_d_rem.clear();
+
+	m_elements = argc;
+
+	handle_straggler(argc, argv);
+
+	std::cout << "m_elements: " << m_elements << '\n';
+
+	for (int i = 0; i < m_elements; i++)
 	{
-		m_list.push_back(atoi(argv[i]));
+		m_deque.push_back(atoi(argv[i]));
 		m_vect.push_back(atoi(argv[i]));
 	}
 
-	m_elements = m_list.size();
+	v_print(m_vect);
 
-	// for (std::list<int>::iterator iter = m_list.begin(); iter != m_list.end(); iter++)
-	// 	std::cout << "List: " << *iter << '\n';
-	
-	for (std::vector<int>::iterator iter = m_vect.begin(); iter != m_vect.end(); iter++)
-		std::cout << "Vector: " << *iter << '\n';
+	v_swap_pairs(0);
 
-	int level = 1;
-	int pairs = max_pairs(level);
-
-	for (int i = 0; i < pairs; i++)
-		swap_vector_pair(i, level * 2);
-
-	std::cout << ICE_BLUE << "Swapping\n" << END;
-
-	for (std::vector<int>::iterator iter = m_vect.begin(); iter != m_vect.end(); iter++)
-		std::cout << "Vector: " << *iter << '\n';
+	v_print(m_vect);
 
 }
 
-PmergeMe::PmergeMe(): m_elements(0), m_list_compares(0), m_vect_compares(0)
+PmergeMe::PmergeMe(): m_elements(0), m_deque_compares(0), m_vect_compares(0)
 {
 	m_vect.clear();
-	m_list.clear();
+	m_v_main.clear();
+	m_v_pend.clear();
+	m_v_rem.clear();
+
+	m_deque.clear();
+	m_d_main.clear();
+	m_d_pend.clear();
+	m_d_rem.clear();
 }
 
-PmergeMe::PmergeMe(const PmergeMe& other): m_elements(other.m_elements), m_list_compares(other.m_list_compares), m_vect_compares(other.m_list_compares), m_list(other.m_list), m_vect(other.m_vect) { }
+PmergeMe::PmergeMe(const PmergeMe& other):
+	m_elements(other.m_elements),
+	m_deque_compares(other.m_deque_compares),
+	m_vect_compares(other.m_deque_compares),
+	m_deque(other.m_deque),
+	m_d_main(other.m_d_main),
+	m_d_pend(other.m_d_pend),
+	m_d_rem(other.m_d_rem),
+	m_vect(other.m_vect),
+	m_v_main(other.m_v_main),
+	m_v_pend(other.m_v_pend),
+	m_v_rem(other.m_v_rem)
+{ }
+
 PmergeMe& PmergeMe::operator= (const PmergeMe& other)
 {
 	if (this != &other)
 	{
-		m_list = other.m_list;
+		m_deque = other.m_deque;
+		m_d_main = other.m_d_main;
+		m_d_pend = other.m_d_pend;
+		m_d_rem = other.m_d_rem;
 		m_vect = other.m_vect;
+		m_v_main = other.m_v_main;
+		m_v_pend = other.m_v_pend;
+		m_v_rem = other.m_v_rem;
 	}
 	return (*this);
 }

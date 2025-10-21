@@ -27,5 +27,5 @@ int main (int argc, char **argv)
 		// std::cout << "Jacobsthal " << i<< ": " << generate_jacobsthal(i) << '\n';
 	}
 
-	std::cout << "Argc: " << argc << '\n';
+	// std::cout << "Argc: " << argc << '\n';
 }
