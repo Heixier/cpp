@@ -150,7 +150,7 @@ void ShuntingYard::display()
 ShuntingYard::ShuntingYard(const char* infix): m_infix(infix)
 {
 	if (!validate_infix(m_infix))
-		throw std::runtime_error("Invalid input.");
+		throw std::runtime_error("Invalid input");
 }
 
 ShuntingYard::ShuntingYard() { }

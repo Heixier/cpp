@@ -48,7 +48,7 @@ void RPN::calculate()
 		else
 		{
 			if (m_result.size() < 2)
-				throw std::runtime_error("Error"); // Invalid calculation
+				throw std::runtime_error("Error: invalid calculation");
 			
 			char op = m_postfix.top();
 			m_postfix.pop();
@@ -67,32 +67,32 @@ void RPN::calculate()
 					overflow_check = static_cast<long long>(first) + static_cast<long long>(second);
 					result = first + second;
 					if (result != overflow_check)
-						throw std::runtime_error("Error"); // Overflow
+						throw std::runtime_error("Error: Overflow");
 					m_result.push(result);
 					break;
 				case '-':
 					overflow_check = static_cast<long long>(first) - static_cast<long long>(second);
 					result = first - second;
 					if (result != overflow_check)
-						throw std::runtime_error("Error"); // Overflow
+						throw std::runtime_error("Error: Overflow");
 					m_result.push(result);
 					break;
 				case '*':
 					overflow_check = static_cast<long long>(first) * static_cast<long long>(second);
 					result = first * second;
 					if (result != overflow_check)
-						throw std::runtime_error("Error"); // Overflow
+						throw std::runtime_error("Error: Overflow");
 					m_result.push(result);
 					break;
 				case '/':
 					overflow_check = static_cast<long long>(first) / static_cast<long long>(second);
 					result = first / second;
 					if (result != overflow_check)
-						throw std::runtime_error("Error"); // Overflow
+						throw std::runtime_error("Error: Overflow");
 					m_result.push(result);
 					break;
 				default:
-					throw std::runtime_error("Error"); // Someone broke my code
+					throw std::runtime_error("Error: Solar Flare");
 			}
 		}
 	}
@@ -101,14 +101,14 @@ void RPN::calculate()
 void RPN::evaluate()
 {
 	if (!m_postfix.empty() || m_result.size() != 1)
-		throw (std::runtime_error("Error")); // Invalid calculation (not enough operators)
+		throw (std::runtime_error("Error: Not enough operators"));
 	std::cout << m_result.top() << '\n';
 }
 
 RPN::RPN(const char* postfix)
 {
 	if (!validate_input(postfix))
-		throw (std::runtime_error("Error"));
+		throw (std::runtime_error("Error: Invalid input"));
 
 	std::istringstream iss(postfix);
 	std::string token;
