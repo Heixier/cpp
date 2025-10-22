@@ -12,6 +12,7 @@ class PmergeMe
 	private:
 
 		int v_swap_pairs(int level);
+		void v_insert(int level);
 		void v_print(std::vector<int> vect);
 
 		int m_elements;

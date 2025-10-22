@@ -78,6 +78,20 @@ int PmergeMe::v_swap_pairs(int level)
 	return (v_swap_pairs(level + 1));
 }
 
+void PmergeMe::v_insert(int level)
+{
+	if (level < 0)
+		return;
+	std::vector<std::vector<int > > v_main;
+	std::vector<std::vector<int> > v_pend;
+	std::vector<int> v_remainder;
+
+	int group_size = std::pow(2, level); // How many numbers for each a/b section
+
+	// Need to create vector of vector<int> for each group, b1, a1, b2, etc.
+
+}
+
 PmergeMe::PmergeMe(int argc, char **argv): m_elements(0), m_deque_compares(0), m_vect_compares(0)
 {
 	if (argc < 2)
@@ -86,6 +100,8 @@ PmergeMe::PmergeMe(int argc, char **argv): m_elements(0), m_deque_compares(0), m
 	argv = &argv[1];
 	if (!are_integers(argc, argv))
 		throw std::runtime_error("Invalid digits!");
+
+	m_vect_compares = m_deque_compares;
 
 	m_vect.clear();
 	m_v_main.clear(); // might not need
@@ -113,6 +129,8 @@ PmergeMe::PmergeMe(int argc, char **argv): m_elements(0), m_deque_compares(0), m
 	std::cout << "Final depth: " << depth << '\n';
 
 	v_print(m_vect);
+
+	v_insert(depth);
 
 }
 
