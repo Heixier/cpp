@@ -11,14 +11,9 @@ class PmergeMe
 		~PmergeMe();
 	private:
 
-		void v_swap_pairs(int level);
+		int v_swap_pairs(int level);
 		void v_print(std::vector<int> vect);
-		int max_pairs(int level);
-		void handle_straggler(int argc, char **argv);
 
-		bool m_straggler_caught;
-
-		int m_straggler;
 		int m_elements;
 		int m_deque_compares;
 		int m_vect_compares;

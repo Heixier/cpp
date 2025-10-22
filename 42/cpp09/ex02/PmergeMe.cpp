@@ -31,36 +31,51 @@ static bool are_integers(int argc, char **argv)
 }
 
 // Idx starts from 0; recursion
-void PmergeMe::v_swap_pairs(int level)
+int PmergeMe::v_swap_pairs(int level)
 {
-
 	int group_size = std::pow(2, level); // How many numbers in each half of the pair
 	int pair_size = group_size * 2; // How big the pair is overall
 	if (pair_size > m_elements)
 	{
-		std::cout << "Not enough elements to make a pair at level " << level << "! Needed: " << pair_size << " Provided: " << m_elements << '\n';
-		return;
+		std::cout << "Level: " << level << " Not enough to make next level! Needed: " << pair_size << " Provided: " << m_elements << " Stopping...\n";
+		return (level);
 	}
 
 	// std::cout << ICE_BLUE << "Swapping\n" << END;
-
 	int pairs_created = m_elements / pair_size;
 
 	std::cout << "Pair size: " << pair_size << " Group size: " << group_size << '\n';
 	std::cout << "Pairs created: " << pairs_created << '\n';
 
-	
-	v_swap_pairs(level + 1);
-}
-
-void PmergeMe::handle_straggler(int argc, char **argv)
-{
-	if (m_elements % 2)
+	std::vector<int> buffer;
+	for (int i = 0; i < pairs_created; i++)
 	{
-		m_straggler = atoi(argv[argc - 1]);
-		std::cout << LIGHT_GREEN << "Straggler caught: " << m_straggler << '\n' << END;
-		--m_elements;
+		int left_group_start_idx = (i * 2 * group_size);
+		int right_group_start_idx = (i * 2 * group_size) + group_size;
+
+		int left_group_end_idx = (i * 2 * group_size) + group_size - 1;
+		int right_group_end_idx = (i * 2 * group_size) + (group_size * 2) - 1;
+
+		std::cout << LIGHT_GREEN << "start_of_left_group: " << m_vect[left_group_start_idx] << " start_of_right_group: " << m_vect[right_group_start_idx] << '\n' << END;
+		std::cout << YELLOW << "end_of_left_group: " << m_vect[left_group_end_idx] << " end_of_right_group: " << m_vect[right_group_end_idx] << '\n' << END;
+
+		if (m_vect[left_group_end_idx] > m_vect[right_group_end_idx])
+		{
+			for (int i = 0; i < group_size; i++) // Copy the left group
+			{
+				buffer.push_back(m_vect[i + left_group_start_idx]);
+				m_vect[i + left_group_start_idx] = m_vect[i + right_group_start_idx];
+				m_vect[i + right_group_start_idx] = buffer[i];
+			}
+			std::cout << ICE_BLUE << "Copy of left group: ";
+			v_print(buffer);
+			std::cout << '\n' << END;
+			buffer.clear();
+		}
+		v_print(m_vect);
 	}
+	
+	return (v_swap_pairs(level + 1));
 }
 
 PmergeMe::PmergeMe(int argc, char **argv): m_elements(0), m_deque_compares(0), m_vect_compares(0)
@@ -73,18 +88,16 @@ PmergeMe::PmergeMe(int argc, char **argv): m_elements(0), m_deque_compares(0), m
 		throw std::runtime_error("Invalid digits!");
 
 	m_vect.clear();
-	m_v_main.clear();
-	m_v_pend.clear();
-	m_v_rem.clear();
+	m_v_main.clear(); // might not need
+	m_v_pend.clear(); // might not need
+	m_v_rem.clear(); // might not need
 
 	m_deque.clear();
-	m_d_main.clear();
-	m_d_pend.clear();
-	m_d_rem.clear();
+	m_d_main.clear(); // might not need
+	m_d_pend.clear(); // might not need
+	m_d_rem.clear(); // might not need
 
 	m_elements = argc;
-
-	handle_straggler(argc, argv);
 
 	std::cout << "m_elements: " << m_elements << '\n';
 
@@ -93,10 +106,11 @@ PmergeMe::PmergeMe(int argc, char **argv): m_elements(0), m_deque_compares(0), m
 		m_deque.push_back(atoi(argv[i]));
 		m_vect.push_back(atoi(argv[i]));
 	}
-
+	// Only doing vector for now; add deque later
 	v_print(m_vect);
 
-	v_swap_pairs(0);
+	int depth = v_swap_pairs(0);
+	std::cout << "Final depth: " << depth << '\n';
 
 	v_print(m_vect);
 
