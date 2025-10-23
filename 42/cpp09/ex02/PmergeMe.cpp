@@ -7,11 +7,31 @@
 #include "colors.hpp"
 #include "PmergeMe.hpp"
 
+void PmergeMe::v_print(std::vector<int> vect, const std::string& name)
+{
+	std::cout << "Vector: " << name << ": ";
+	for (std::vector<int>::iterator iter = vect.begin(); iter != vect.end(); iter++)
+		std::cout << '[' << *iter << ']';
+	std::cout << '\n';
+}
+
 void PmergeMe::v_print(std::vector<int> vect)
 {
 	std::cout << "Vector: ";
 	for (std::vector<int>::iterator iter = vect.begin(); iter != vect.end(); iter++)
 		std::cout << '[' << *iter << ']';
+	std::cout << '\n';
+}
+
+void PmergeMe::v_print2(std::vector<std::vector<int> > vect2, const std::string& name)
+{
+	std::cout << "Vect2 " << name << ": \n";
+	for (std::vector<std::vector<int > >::iterator iter2 = vect2.begin(); iter2 != vect2.end(); iter2++)
+	{
+		for (std::vector<int>::iterator iter = iter2 -> begin(); iter != iter2 -> end(); iter++)
+			std::cout << '[' << *iter << ']';
+		std::cout << '\n';
+	}
 	std::cout << '\n';
 }
 
@@ -67,12 +87,12 @@ int PmergeMe::v_swap_pairs(int level)
 				m_vect[i + left_group_start_idx] = m_vect[i + right_group_start_idx];
 				m_vect[i + right_group_start_idx] = buffer[i];
 			}
-			std::cout << ICE_BLUE << "Copy of left group: ";
-			v_print(buffer);
+			std::cout << ICE_BLUE;
+			v_print(buffer, "Copy of left group");
 			std::cout << '\n' << END;
 			buffer.clear();
 		}
-		v_print(m_vect);
+		v_print(m_vect, "m_vect");
 	}
 	
 	return (v_swap_pairs(level + 1));
@@ -82,14 +102,72 @@ void PmergeMe::v_insert(int level)
 {
 	if (level < 0)
 		return;
+	std::vector<std::vector<int > > v_start;
 	std::vector<std::vector<int > > v_main;
 	std::vector<std::vector<int> > v_pend;
 	std::vector<int> v_remainder;
 
 	int group_size = std::pow(2, level); // How many numbers for each a/b section
+	int groups = m_elements / group_size;
 
-	// Need to create vector of vector<int> for each group, b1, a1, b2, etc.
+	v_start.clear();
+	v_main.clear();
+	v_pend.clear();
+	v_remainder.clear();
 
+	std::vector<int> buffer;
+
+	std::cout << ORANGE << "Beginning insert for depth: " << level << "\nElements: " << m_elements << " Group size: " << group_size << " Groups: " << groups << '\n' << END;
+
+	// Create v_start
+	for (int group = 0; group < groups; group++)
+	{
+		for (int i = 0; i < group_size; i++)
+			buffer.push_back(m_vect[i + (group * group_size)]);
+		v_print(buffer, "Insert buffer");
+		std::cout << '\n';
+		v_start.push_back(buffer);
+		v_print2(v_start, "v_start");
+		buffer.clear();
+	}
+ 
+	for (int i = group_size * groups; i < m_elements; i++)
+		v_remainder.push_back(m_vect[i]);
+
+	// Create v_main and v_pend
+	for (int i = 0; i < groups; i++)
+	{
+		if (i % 2) // if a
+		{
+			std::cout << PURPLE << "a" << i / 2 + 1 << ": ";
+			v_print(v_start[i]);
+			std::cout << END;
+			v_main.push_back(v_start[i]);
+		}
+		else // if b
+		{
+			if (i == 0) // b1
+				v_main.push_back(v_start[i]);
+			else
+				v_pend.push_back(v_start[i]);
+			std::cout << ICE_BLUE << "b" << i / 2 + 1 << ": ";
+			v_print(v_start[i]);
+			std::cout << END;
+		}
+	}
+
+	std::cout << LIGHT_GREEN;
+	v_print2(v_main, "v_main");
+	std::cout << END;
+
+	std::cout << ORANGE;
+	v_print2(v_pend, "v_pend");
+	std::cout << END;
+
+	std::cout << YELLOW;
+	v_print(v_remainder, "v_remainder");
+	std::cout << END;
+	v_insert(--level);
 }
 
 PmergeMe::PmergeMe(int argc, char **argv): m_elements(0), m_deque_compares(0), m_vect_compares(0)
