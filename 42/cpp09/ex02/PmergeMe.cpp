@@ -35,6 +35,21 @@ void PmergeMe::v_print2(std::vector<std::vector<int> > vect2, const std::string&
 	std::cout << '\n';
 }
 
+void PmergeMe::v_push_vect(std::vector<int> vect)
+{
+	for (std::vector<int>::iterator iter = vect.begin(); iter != vect.end(); iter++)
+		m_vect.push_back(*iter);
+}
+
+void PmergeMe::v_push_vect(std::vector<std::vector<int > > vect2)
+{
+	for (std::vector<std::vector<int > >::iterator iter2 = vect2.begin(); iter2 != vect2.end(); iter2++)
+	{
+		for (std::vector<int>::iterator iter = iter2 -> begin(); iter != iter2 -> end(); iter++)
+			m_vect.push_back(*iter);
+	}
+}
+
 static bool are_integers(int argc, char **argv)
 {
 	for (int i = 0; i < argc; i++)
@@ -167,6 +182,13 @@ void PmergeMe::v_insert(int level)
 	std::cout << YELLOW;
 	v_print(v_remainder, "v_remainder");
 	std::cout << END;
+
+	m_vect.clear();
+	v_push_vect(v_main);
+	v_push_vect(v_pend); // TEMP; NOT LIKE THIS
+	v_push_vect(v_remainder);
+	v_print(m_vect, "m_vect");
+
 	v_insert(--level);
 }
 

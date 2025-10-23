@@ -13,7 +13,9 @@ class PmergeMe
 
 		int v_swap_pairs(int level);
 		void v_insert(int level);
-		
+		void v_push_vect(std::vector<int> vect);
+		void v_push_vect(std::vector<std::vector<int > > vect2);
+
 		void v_print(std::vector<int> vect);
 		void v_print(std::vector<int> vect, const std::string &name);
 		void v_print2(std::vector<std::vector<int > > vect2, const std::string& name);
