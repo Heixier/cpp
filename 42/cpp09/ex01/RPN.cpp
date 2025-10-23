@@ -85,6 +85,8 @@ void RPN::calculate()
 					m_result.push(result);
 					break;
 				case '/':
+					if (second == 0)
+						throw std::runtime_error("Error: Division by zero");
 					overflow_check = static_cast<long long>(first) / static_cast<long long>(second);
 					result = first / second;
 					if (result != overflow_check)
