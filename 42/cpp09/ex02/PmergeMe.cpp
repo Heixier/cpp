@@ -7,6 +7,43 @@
 #include "colors.hpp"
 #include "PmergeMe.hpp"
 
+std::vector<int> PmergeMe::v_generate_jacobsthal_sequence(int b_elements)
+{
+	if (b_elements >= 33)
+		throw std::runtime_error("Too many numbers!");
+	std::vector<int> jacobsthal_sequence;
+	int current_idx = 0;
+	int current_jacobsthal = 0;
+
+	while (current_jacobsthal < b_elements)
+	{
+		current_jacobsthal = ((std::pow(2, current_idx) - std::pow(-1, current_idx)) / 3);
+		// std::cout << "Current jacobsthal: " << current_jacobsthal << '\n';
+		jacobsthal_sequence.push_back(current_jacobsthal);
+		current_idx++;
+	}
+	// std::cout << "For b_elements: " << b_elements << '\n';
+	// v_print(jacobsthal_sequence, "Jacobsthal");
+
+	std::vector<int> output;
+	output.clear();
+
+	for (size_t i = 0; i + 1 < jacobsthal_sequence.size(); i++)
+	{
+		int num_of_elements_to_add = jacobsthal_sequence[i + 1] - jacobsthal_sequence[i];
+		// std::cout << "Num of elements to add: " << num_of_elements_to_add << " for numbers between: " << jacobsthal_sequence[i + 1] << " and " << jacobsthal_sequence[i] << '\n';
+		for (int j = 0; j < num_of_elements_to_add; j++)
+		{
+			int to_insert = jacobsthal_sequence[i + 1] - j;
+			// std::cout << "Inserting jacobsthal_sequence[i] - j = " << jacobsthal_sequence[i] << " - " << j << " = " << to_insert << '\n';
+			if (to_insert > 1 && to_insert <= b_elements)
+				output.push_back(to_insert);
+		}
+	}
+	// v_print(output, "Jacobsthal sequence");
+	return (output);
+}
+
 void PmergeMe::v_print(std::vector<int> vect, const std::string& name)
 {
 	std::cout << "Vector: " << name << ": ";
@@ -183,11 +220,13 @@ void PmergeMe::v_insert(int level)
 	v_print(v_remainder, "v_remainder");
 	std::cout << END;
 
-	m_vect.clear();
+	// m_vect.clear();
 	v_push_vect(v_main);
-	v_push_vect(v_pend); // TEMP; NOT LIKE THIS
+	// v_push_vect(v_pend); // TEMP; NOT LIKE THIS
 	v_push_vect(v_remainder);
 	v_print(m_vect, "m_vect");
+
+	v_generate_jacobsthal_sequence(v_pend.size());
 
 	v_insert(--level);
 }

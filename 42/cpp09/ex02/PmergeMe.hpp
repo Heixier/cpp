@@ -20,6 +20,8 @@ class PmergeMe
 		void v_print(std::vector<int> vect, const std::string &name);
 		void v_print2(std::vector<std::vector<int > > vect2, const std::string& name);
 
+		std::vector<int> v_generate_jacobsthal_sequence(int elements);
+
 		int m_elements;
 		int m_deque_compares;
 		int m_vect_compares;
