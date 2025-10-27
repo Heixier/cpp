@@ -35,12 +35,13 @@ std::vector<int> PmergeMe::v_generate_jacobsthal_sequence(int b_elements)
 		for (int j = 0; j < num_of_elements_to_add; j++)
 		{
 			int to_insert = jacobsthal_sequence[i + 1] - j;
-			// std::cout << "Inserting jacobsthal_sequence[i] - j = " << jacobsthal_sequence[i] << " - " << j << " = " << to_insert << '\n';
 			if (to_insert > 1 && to_insert <= b_elements)
+			{
+				// std::cout << "Inserting jacobsthal_sequence[i] - j = " << jacobsthal_sequence[i] << " - " << j << " = " << to_insert << '\n';
 				output.push_back(to_insert);
+			}
 		}
 	}
-	// v_print(output, "Jacobsthal sequence");
 	return (output);
 }
 
@@ -150,6 +151,20 @@ int PmergeMe::v_swap_pairs(int level)
 	return (v_swap_pairs(level + 1));
 }
 
+
+// Binary insert returns the index to put the value in
+int PmergeMe::v_get_insert_pos(int to_insert, std::vector<std::vector<int> > v_main, std::vector<std::vector<int> > v_pend)
+{
+	int num_to_compare = v_pend[to_insert].back();
+	int idx_upper_bound = to_insert + 2 - 1;
+	int idx_lower_bound = 0;
+	int size_of_search = idx_upper_bound - idx_lower_bound + 1;
+
+	std::cout << "b" << to_insert + 2 << " (" << num_to_compare<< ") will be checked against the range of at idx " << idx_lower_bound << " (" << v_main[idx_lower_bound].back() << ") to a" << idx_upper_bound << " (" << v_main[idx_upper_bound].back() << ") search size: " << size_of_search << '\n';
+
+	return (to_insert);
+}
+
 void PmergeMe::v_insert(int level)
 {
 	if (level < 0)
@@ -176,10 +191,10 @@ void PmergeMe::v_insert(int level)
 	{
 		for (int i = 0; i < group_size; i++)
 			buffer.push_back(m_vect[i + (group * group_size)]);
-		v_print(buffer, "Insert buffer");
-		std::cout << '\n';
+		// v_print(buffer, "Insert buffer");
+		// std::cout << '\n';
 		v_start.push_back(buffer);
-		v_print2(v_start, "v_start");
+		// v_print2(v_start, "v_start");
 		buffer.clear();
 	}
  
@@ -224,9 +239,24 @@ void PmergeMe::v_insert(int level)
 	v_push_vect(v_main);
 	// v_push_vect(v_pend); // TEMP; NOT LIKE THIS
 	v_push_vect(v_remainder);
-	v_print(m_vect, "m_vect");
+	// v_print(m_vect, "m_vect");
 
-	v_generate_jacobsthal_sequence(v_pend.size());
+	std::vector<int> sequence = v_generate_jacobsthal_sequence(v_pend.size() + 1);
+	v_print(sequence, "Full Jacobsthal sequence");
+
+	// Time to find the search range
+
+	// We know that main consists of b1, then all the as, so in order to know which a I am looking at, I can subtract 1 from the b sequence
+
+	// Pend chain starts from b2 onwards, so that means b3 is index 3 - 1 for b1 and -1 for index = 1
+
+	// Jacobsthal - 2 = index;
+
+	for (std::vector<int>::iterator iter = sequence.begin(); iter != sequence.end(); iter++)
+	{
+		int idx_to_insert = v_get_insert_pos((*iter) - 2, v_main, v_pend); 
+		idx_to_insert++;
+	}
 
 	v_insert(--level);
 }
@@ -243,14 +273,8 @@ PmergeMe::PmergeMe(int argc, char **argv): m_elements(0), m_deque_compares(0), m
 	m_vect_compares = m_deque_compares;
 
 	m_vect.clear();
-	m_v_main.clear(); // might not need
-	m_v_pend.clear(); // might not need
-	m_v_rem.clear(); // might not need
 
 	m_deque.clear();
-	m_d_main.clear(); // might not need
-	m_d_pend.clear(); // might not need
-	m_d_rem.clear(); // might not need
 
 	m_elements = argc;
 
@@ -276,14 +300,7 @@ PmergeMe::PmergeMe(int argc, char **argv): m_elements(0), m_deque_compares(0), m
 PmergeMe::PmergeMe(): m_elements(0), m_deque_compares(0), m_vect_compares(0)
 {
 	m_vect.clear();
-	m_v_main.clear();
-	m_v_pend.clear();
-	m_v_rem.clear();
-
 	m_deque.clear();
-	m_d_main.clear();
-	m_d_pend.clear();
-	m_d_rem.clear();
 }
 
 PmergeMe::PmergeMe(const PmergeMe& other):
@@ -291,13 +308,7 @@ PmergeMe::PmergeMe(const PmergeMe& other):
 	m_deque_compares(other.m_deque_compares),
 	m_vect_compares(other.m_deque_compares),
 	m_deque(other.m_deque),
-	m_d_main(other.m_d_main),
-	m_d_pend(other.m_d_pend),
-	m_d_rem(other.m_d_rem),
-	m_vect(other.m_vect),
-	m_v_main(other.m_v_main),
-	m_v_pend(other.m_v_pend),
-	m_v_rem(other.m_v_rem)
+	m_vect(other.m_vect)
 { }
 
 PmergeMe& PmergeMe::operator= (const PmergeMe& other)
@@ -305,13 +316,7 @@ PmergeMe& PmergeMe::operator= (const PmergeMe& other)
 	if (this != &other)
 	{
 		m_deque = other.m_deque;
-		m_d_main = other.m_d_main;
-		m_d_pend = other.m_d_pend;
-		m_d_rem = other.m_d_rem;
 		m_vect = other.m_vect;
-		m_v_main = other.m_v_main;
-		m_v_pend = other.m_v_pend;
-		m_v_rem = other.m_v_rem;
 	}
 	return (*this);
 }

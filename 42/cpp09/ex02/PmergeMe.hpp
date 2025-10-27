@@ -21,20 +21,15 @@ class PmergeMe
 		void v_print2(std::vector<std::vector<int > > vect2, const std::string& name);
 
 		std::vector<int> v_generate_jacobsthal_sequence(int elements);
+		int v_get_insert_pos(int to_insert, std::vector<std::vector<int> > v_main, std::vector<std::vector<int> > v_pend);
 
 		int m_elements;
 		int m_deque_compares;
 		int m_vect_compares;
 		
 		std::deque<int> m_deque;
-		std::deque<int> m_d_main;
-		std::deque<int> m_d_pend;
-		std::deque<int> m_d_rem;
 
 		std::vector<int> m_vect;
-		std::vector<int> m_v_main;
-		std::vector<int> m_v_pend;
-		std::vector<int> m_v_rem;
 
 		PmergeMe();
 		PmergeMe(const PmergeMe &other);
