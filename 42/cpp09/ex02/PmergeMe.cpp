@@ -162,11 +162,13 @@ int PmergeMe::v_get_insert_pos(int to_insert, std::vector<std::vector<int> > v_m
 
 	std::cout << "b" << to_insert + 2 << " (" << num_to_compare<< ") will be checked against the range of at idx " << idx_lower_bound << " (" << v_main[idx_lower_bound].back() << ") to a" << idx_upper_bound << " (" << v_main[idx_upper_bound].back() << ") search size: " << size_of_search << '\n';
 
-	return (to_insert);
+	while (size_of_search > 1) ; // do binary search
+	return (idx_lower_bound);
 }
 
 void PmergeMe::v_insert(int level)
 {
+	v_print(m_vect, "m_vect start");
 	if (level < 0)
 		return;
 	std::vector<std::vector<int > > v_start;
@@ -235,30 +237,31 @@ void PmergeMe::v_insert(int level)
 	v_print(v_remainder, "v_remainder");
 	std::cout << END;
 
-	// m_vect.clear();
+	m_vect.clear();
 	v_push_vect(v_main);
-	// v_push_vect(v_pend); // TEMP; NOT LIKE THIS
 	v_push_vect(v_remainder);
-	// v_print(m_vect, "m_vect");
 
 	std::vector<int> sequence = v_generate_jacobsthal_sequence(v_pend.size() + 1);
 	v_print(sequence, "Full Jacobsthal sequence");
 
-	// Time to find the search range
-
-	// We know that main consists of b1, then all the as, so in order to know which a I am looking at, I can subtract 1 from the b sequence
-
-	// Pend chain starts from b2 onwards, so that means b3 is index 3 - 1 for b1 and -1 for index = 1
-
-	// Jacobsthal - 2 = index;
-
 	for (std::vector<int>::iterator iter = sequence.begin(); iter != sequence.end(); iter++)
 	{
-		int idx_to_insert = v_get_insert_pos((*iter) - 2, v_main, v_pend); 
-		idx_to_insert++;
+		int idx_to_insert = v_get_insert_pos((*iter) - 2, v_main, v_pend);
+		std::cout << ICE_BLUE << "Inserting ";
+		v_print(v_pend[(*iter) - 2]);
+		std::cout << "from index: " << (*iter) - 2 << " of pend before idx: " << idx_to_insert << " of main\n";
+
+		v_print2(v_main, "v_main before insert");
+		v_main.insert(v_main.begin() + idx_to_insert, v_pend[(*iter) - 2]);
+		v_print2(v_main, "v_main after insert loop");
+		std::cout << END;
 	}
 
+	m_vect.clear();
+	v_push_vect(v_main);
+	v_print(m_vect, "m_vect");
 	v_insert(--level);
+
 }
 
 PmergeMe::PmergeMe(int argc, char **argv): m_elements(0), m_deque_compares(0), m_vect_compares(0)
@@ -294,7 +297,6 @@ PmergeMe::PmergeMe(int argc, char **argv): m_elements(0), m_deque_compares(0), m
 	v_print(m_vect);
 
 	v_insert(depth);
-
 }
 
 PmergeMe::PmergeMe(): m_elements(0), m_deque_compares(0), m_vect_compares(0)
