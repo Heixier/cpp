@@ -13,6 +13,7 @@
 
 int main (int argc, char **argv)
 {
+	// HANDLE DUPLICATES BY ERROR
 	try
 	{
 		PmergeMe(argc, argv);

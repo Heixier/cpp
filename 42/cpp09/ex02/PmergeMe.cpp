@@ -6,6 +6,7 @@
 
 #include "colors.hpp"
 #include "PmergeMe.hpp"
+#include "structs.hpp"
 
 std::vector<int> PmergeMe::v_generate_jacobsthal_sequence(int b_elements)
 {
@@ -155,7 +156,7 @@ int PmergeMe::v_swap_pairs(int level)
 // Binary insert returns the index to put the value in
 int PmergeMe::v_get_insert_pos(int to_insert, std::vector<std::vector<int> > v_main, std::vector<std::vector<int> > v_pend)
 {
-	int num_to_compare = v_pend[to_insert].back();
+	int num_to_compare = v_pend[to_insert].back();	
 	int idx_upper_bound = to_insert + 2 - 1;
 	int idx_lower_bound = 0;
 	int size_of_search = idx_upper_bound - idx_lower_bound + 1;
@@ -163,6 +164,10 @@ int PmergeMe::v_get_insert_pos(int to_insert, std::vector<std::vector<int> > v_m
 	std::cout << "b" << to_insert + 2 << " (" << num_to_compare<< ") will be checked against the range of at idx " << idx_lower_bound << " (" << v_main[idx_lower_bound].back() << ") to a" << idx_upper_bound << " (" << v_main[idx_upper_bound].back() << ") search size: " << size_of_search << '\n';
 
 	while (size_of_search > 1) ; // do binary search
+
+
+	// STORE ITERATORS DEQUE AND IST ARE SAFE
+
 	return (idx_lower_bound);
 }
 
@@ -239,6 +244,7 @@ void PmergeMe::v_insert(int level)
 
 	m_vect.clear();
 	v_push_vect(v_main);
+	v_push_vect(v_pend); // DO NOT; PLEASE DELETE ME
 	v_push_vect(v_remainder);
 
 	std::vector<int> sequence = v_generate_jacobsthal_sequence(v_pend.size() + 1);

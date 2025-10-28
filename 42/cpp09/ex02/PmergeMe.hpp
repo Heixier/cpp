@@ -2,7 +2,8 @@
 #define PMERGEME_HPP
 
 #include <deque>
-#include <vector>
+#include <list>
+#include <string>
 
 class PmergeMe
 {
