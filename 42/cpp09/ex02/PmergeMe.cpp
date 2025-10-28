@@ -6,6 +6,7 @@
 
 #include "colors.hpp"
 #include "PmergeMe.hpp"
+#include "structs.hpp"
 
 std::vector<int> PmergeMe::v_generate_jacobsthal_sequence(int b_elements)
 {
@@ -45,45 +46,45 @@ std::vector<int> PmergeMe::v_generate_jacobsthal_sequence(int b_elements)
 	return (output);
 }
 
-void PmergeMe::v_print(std::vector<int> vect, const std::string& name)
+void PmergeMe::v_print(const std::vector<int>& vect, const std::string& name) const
 {
 	std::cout << "Vector: " << name << ": ";
-	for (std::vector<int>::iterator iter = vect.begin(); iter != vect.end(); iter++)
+	for (std::vector<int>::const_iterator iter = vect.begin(); iter != vect.end(); iter++)
 		std::cout << '[' << *iter << ']';
 	std::cout << '\n';
 }
 
-void PmergeMe::v_print(std::vector<int> vect)
+void PmergeMe::v_print(const std::vector<int>& vect) const
 {
 	std::cout << "Vector: ";
-	for (std::vector<int>::iterator iter = vect.begin(); iter != vect.end(); iter++)
+	for (std::vector<int>::const_iterator iter = vect.begin(); iter != vect.end(); iter++)
 		std::cout << '[' << *iter << ']';
 	std::cout << '\n';
 }
 
-void PmergeMe::v_print2(std::vector<std::vector<int> > vect2, const std::string& name)
+void PmergeMe::v_print2(const std::vector<std::vector<int> >& vect2, const std::string& name) const
 {
 	std::cout << "Vect2 " << name << ": \n";
-	for (std::vector<std::vector<int > >::iterator iter2 = vect2.begin(); iter2 != vect2.end(); iter2++)
+	for (std::vector<std::vector<int > >::const_iterator iter2 = vect2.begin(); iter2 != vect2.end(); iter2++)
 	{
-		for (std::vector<int>::iterator iter = iter2 -> begin(); iter != iter2 -> end(); iter++)
+		for (std::vector<int>::const_iterator iter = iter2 -> begin(); iter != iter2 -> end(); iter++)
 			std::cout << '[' << *iter << ']';
 		std::cout << '\n';
 	}
 	std::cout << '\n';
 }
 
-void PmergeMe::v_push_vect(std::vector<int> vect)
+void PmergeMe::v_push_vect(const std::vector<int>& vect)
 {
-	for (std::vector<int>::iterator iter = vect.begin(); iter != vect.end(); iter++)
+	for (std::vector<int>::const_iterator iter = vect.begin(); iter != vect.end(); iter++)
 		m_vect.push_back(*iter);
 }
 
-void PmergeMe::v_push_vect(std::vector<std::vector<int > > vect2)
+void PmergeMe::v_push_vect(const std::vector<std::vector<int > >& vect2)
 {
-	for (std::vector<std::vector<int > >::iterator iter2 = vect2.begin(); iter2 != vect2.end(); iter2++)
+	for (std::vector<std::vector<int > >::const_iterator iter2 = vect2.begin(); iter2 != vect2.end(); iter2++)
 	{
-		for (std::vector<int>::iterator iter = iter2 -> begin(); iter != iter2 -> end(); iter++)
+		for (std::vector<int>::const_iterator iter = iter2 -> begin(); iter != iter2 -> end(); iter++)
 			m_vect.push_back(*iter);
 	}
 }
@@ -152,18 +153,33 @@ int PmergeMe::v_swap_pairs(int level)
 }
 
 
-// Binary insert returns the index to put the value in
-int PmergeMe::v_get_insert_pos(int to_insert, std::vector<std::vector<int> > v_main, std::vector<std::vector<int> > v_pend)
+void PmergeMe::v_dynamic_binary_insert(std::vector<t_bounds> jacobsthal_pair, std::vector<std::vector<int > >& v_main, std::vector<std::vector<int> >& v_pend)
 {
-	int num_to_compare = v_pend[to_insert].back();
-	int idx_upper_bound = to_insert + 2 - 1;
-	int idx_lower_bound = 0;
-	int size_of_search = idx_upper_bound - idx_lower_bound + 1;
+	int insertion_idx = 0;
 
-	std::cout << "b" << to_insert + 2 << " (" << num_to_compare<< ") will be checked against the range of at idx " << idx_lower_bound << " (" << v_main[idx_lower_bound].back() << ") to a" << idx_upper_bound << " (" << v_main[idx_upper_bound].back() << ") search size: " << size_of_search << '\n';
+	(void)v_main;
+	(void)v_pend;
 
-	while (size_of_search > 1) ; // do binary search
-	return (idx_lower_bound);
+	for (std::vector<t_bounds>::iterator jacobsthal_iter = jacobsthal_pair.begin(); jacobsthal_iter != jacobsthal_pair.end(); jacobsthal_iter++)
+	{
+		if (jacobsthal_iter -> exclusive_upper_bound_idx >= insertion_idx) // NEEDS TO BE A FOR LOOP; RUN THROUGH EVERY ELEMENT FROM HERE TO THE END OF THE JACOBSTHAL PAIRS AND DO THIS CHECK
+			++jacobsthal_iter -> exclusive_upper_bound_idx;
+		std::cout << "jacobsthal_iter -> b_element: " << jacobsthal_iter -> b_element << " jacobsthal_iter -> exclusive_upper_bound_idx: " << jacobsthal_iter -> exclusive_upper_bound_idx << '\n';
+	}
+}
+
+std::vector<t_bounds> PmergeMe::v_generate_bounds_pairing(const std::vector<int>& jacobsthal_sequence)
+{
+	std::vector<t_bounds> bounds(0);
+	t_bounds buffer;
+
+	for (std::vector<int>::const_iterator iter = jacobsthal_sequence.begin(); iter != jacobsthal_sequence.end(); iter++)
+	{
+		buffer.b_element = *iter - 2;
+		buffer.exclusive_upper_bound_idx = *iter;
+		bounds.push_back(buffer);
+	}
+	return (bounds);
 }
 
 void PmergeMe::v_insert(int level)
@@ -171,20 +187,20 @@ void PmergeMe::v_insert(int level)
 	v_print(m_vect, "m_vect start");
 	if (level < 0)
 		return;
-	std::vector<std::vector<int > > v_start;
-	std::vector<std::vector<int > > v_main;
-	std::vector<std::vector<int> > v_pend;
-	std::vector<int> v_remainder;
+	std::vector<std::vector<int > > v_start(0);
+	std::vector<std::vector<int > > v_main(0);
+	std::vector<std::vector<int> > v_pend(0);
+	std::vector<int> v_remainder(0);
 
 	int group_size = std::pow(2, level); // How many numbers for each a/b section
 	int groups = m_elements / group_size;
 
-	v_start.clear();
-	v_main.clear();
-	v_pend.clear();
-	v_remainder.clear();
+	// v_start.clear();
+	// v_main.clear();
+	// v_pend.clear();
+	// v_remainder.clear();
 
-	std::vector<int> buffer;
+	std::vector<int> buffer(0);
 
 	std::cout << ORANGE << "Beginning insert for depth: " << level << "\nElements: " << m_elements << " Group size: " << group_size << " Groups: " << groups << '\n' << END;
 
@@ -239,23 +255,13 @@ void PmergeMe::v_insert(int level)
 
 	m_vect.clear();
 	v_push_vect(v_main);
+	v_push_vect(v_pend); // DO NOT ACTUALLY USE; PLEASE DELETE ME
 	v_push_vect(v_remainder);
 
 	std::vector<int> sequence = v_generate_jacobsthal_sequence(v_pend.size() + 1);
 	v_print(sequence, "Full Jacobsthal sequence");
 
-	for (std::vector<int>::iterator iter = sequence.begin(); iter != sequence.end(); iter++)
-	{
-		int idx_to_insert = v_get_insert_pos((*iter) - 2, v_main, v_pend);
-		std::cout << ICE_BLUE << "Inserting ";
-		v_print(v_pend[(*iter) - 2]);
-		std::cout << "from index: " << (*iter) - 2 << " of pend before idx: " << idx_to_insert << " of main\n";
-
-		v_print2(v_main, "v_main before insert");
-		v_main.insert(v_main.begin() + idx_to_insert, v_pend[(*iter) - 2]);
-		v_print2(v_main, "v_main after insert loop");
-		std::cout << END;
-	}
+	v_dynamic_binary_insert(v_generate_bounds_pairing(sequence), v_main, v_pend);
 
 	m_vect.clear();
 	v_push_vect(v_main);
