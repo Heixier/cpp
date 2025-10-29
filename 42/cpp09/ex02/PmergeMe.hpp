@@ -59,6 +59,51 @@ class PmergeMe
 			return (swap_pairs(c, level + 1, comparisons));
 		}
 
+		template <typename Container>
+		std::vector<int> generate_jacobsthal_sequence(int b_element_idxs)
+		{
+			if (b_element_idxs >= 33)
+				throw std::runtime_error("Too many numbers!");
+			Container jacobsthal_sequence(0);
+			int current_idx = 0;
+			int current_jacobsthal = 0;
+		
+			while (current_jacobsthal < b_element_idxs)
+			{
+				current_jacobsthal = ((std::pow(2, current_idx) - std::pow(-1, current_idx)) / 3);
+				jacobsthal_sequence.push_back(current_jacobsthal);
+				current_idx++;
+			}
+		
+			Container output(0);
+			for (size_t i = 0; i + 1 < jacobsthal_sequence.size(); i++)
+			{
+				int num_of_elements_to_add = jacobsthal_sequence[i + 1] - jacobsthal_sequence[i];
+				for (int j = 0; j < num_of_elements_to_add; j++)
+				{
+					int to_insert = jacobsthal_sequence[i + 1] - j;
+					if (to_insert > 1 && to_insert <= b_element_idxs)
+						output.push_back(to_insert);
+				}
+			}
+			return (output);
+		}
+
+		template <typename Container, typename PairContainer>
+		PairContainer generate_bounds_pairing(const Container& jacobsthal_sequence)
+		{
+			PairContainer bounds(0);
+			t_bounds buffer;
+
+			for (typename Container::const_iterator iter = jacobsthal_sequence.begin(); iter != jacobsthal_sequence.end(); iter++)
+			{
+				buffer.b_element_idx = *iter - 2;
+				buffer.exclusive_upper_bound_idx = *iter;
+				bounds.push_back(buffer);
+			}
+			return (bounds);
+		}
+
 		template <typename Container, typename Container2, typename PairContainer>
 		void insert(Container& c, int level, int& comparisons)
 		{
@@ -99,9 +144,9 @@ class PmergeMe
 				}
 			}
 		
-			Container sequence = v_generate_jacobsthal_sequence(pend.size() + 1);
+			Container sequence = generate_jacobsthal_sequence<Container>(pend.size() + 1);
 		
-			PairContainer pairings = v_generate_bounds_pairing(sequence);
+			PairContainer pairings = generate_bounds_pairing<Container, PairContainer>(sequence);
 			v_dynamic_binary_insert(pairings, main, pend, comparisons);
 		
 			c.clear();
@@ -139,9 +184,7 @@ class PmergeMe
 		
 		void v_print2(const std::vector<std::vector<int > >& vect2, const std::string& name) const;
 
-		std::vector<int> v_generate_jacobsthal_sequence(int elements);
 		void v_dynamic_binary_insert(std::vector<t_bounds> jacobsthal_pairings, std::vector<std::vector<int> >& v_main, std::vector<std::vector<int> >& v_pend, int& comparisons);
-		std::vector<t_bounds> v_generate_bounds_pairing(const std::vector<int>& jacobsthal_sequence);
 
 		template <typename Container>
 		bool is_sorted(Container c)

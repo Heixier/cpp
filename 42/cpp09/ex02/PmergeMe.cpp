@@ -8,44 +8,6 @@
 #include "PmergeMe.hpp"
 #include "structs.hpp"
 
-std::vector<int> PmergeMe::v_generate_jacobsthal_sequence(int b_element_idxs)
-{
-	if (b_element_idxs >= 33)
-		throw std::runtime_error("Too many numbers!");
-	std::vector<int> jacobsthal_sequence;
-	int current_idx = 0;
-	int current_jacobsthal = 0;
-
-	while (current_jacobsthal < b_element_idxs)
-	{
-		current_jacobsthal = ((std::pow(2, current_idx) - std::pow(-1, current_idx)) / 3);
-		// std::cout << "Current jacobsthal: " << current_jacobsthal << '\n';
-		jacobsthal_sequence.push_back(current_jacobsthal);
-		current_idx++;
-	}
-	// std::cout << "For b_element_idxs: " << b_element_idxs << '\n';
-	// c_print(jacobsthal_sequence, "Jacobsthal");
-
-	std::vector<int> output;
-	output.clear();
-
-	for (size_t i = 0; i + 1 < jacobsthal_sequence.size(); i++)
-	{
-		int num_of_elements_to_add = jacobsthal_sequence[i + 1] - jacobsthal_sequence[i];
-		// std::cout << "Num of elements to add: " << num_of_elements_to_add << " for numbers between: " << jacobsthal_sequence[i + 1] << " and " << jacobsthal_sequence[i] << '\n';
-		for (int j = 0; j < num_of_elements_to_add; j++)
-		{
-			int to_insert = jacobsthal_sequence[i + 1] - j;
-			if (to_insert > 1 && to_insert <= b_element_idxs)
-			{
-				// std::cout << "Inserting jacobsthal_sequence[i] - j = " << jacobsthal_sequence[i] << " - " << j << " = " << to_insert << '\n';
-				output.push_back(to_insert);
-			}
-		}
-	}
-	return (output);
-}
-
 void PmergeMe::v_print2(const std::vector<std::vector<int> >& vect2, const std::string& name) const
 {
 	std::cout << "Vect2 " << name << ": \n";
@@ -112,20 +74,6 @@ void PmergeMe::v_dynamic_binary_insert(std::vector<t_bounds> jacobsthal_pairings
 	}
 	for (std::vector<t_bounds>::iterator jacobsthal_iter = jacobsthal_pairings.begin(); jacobsthal_iter != jacobsthal_pairings.end(); jacobsthal_iter++)
 		std::cout << "RESULT: b_element_idx: " << jacobsthal_iter -> b_element_idx << " upper_bound: " << jacobsthal_iter -> exclusive_upper_bound_idx << '\n';
-}
-
-std::vector<t_bounds> PmergeMe::v_generate_bounds_pairing(const std::vector<int>& jacobsthal_sequence)
-{
-	std::vector<t_bounds> bounds(0);
-	t_bounds buffer;
-
-	for (std::vector<int>::const_iterator iter = jacobsthal_sequence.begin(); iter != jacobsthal_sequence.end(); iter++)
-	{
-		buffer.b_element_idx = *iter - 2;
-		buffer.exclusive_upper_bound_idx = *iter;
-		bounds.push_back(buffer);
-	}
-	return (bounds);
 }
 
 PmergeMe::PmergeMe(int argc, char **argv): m_elements(0), m_deque_compares(0), m_vect_compares(0)
