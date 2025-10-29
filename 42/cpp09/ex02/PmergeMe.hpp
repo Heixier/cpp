@@ -3,8 +3,10 @@
 
 #include <deque>
 #include <vector>
+#include <sys/time.h>
 
 #include "structs.hpp"
+#include "colors.hpp"
 
 class PmergeMe
 {
@@ -15,12 +17,25 @@ class PmergeMe
 	private:
 	
 		template <typename Container, typename Container2, typename PairContainer>
-		int sort(Container& c)
+		void sort(const std::string& container_name, Container& c)
 		{
+			struct timeval start;
+			struct timeval end;
+
+			c_print(c, "Before sort");
 			int comparisons = 0;
+			gettimeofday(&start, NULL);
+
 			int depth = swap_pairs<std::vector<int> >(c, 0, comparisons);
 			insert<Container, Container2, PairContainer>(c, depth, comparisons);
-			return (comparisons);
+			gettimeofday(&end, NULL);
+
+			c_print(m_vect, "\nAfter sort");
+			if (!is_sorted<std::vector<int> >(m_vect))
+				std::cout << RED << "Not sorted!\n" << END;
+
+			double time_taken_us = ((end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec) / 1000000.0);
+			std::cout << "Sorted " << m_elements << " elements in " << time_taken_us << "s with " << container_name << " (" << comparisons << " comparisons)\n";
 		}
 
 		// Idx starts from 0; recursion

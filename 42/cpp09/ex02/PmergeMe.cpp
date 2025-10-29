@@ -46,13 +46,7 @@ PmergeMe::PmergeMe(int argc, char **argv): m_elements(0), m_deque_compares(0), m
 		m_vect.push_back(atoi(argv[i]));
 	}
 
-	int compares = sort<std::vector<int>, std::vector<std::vector<int> >, std::vector<t_bounds> >(m_vect);
-	c_print(m_vect, "Final");
-	if (!is_sorted<std::vector<int> >(m_vect))
-		std::cout << RED << "Not sorted!\n" << END;
-	else
-		std::cout << LIGHT_GREEN << "Sorted!\n" << END;
-	std::cout << "compares: " << compares << '\n';
+	sort<std::vector<int>, std::vector<std::vector<int> >, std::vector<t_bounds> >("std::vector", m_vect);
 }
 
 PmergeMe::PmergeMe(): m_elements(0), m_deque_compares(0), m_vect_compares(0)
