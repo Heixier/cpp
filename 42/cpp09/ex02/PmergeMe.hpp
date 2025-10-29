@@ -14,6 +14,15 @@ class PmergeMe
 
 	private:
 	
+		template <typename Container, typename Container2, typename PairContainer>
+		int sort(Container& c)
+		{
+			int comparisons = 0;
+			int depth = swap_pairs<std::vector<int> >(c, 0, comparisons);
+			insert<Container, Container2, PairContainer>(c, depth, comparisons);
+			return (comparisons);
+		}
+
 		// Idx starts from 0; recursion
 		template <typename Container>
 		int swap_pairs(Container& c, int level, int& comparisons)
@@ -45,30 +54,87 @@ class PmergeMe
 					}
 					buffer.clear();
 				}
-				v_print(c, "m_vect");
+				c_print(c, "m_vect");
 			}
 			return (swap_pairs(c, level + 1, comparisons));
 		}
-		void v_insert(int level, int& comparisons);
+
+		template <typename Container, typename Container2, typename PairContainer>
+		void insert(Container& c, int level, int& comparisons)
+		{
+			if (level < 0)
+				return;
+			Container2 start(0);
+			Container2 main(0);
+			Container2 pend(0);
+			Container remainder(0);
+		
+			int group_size = std::pow(2, level); // How many numbers for each a/b section
+			int groups = m_elements / group_size;
+			Container buffer(0);
+		
+			// Create v_start
+			for (int group = 0; group < groups; group++)
+			{
+				for (int i = 0; i < group_size; i++)
+					buffer.push_back(c[i + (group * group_size)]);
+				start.push_back(buffer);
+				buffer.clear();
+			}
+		 
+			for (int i = group_size * groups; i < m_elements; i++)
+				remainder.push_back(c[i]);
+		
+			// Create v_main and v_pend
+			for (int i = 0; i < groups; i++)
+			{
+				if (i % 2) // if a
+					main.push_back(start[i]);
+				else // if b
+				{
+					if (i == 0) // b1
+						main.push_back(start[i]);
+					else
+						pend.push_back(start[i]);
+				}
+			}
+		
+			Container sequence = v_generate_jacobsthal_sequence(pend.size() + 1);
+		
+			PairContainer pairings = v_generate_bounds_pairing(sequence);
+			v_dynamic_binary_insert(pairings, main, pend, comparisons);
+		
+			c.clear();
+			v_push_vect(main);
+			insert<Container, Container2, PairContainer>(c, --level, comparisons);
+		}
+
 		void v_push_vect(const std::vector<int>& vect);
 		void v_push_vect(const std::vector<std::vector<int > >& vect2);
 
-		void v_print(const std::vector<int>& vect) const;
-		void v_print(const std::vector<int>& vect, const std::string &name) const;
+		template <typename Container>
+		void c_print(const Container& c, const std::string& name) const
+		{
+			std::cout << name << ": ";
+			for (typename Container::const_iterator iter = c.begin(); iter != c.end(); iter++)
+				std::cout << '[' << *iter << ']';
+			std::cout << '\n';
+		}
+		
+		template <typename Container>
+		void c_print(const Container& c) const
+		{
+			std::cout << "Container: ";
+			for (typename Container::const_iterator iter = c.begin(); iter != c.end(); iter++)
+				std::cout << '[' << *iter << ']';
+			std::cout << '\n';
+		}
+		
 		void v_print2(const std::vector<std::vector<int > >& vect2, const std::string& name) const;
 
 		std::vector<int> v_generate_jacobsthal_sequence(int elements);
 		void v_dynamic_binary_insert(std::vector<t_bounds> jacobsthal_pairings, std::vector<std::vector<int> >& v_main, std::vector<std::vector<int> >& v_pend, int& comparisons);
 		std::vector<t_bounds> v_generate_bounds_pairing(const std::vector<int>& jacobsthal_sequence);
-
-		template <typename Container, typename Container2, typename PairContainer>
-		int sort(Container& c)
-		{
-			int comparisons = 0;
-			int depth = swap_pairs<std::vector<int> >(c, 0, comparisons);
-			v_insert(depth, comparisons);
-			return (comparisons);
-		}
 
 		template <typename Container>
 		bool is_sorted(Container c)
