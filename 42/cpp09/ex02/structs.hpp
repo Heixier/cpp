@@ -4,7 +4,7 @@
 typedef struct s_bounds
 {
 	int exclusive_upper_bound_idx;
-	int b_element;
+	int b_element_idx;
 } t_bounds;
 
 #endif

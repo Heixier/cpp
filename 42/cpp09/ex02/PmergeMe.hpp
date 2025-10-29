@@ -24,7 +24,7 @@ class PmergeMe
 		void v_print2(const std::vector<std::vector<int > >& vect2, const std::string& name) const;
 
 		std::vector<int> v_generate_jacobsthal_sequence(int elements);
-		void v_dynamic_binary_insert(std::vector<t_bounds> bounds, std::vector<std::vector<int> >& v_main, std::vector<std::vector<int> >& v_pend);
+		void v_dynamic_binary_insert(std::vector<t_bounds> jacobsthal_pairings, std::vector<std::vector<int> >& v_main, std::vector<std::vector<int> >& v_pend);
 		std::vector<t_bounds> v_generate_bounds_pairing(const std::vector<int>& jacobsthal_sequence);
 
 		int m_elements;
