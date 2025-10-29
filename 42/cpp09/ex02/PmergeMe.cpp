@@ -104,56 +104,6 @@ static bool are_integers(int argc, char **argv)
 	return (true);
 }
 
-// Idx starts from 0; recursion
-int PmergeMe::v_swap_pairs(int level, int& comparisons)
-{
-	int group_size = std::pow(2, level); // How many numbers in each half of the pair
-	int pair_size = group_size * 2; // How big the pair is overall
-	if (pair_size > m_elements)
-	{
-		std::cout << "Level: " << level << " Not enough to make next level! Needed: " << pair_size << " Provided: " << m_elements << " Stopping...\n";
-		return (level);
-	}
-
-	// std::cout << ICE_BLUE << "Swapping\n" << END;
-	int pairs_created = m_elements / pair_size;
-
-	std::cout << "Pair size: " << pair_size << " Group size: " << group_size << '\n';
-	std::cout << "Pairs created: " << pairs_created << '\n';
-
-	std::vector<int> buffer;
-	for (int i = 0; i < pairs_created; i++)
-	{
-		++comparisons;
-		int left_group_start_idx = (i * 2 * group_size);
-		int right_group_start_idx = (i * 2 * group_size) + group_size;
-
-		int left_group_end_idx = (i * 2 * group_size) + group_size - 1;
-		int right_group_end_idx = (i * 2 * group_size) + (group_size * 2) - 1;
-
-		std::cout << LIGHT_GREEN << "start_of_left_group: " << m_vect[left_group_start_idx] << " start_of_right_group: " << m_vect[right_group_start_idx] << '\n' << END;
-		std::cout << YELLOW << "end_of_left_group: " << m_vect[left_group_end_idx] << " end_of_right_group: " << m_vect[right_group_end_idx] << '\n' << END;
-
-		if (m_vect[left_group_end_idx] > m_vect[right_group_end_idx])
-		{
-			for (int i = 0; i < group_size; i++) // Copy the left group
-			{
-				buffer.push_back(m_vect[i + left_group_start_idx]);
-				m_vect[i + left_group_start_idx] = m_vect[i + right_group_start_idx];
-				m_vect[i + right_group_start_idx] = buffer[i];
-			}
-			std::cout << ICE_BLUE;
-			v_print(buffer, "Copy of left group");
-			std::cout << '\n' << END;
-			buffer.clear();
-		}
-		v_print(m_vect, "m_vect");
-	}
-	
-	return (v_swap_pairs(level + 1, comparisons));
-}
-
-
 void PmergeMe::v_dynamic_binary_insert(std::vector<t_bounds> jacobsthal_pairings, std::vector<std::vector<int > >& v_main, std::vector<std::vector<int> >& v_pend, int& comparisons)
 {
 	for (std::vector<t_bounds>::iterator jacobsthal_iter = jacobsthal_pairings.begin(); jacobsthal_iter != jacobsthal_pairings.end(); jacobsthal_iter++)
