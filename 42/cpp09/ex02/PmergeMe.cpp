@@ -8,18 +8,6 @@
 #include "PmergeMe.hpp"
 #include "structs.hpp"
 
-void PmergeMe::v_print2(const std::vector<std::vector<int> >& vect2, const std::string& name) const
-{
-	std::cout << "Vect2 " << name << ": \n";
-	for (std::vector<std::vector<int > >::const_iterator iter2 = vect2.begin(); iter2 != vect2.end(); iter2++)
-	{
-		for (std::vector<int>::const_iterator iter = iter2 -> begin(); iter != iter2 -> end(); iter++)
-			std::cout << '[' << *iter << ']';
-		std::cout << '\n';
-	}
-	std::cout << '\n';
-}
-
 static bool are_integers(int argc, char **argv)
 {
 	for (int i = 0; i < argc; i++)
@@ -33,47 +21,6 @@ static bool are_integers(int argc, char **argv)
 		}
 	}
 	return (true);
-}
-
-void PmergeMe::v_dynamic_binary_insert(std::vector<t_bounds> jacobsthal_pairings, std::vector<std::vector<int > >& v_main, std::vector<std::vector<int> >& v_pend, int& comparisons)
-{
-	for (std::vector<t_bounds>::iterator jacobsthal_iter = jacobsthal_pairings.begin(); jacobsthal_iter != jacobsthal_pairings.end(); jacobsthal_iter++)
-		std::cout << "BEFORE: b_element_idx: " << jacobsthal_iter -> b_element_idx << " upper_bound: " << jacobsthal_iter -> exclusive_upper_bound_idx << '\n';
-
-	for (std::vector<t_bounds>::iterator jacobsthal_iter = jacobsthal_pairings.begin(); jacobsthal_iter != jacobsthal_pairings.end(); jacobsthal_iter++)
-	{
-		int lower_bound_idx = 0;
-		int upper_bound_idx = jacobsthal_iter -> exclusive_upper_bound_idx - 1;
-
-		int to_insert = v_pend[jacobsthal_iter -> b_element_idx].back();
-		while (lower_bound_idx <= upper_bound_idx)
-		{
-			++comparisons;
-			int to_compare_idx = lower_bound_idx + (upper_bound_idx - lower_bound_idx) / 2;
-			std::cout << ORANGE << "For value: " << to_insert << " at index " << jacobsthal_iter -> b_element_idx << " comparing from lower bound " << v_main[lower_bound_idx].back() << " at index " << lower_bound_idx << " to upper bound: " << v_main[upper_bound_idx].back() << " at index " << upper_bound_idx << '\n' << END;
-
-			if (to_insert <= v_main[to_compare_idx].back())
-				upper_bound_idx = to_compare_idx - 1;
-			else
-				lower_bound_idx = to_compare_idx + 1;
-		}
-
-		int insertion_idx = lower_bound_idx;
-		std::cout << ICE_BLUE << "Inserting " << v_pend[jacobsthal_iter -> b_element_idx].back() << " of index " << jacobsthal_iter -> b_element_idx << " into index " << lower_bound_idx << " of main\n" << END;
-		v_main.insert(v_main.begin() + insertion_idx, v_pend[jacobsthal_iter -> b_element_idx]);
-
-		for (std::vector<t_bounds>::iterator iter = jacobsthal_iter; iter != jacobsthal_pairings.end(); iter++)
-		{
-			if (iter -> exclusive_upper_bound_idx >= insertion_idx)
-			{
-				std::cout << "For element: " << iter -> b_element_idx << " upper bound of idx: " << iter -> exclusive_upper_bound_idx << " is more than insertion idx of " << insertion_idx << ". Incrementing upper bound to " << iter -> exclusive_upper_bound_idx + 1 << '\n';
-				++iter -> exclusive_upper_bound_idx;
-			}
-		}
-		std::cout << "jacobsthal_iter -> b_element_idx: " << jacobsthal_iter -> b_element_idx << " jacobsthal_iter -> exclusive_upper_bound_idx: " << jacobsthal_iter -> exclusive_upper_bound_idx << '\n';
-	}
-	for (std::vector<t_bounds>::iterator jacobsthal_iter = jacobsthal_pairings.begin(); jacobsthal_iter != jacobsthal_pairings.end(); jacobsthal_iter++)
-		std::cout << "RESULT: b_element_idx: " << jacobsthal_iter -> b_element_idx << " upper_bound: " << jacobsthal_iter -> exclusive_upper_bound_idx << '\n';
 }
 
 PmergeMe::PmergeMe(int argc, char **argv): m_elements(0), m_deque_compares(0), m_vect_compares(0)

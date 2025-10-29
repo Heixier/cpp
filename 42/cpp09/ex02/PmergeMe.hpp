@@ -54,27 +54,31 @@ class PmergeMe
 					}
 					buffer.clear();
 				}
-				c_print(c, "m_vect");
 			}
 			return (swap_pairs(c, level + 1, comparisons));
 		}
 
 		template <typename Container>
-		std::vector<int> generate_jacobsthal_sequence(int b_element_idxs)
+		Container generate_insertion_sequence(int pend_elements)
 		{
-			if (b_element_idxs >= 33)
-				throw std::runtime_error("Too many numbers!");
 			Container jacobsthal_sequence(0);
-			int current_idx = 0;
-			int current_jacobsthal = 0;
+
+			jacobsthal_sequence.push_back(0);
+			jacobsthal_sequence.push_back(1);
 		
-			while (current_jacobsthal < b_element_idxs)
+			int last = 1;
+			int prev = 0;
+			int next;
+			while (last < pend_elements)
 			{
-				current_jacobsthal = ((std::pow(2, current_idx) - std::pow(-1, current_idx)) / 3);
-				jacobsthal_sequence.push_back(current_jacobsthal);
-				current_idx++;
+				if (jacobsthal_sequence.size() > 32)
+					throw std::runtime_error("Too many numbers!");
+				next = last + 2 * prev;
+				jacobsthal_sequence.push_back(next);
+				prev = last;
+				last = next;
 			}
-		
+
 			Container output(0);
 			for (size_t i = 0; i + 1 < jacobsthal_sequence.size(); i++)
 			{
@@ -82,7 +86,7 @@ class PmergeMe
 				for (int j = 0; j < num_of_elements_to_add; j++)
 				{
 					int to_insert = jacobsthal_sequence[i + 1] - j;
-					if (to_insert > 1 && to_insert <= b_element_idxs)
+					if (to_insert > 1 && to_insert <= pend_elements)
 						output.push_back(to_insert);
 				}
 			}
@@ -104,6 +108,37 @@ class PmergeMe
 			return (bounds);
 		}
 
+		template <typename Container2, typename PairContainer>
+		void dynamic_binary_insert(PairContainer jacobsthal_pairings, Container2& main, Container2& pend, int& comparisons)
+		{
+			for (typename PairContainer::iterator jacobsthal_iter = jacobsthal_pairings.begin(); jacobsthal_iter != jacobsthal_pairings.end(); jacobsthal_iter++)
+			{
+				int lower_bound_idx = 0;
+				int upper_bound_idx = jacobsthal_iter -> exclusive_upper_bound_idx - 1;
+
+				int to_insert = pend[jacobsthal_iter -> b_element_idx].back();
+				while (lower_bound_idx <= upper_bound_idx)
+				{
+					++comparisons;
+					int to_compare_idx = lower_bound_idx + (upper_bound_idx - lower_bound_idx) / 2;
+					if (to_insert <= main[to_compare_idx].back())
+						upper_bound_idx = to_compare_idx - 1;
+					else
+						lower_bound_idx = to_compare_idx + 1;
+				}
+
+				int insertion_idx = lower_bound_idx;
+				main.insert(main.begin() + insertion_idx, pend[jacobsthal_iter -> b_element_idx]);
+
+				// Push every index above it up by one to account for the newly inserted element
+				for (typename PairContainer::iterator iter = jacobsthal_iter; iter != jacobsthal_pairings.end(); iter++)
+				{
+					if (iter -> exclusive_upper_bound_idx >= insertion_idx)
+						++iter -> exclusive_upper_bound_idx;
+				}
+			}
+		}
+
 		template <typename Container, typename Container2, typename PairContainer>
 		void insert(Container& c, int level, int& comparisons)
 		{
@@ -113,6 +148,7 @@ class PmergeMe
 			Container2 main(0);
 			Container2 pend(0);
 			Container remainder(0);
+
 		
 			int group_size = std::pow(2, level); // How many numbers for each a/b section
 			int groups = m_elements / group_size;
@@ -144,10 +180,10 @@ class PmergeMe
 				}
 			}
 		
-			Container sequence = generate_jacobsthal_sequence<Container>(pend.size() + 1);
+			Container sequence = generate_insertion_sequence<Container>(pend.size() + 1);
 		
 			PairContainer pairings = generate_bounds_pairing<Container, PairContainer>(sequence);
-			v_dynamic_binary_insert(pairings, main, pend, comparisons);
+			dynamic_binary_insert<Container2, PairContainer>(pairings, main, pend, comparisons);
 		
 			c.clear();
 			push_to_flattened_container<Container, Container2>(main, c);
@@ -183,8 +219,6 @@ class PmergeMe
 		}
 		
 		void v_print2(const std::vector<std::vector<int > >& vect2, const std::string& name) const;
-
-		void v_dynamic_binary_insert(std::vector<t_bounds> jacobsthal_pairings, std::vector<std::vector<int> >& v_main, std::vector<std::vector<int> >& v_pend, int& comparisons);
 
 		template <typename Container>
 		bool is_sorted(Container c)

@@ -4,12 +4,6 @@
 #include "PmergeMe.hpp"
 #include "colors.hpp"
 
-// static int generate_jacobsthal(int n)
-// {
-// 	if (n >= 33)
-// 		throw std::runtime_error("Too many numbers!");
-// 	return ((std::pow(2, n) - std::pow(-1, n)) / 3);
-// }
 
 int main (int argc, char **argv)
 {
@@ -19,7 +13,7 @@ int main (int argc, char **argv)
 	}
 	catch(const std::exception& e)
 	{
-		std::cerr << RED << "Error" << '\n';
+		std::cerr << RED << "Error: " << e.what() << '\n';
 	}
 	for (int i = 0; i < argc; i++)
 	{
