@@ -105,7 +105,7 @@ static bool are_integers(int argc, char **argv)
 }
 
 // Idx starts from 0; recursion
-int PmergeMe::v_swap_pairs(int level)
+int PmergeMe::v_swap_pairs(int level, int& comparisons)
 {
 	int group_size = std::pow(2, level); // How many numbers in each half of the pair
 	int pair_size = group_size * 2; // How big the pair is overall
@@ -124,7 +124,7 @@ int PmergeMe::v_swap_pairs(int level)
 	std::vector<int> buffer;
 	for (int i = 0; i < pairs_created; i++)
 	{
-		++m_vect_compares;
+		++comparisons;
 		int left_group_start_idx = (i * 2 * group_size);
 		int right_group_start_idx = (i * 2 * group_size) + group_size;
 
@@ -150,11 +150,11 @@ int PmergeMe::v_swap_pairs(int level)
 		v_print(m_vect, "m_vect");
 	}
 	
-	return (v_swap_pairs(level + 1));
+	return (v_swap_pairs(level + 1, comparisons));
 }
 
 
-void PmergeMe::v_dynamic_binary_insert(std::vector<t_bounds> jacobsthal_pairings, std::vector<std::vector<int > >& v_main, std::vector<std::vector<int> >& v_pend)
+void PmergeMe::v_dynamic_binary_insert(std::vector<t_bounds> jacobsthal_pairings, std::vector<std::vector<int > >& v_main, std::vector<std::vector<int> >& v_pend, int& comparisons)
 {
 	for (std::vector<t_bounds>::iterator jacobsthal_iter = jacobsthal_pairings.begin(); jacobsthal_iter != jacobsthal_pairings.end(); jacobsthal_iter++)
 		std::cout << "BEFORE: b_element_idx: " << jacobsthal_iter -> b_element_idx << " upper_bound: " << jacobsthal_iter -> exclusive_upper_bound_idx << '\n';
@@ -167,7 +167,7 @@ void PmergeMe::v_dynamic_binary_insert(std::vector<t_bounds> jacobsthal_pairings
 		int to_insert = v_pend[jacobsthal_iter -> b_element_idx].back();
 		while (lower_bound_idx <= upper_bound_idx)
 		{
-			++m_vect_compares;
+			++comparisons;
 			int to_compare_idx = lower_bound_idx + (upper_bound_idx - lower_bound_idx) / 2;
 			std::cout << ORANGE << "For value: " << to_insert << " at index " << jacobsthal_iter -> b_element_idx << " comparing from lower bound " << v_main[lower_bound_idx].back() << " at index " << lower_bound_idx << " to upper bound: " << v_main[upper_bound_idx].back() << " at index " << upper_bound_idx << '\n' << END;
 
@@ -209,7 +209,7 @@ std::vector<t_bounds> PmergeMe::v_generate_bounds_pairing(const std::vector<int>
 	return (bounds);
 }
 
-void PmergeMe::v_insert(int level)
+void PmergeMe::v_insert(int level, int& comparisons)
 {
 	if (level < 0)
 		return;
@@ -220,11 +220,6 @@ void PmergeMe::v_insert(int level)
 
 	int group_size = std::pow(2, level); // How many numbers for each a/b section
 	int groups = m_elements / group_size;
-
-	// v_start.clear();
-	// v_main.clear();
-	// v_pend.clear();
-	// v_remainder.clear();
 
 	std::vector<int> buffer(0);
 
@@ -267,33 +262,16 @@ void PmergeMe::v_insert(int level)
 		}
 	}
 
-	std::cout << LIGHT_GREEN;
-	v_print2(v_main, "v_main");
-	std::cout << END;
-
-	std::cout << ORANGE;
-	v_print2(v_pend, "v_pend");
-	std::cout << END;
-
-	std::cout << YELLOW;
-	v_print(v_remainder, "v_remainder");
-	std::cout << END;
-
-	m_vect.clear();
-	v_push_vect(v_main);
-	v_push_vect(v_pend); // DO NOT ACTUALLY USE; PLEASE DELETE ME
-	v_push_vect(v_remainder);
-
 	std::vector<int> sequence = v_generate_jacobsthal_sequence(v_pend.size() + 1);
 	v_print(sequence, "Full Jacobsthal sequence");
 
 	std::vector<t_bounds> pairings = v_generate_bounds_pairing(sequence);
-	v_dynamic_binary_insert(pairings, v_main, v_pend);
+	v_dynamic_binary_insert(pairings, v_main, v_pend, comparisons);
 
 	m_vect.clear();
 	v_push_vect(v_main);
 	v_print(m_vect, "m_vect");
-	v_insert(--level);
+	v_insert(--level, comparisons);
 }
 
 PmergeMe::PmergeMe(int argc, char **argv): m_elements(0), m_deque_compares(0), m_vect_compares(0)
@@ -308,9 +286,7 @@ PmergeMe::PmergeMe(int argc, char **argv): m_elements(0), m_deque_compares(0), m
 	m_vect_compares = m_deque_compares;
 
 	m_vect.clear();
-
 	m_deque.clear();
-
 	m_elements = argc;
 
 	std::cout << "m_elements: " << m_elements << '\n';
@@ -320,16 +296,14 @@ PmergeMe::PmergeMe(int argc, char **argv): m_elements(0), m_deque_compares(0), m
 		m_deque.push_back(atoi(argv[i]));
 		m_vect.push_back(atoi(argv[i]));
 	}
-	// Only doing vector for now; add deque later
-	v_print(m_vect);
 
-	int depth = v_swap_pairs(0);
-	std::cout << "Final depth: " << depth << '\n';
-
-	v_print(m_vect);
-
-	v_insert(depth);
-	std::cout << "v_comparisons: " << m_vect_compares << '\n';
+	int compares = sort<std::vector<int>, std::vector<std::vector<int> >, std::vector<t_bounds> >(m_vect);
+	v_print(m_vect, "Final");
+	if (!is_sorted<std::vector<int> >(m_vect))
+		std::cout << RED << "Not sorted!\n" << END;
+	else
+		std::cout << LIGHT_GREEN << "Sorted!\n" << END;
+	std::cout << "compares: " << compares << '\n';
 }
 
 PmergeMe::PmergeMe(): m_elements(0), m_deque_compares(0), m_vect_compares(0)
