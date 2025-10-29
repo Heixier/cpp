@@ -105,12 +105,19 @@ class PmergeMe
 			v_dynamic_binary_insert(pairings, main, pend, comparisons);
 		
 			c.clear();
-			v_push_vect(main);
+			push_to_flattened_container<Container, Container2>(main, c);
 			insert<Container, Container2, PairContainer>(c, --level, comparisons);
 		}
 
-		void v_push_vect(const std::vector<int>& vect);
-		void v_push_vect(const std::vector<std::vector<int > >& vect2);
+		template <typename Container, typename Container2>
+		void push_to_flattened_container(const Container2& src, Container& dest)
+		{
+			for (typename Container2::const_iterator iter2 = src.begin(); iter2 != src.end(); iter2++)
+			{
+				for (typename Container::const_iterator iter = iter2 -> begin(); iter != iter2 -> end(); iter++)
+					dest.push_back(*iter);
+			}
+		}
 
 		template <typename Container>
 		void c_print(const Container& c, const std::string& name) const
