@@ -1,7 +1,7 @@
 #ifndef PMERGEME_HPP
 #define PMERGEME_HPP
 
-#include <deque>
+#include <list>
 #include <vector>
 #include <sys/time.h>
 #include <iostream>
@@ -18,10 +18,16 @@ class PmergeMe
 	private:
 
 		void v_sort(std::vector<int> vect);
-		int v_swap_pairs(int level);
-		void v_insert(int level);
+		void l_sort(std::list<int> vect);
 
-		void v_push_flattened_vect(std::vector<std::vector<int> >& src);
+		int v_swap_pairs(int level);
+		int l_swap_pairs(int level);
+
+		void v_insert(int level);
+		int l_insert(int level);
+
+		void v_flatten_into_m_vect(std::vector<std::vector<int> >& src);
+		int l_flatten_into_m_list(std::list<std::list<int> >& src);
 
 		template <typename Container>
 		Container generate_insertion_sequence(int pend_elements)
@@ -84,16 +90,18 @@ class PmergeMe
 			std::cout << '\n';
 		}
 		
-		template <typename Container>
-		void c_print(const Container& c) const
+		template <typename Container, typename Container2>
+		void c_print(Container2& vect2, const std::string& name) const
 		{
-			std::cout << "Container: ";
-			for (typename Container::const_iterator iter = c.begin(); iter != c.end(); iter++)
-				std::cout << '[' << *iter << ']';
+			std::cout << name << ": \n";
+			for (typename Container2::const_iterator iter2 = vect2.begin(); iter2 != vect2.end(); iter2++)
+			{
+				for (typename Container::const_iterator iter = iter2 -> begin(); iter != iter2 -> end(); iter++)
+					std::cout << '[' << *iter << ']';
+				std::cout << '\n';
+			}
 			std::cout << '\n';
 		}
-		
-		void v_print2(const std::vector<std::vector<int > >& vect2, const std::string& name) const;
 
 		template <typename Container>
 		bool is_sorted(Container c)
@@ -107,10 +115,10 @@ class PmergeMe
 		}
 
 		int m_elements;
-		int m_deque_compares;
+		int m_list_compares;
 		int m_vect_compares;
 		
-		std::deque<int> m_deque;
+		std::list<int> m_list;
 		std::vector<int> m_vect;
 
 		PmergeMe();

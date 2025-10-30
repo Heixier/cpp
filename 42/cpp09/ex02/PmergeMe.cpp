@@ -23,7 +23,7 @@ static bool are_integers(int argc, char **argv)
 	return (true);
 }
 
-void PmergeMe::v_push_flattened_vect(std::vector<std::vector<int> >& src)
+void PmergeMe::v_flatten_into_m_vect(std::vector<std::vector<int> >& src)
 {
 	for (std::vector<std::vector<int> >::const_iterator iter2 = src.begin(); iter2 != src.end(); iter2++)
 	{
@@ -50,6 +50,26 @@ void PmergeMe::v_sort(std::vector<int> vect)
 
 	double time_taken_us = ((end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec) / 1000000.0);
 	std::cout << "Sorted " << m_elements << " elements in " << time_taken_us << "s with std::vector " << " (" << m_vect_compares << " comparisons)\n";
+}
+
+void PmergeMe::l_sort(std::list<int> lst)
+{
+	struct timeval start;
+	struct timeval end;
+
+	c_print(lst, "Before sort");
+	gettimeofday(&start, NULL);
+
+	int depth = l_swap_pairs(0);
+	l_insert(depth);
+	gettimeofday(&end, NULL);
+
+	c_print(m_list, "\nAfter sort");
+	if (!is_sorted<std::list<int> >(m_list))
+		std::cout << RED << "Not sorted!\n" << END;
+
+	double time_taken_us = ((end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec) / 1000000.0);
+	std::cout << "Sorted " << m_elements << " elements in " << time_taken_us << "s with std::list" << " (" << m_list_compares << " comparisons)\n";
 }
 
 // Idx starts from 0; recursion
@@ -165,7 +185,7 @@ void PmergeMe::v_insert(int level)
 	v_insert(--level);
 }
 
-PmergeMe::PmergeMe(int argc, char **argv): m_elements(0), m_deque_compares(0), m_vect_compares(0)
+PmergeMe::PmergeMe(int argc, char **argv): m_elements(0), m_list_compares(0), m_vect_compares(0)
 {
 	if (argc < 2)
 		throw std::runtime_error("Not enough arguments!");
@@ -174,34 +194,34 @@ PmergeMe::PmergeMe(int argc, char **argv): m_elements(0), m_deque_compares(0), m
 	if (!are_integers(argc, argv))
 		throw std::runtime_error("Invalid digits!");
 
-	m_vect_compares = m_deque_compares;
+	m_vect_compares = m_list_compares;
 
 	m_vect.clear();
-	m_deque.clear();
+	m_list.clear();
 	m_elements = argc;
 
 	std::cout << "m_elements: " << m_elements << '\n';
 
 	for (int i = 0; i < m_elements; i++)
 	{
-		m_deque.push_back(atoi(argv[i]));
+		m_list.push_back(atoi(argv[i]));
 		m_vect.push_back(atoi(argv[i]));
 	}
 
 	v_sort(m_vect);
 }
 
-PmergeMe::PmergeMe(): m_elements(0), m_deque_compares(0), m_vect_compares(0)
+PmergeMe::PmergeMe(): m_elements(0), m_list_compares(0), m_vect_compares(0)
 {
 	m_vect.clear();
-	m_deque.clear();
+	m_list.clear();
 }
 
 PmergeMe::PmergeMe(const PmergeMe& other):
 	m_elements(other.m_elements),
-	m_deque_compares(other.m_deque_compares),
-	m_vect_compares(other.m_deque_compares),
-	m_deque(other.m_deque),
+	m_list_compares(other.m_list_compares),
+	m_vect_compares(other.m_list_compares),
+	m_list(other.m_list),
 	m_vect(other.m_vect)
 { }
 
@@ -209,7 +229,7 @@ PmergeMe& PmergeMe::operator= (const PmergeMe& other)
 {
 	if (this != &other)
 	{
-		m_deque = other.m_deque;
+		m_list = other.m_list;
 		m_vect = other.m_vect;
 	}
 	return (*this);
