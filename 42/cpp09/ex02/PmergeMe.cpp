@@ -63,6 +63,7 @@ void PmergeMe::l_sort(std::list<int> lst)
 
 	int depth = l_swap_pairs(0);
 	depth++;
+	depth--;
 	// l_insert(depth);
 	// gettimeofday(&end, NULL);
 
@@ -129,45 +130,43 @@ int PmergeMe::l_swap_pairs(int level)
 		std::cout << "Level: " << level << " Not enough to make next level! Needed: " << pair_size << " Provided: " << m_elements << " Stopping...\n";
 		return (level);
 	}
-	return (0);
 
-// 	// std::cout << ICE_BLUE << "Swapping\n" << END;
-// 	int pairs_created = m_elements / pair_size;
+	// std::cout << ICE_BLUE << "Swapping\n" << END;
+	int pairs_created = m_elements / pair_size;
 
-// 	std::cout << "Pair size: " << pair_size << " Group size: " << group_size << '\n';
-// 	std::cout << "Pairs created: " << pairs_created << '\n';
+	std::cout << "Pair size: " << pair_size << " Group size: " << group_size << '\n';
+	std::cout << "Pairs created: " << pairs_created << '\n';
 
-// 	std::vector<int> buffer;
-// 	for (int i = 0; i < pairs_created; i++)
-// 	{
-// 		++m_list_compares;
-// 		int left_group_start_idx = (i * 2 * group_size);
-// 		int right_group_start_idx = (i * 2 * group_size) + group_size;
+	std::list<int> buffer;
+	for (int i = 0; i < pairs_created; i++)
+	{
+		++m_list_compares;
+		int left_group_start_idx = (i * 2 * group_size);
+		int right_group_start_idx = (i * 2 * group_size) + group_size;
 
-// 		int left_group_end_idx = (i * 2 * group_size) + group_size - 1;
-// 		int right_group_end_idx = (i * 2 * group_size) + (group_size * 2) - 1;
+		int left_group_end_idx = (i * 2 * group_size) + group_size - 1;
+		int right_group_end_idx = (i * 2 * group_size) + (group_size * 2) - 1;
 
-// 		std::cout << LIGHT_GREEN << "start_of_left_group: " << m_list[left_group_start_idx] << " start_of_right_group: " << m_list[right_group_start_idx] << '\n' << END;
-// 		std::cout << YELLOW << "end_of_left_group: " << m_list[left_group_end_idx] << " end_of_right_group: " << m_list[right_group_end_idx] << '\n' << END;
+		std::cout << LIGHT_GREEN << "start_of_left_group: " << lst_idx(m_list, left_group_start_idx) << " start_of_right_group: " << lst_idx(m_list, right_group_start_idx) << '\n' << END;
+		std::cout << YELLOW << "end_of_left_group: " << lst_idx(m_list, left_group_end_idx) << " end_of_right_group: " << lst_idx(m_list, right_group_end_idx) << '\n' << END;
 
-// 		if (m_vect[left_group_end_idx] > m_vect[right_group_end_idx])
-// 		{
-// 			for (int i = 0; i < group_size; i++) // Copy the left group
-// 			{
-// 				buffer.push_back(m_vect[i + left_group_start_idx]);
-// 				m_vect[i + left_group_start_idx] = m_vect[i + right_group_start_idx];
-// 				m_vect[i + right_group_start_idx] = buffer[i];
-// 			}
-// 			std::cout << ICE_BLUE;
-// 			v_print(buffer, "Copy of left group");
-// 			std::cout << '\n' << END;
-// 			buffer.clear();
-// 		}
-// 		v_print(m_vect, "m_vect");
-// 	}
+		if (lst_idx(m_list, left_group_end_idx) > lst_idx(m_list, right_group_end_idx))
+		{
+			for (int i = 0; i < group_size; i++) // Copy the left group
+			{
+				buffer.push_back(lst_idx(m_list, i + left_group_start_idx));
+				lst_idx(m_list, i + left_group_start_idx) = lst_idx(m_list, i + right_group_start_idx);
+				lst_idx(m_list, i + right_group_start_idx) = lst_idx(buffer, i);
+			}
+			std::cout << ICE_BLUE;
+			c_print(buffer, "Copy of left group");
+			std::cout << '\n' << END;
+			buffer.clear();
+		}
+		c_print(m_list, "m_list");
+	}
 	
-// 	return (v_swap_pairs(level + 1, comparisons));
-// }
+	return (l_swap_pairs(++level));
 }
 
 void PmergeMe::v_dynamic_binary_insert(std::vector<t_bounds> jacobsthal_pairings, std::vector<std::vector<int> >& main, std::vector<std::vector<int > > pend)
@@ -272,6 +271,10 @@ void PmergeMe::v_insert(int level)
 	v_insert(--level);
 }
 
+#include <unistd.h>
+#include <fcntl.h>
+#include <cstdio>
+
 PmergeMe::PmergeMe(int argc, char **argv): m_elements(0), m_list_compares(0), m_vect_compares(0)
 {
 	if (argc < 2)
@@ -295,7 +298,28 @@ PmergeMe::PmergeMe(int argc, char **argv): m_elements(0), m_list_compares(0), m_
 		m_vect.push_back(atoi(argv[i]));
 	}
 
+	int fd = open("vect.txt", O_WRONLY | O_CREAT, 0777);
+	if (fd == -1)
+	{
+		std::perror("open");
+		throw std::runtime_error("file error");
+	}
+	int stdout = dup(STDOUT_FILENO);
+	dup2(fd, STDOUT_FILENO);
 	v_sort(m_vect);
+
+	close(fd);
+
+	fd = open("list.txt", O_WRONLY | O_CREAT, 0777);
+	if (fd == -1)
+	{
+		std::perror("open");
+		throw std::runtime_error("file error");
+	}
+	dup2(fd, STDOUT_FILENO);
+	l_sort(m_list);
+	close(fd);
+	dup2(stdout, STDOUT_FILENO);
 }
 
 PmergeMe::PmergeMe(): m_elements(0), m_list_compares(0), m_vect_compares(0)
