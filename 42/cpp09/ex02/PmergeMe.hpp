@@ -6,6 +6,7 @@
 #include <sys/time.h>
 #include <iostream>
 #include <stdexcept>
+#include <algorithm>
 
 #include "structs.hpp"
 
@@ -101,6 +102,16 @@ class PmergeMe
 				std::cout << '\n';
 			}
 			std::cout << '\n';
+		}
+
+		template <typename T>
+		T& lst_idx(std::list<T>& lst, int idx)
+		{
+			if (idx < 0)
+				throw std::runtime_error("boi your index calculations got screwed up somewhere");
+			typename std::list<T>::iterator it = lst.begin();
+			std::advance(it, idx);
+			return (*it);
 		}
 
 		template <typename Container>

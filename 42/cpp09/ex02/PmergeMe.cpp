@@ -3,6 +3,7 @@
 #include <cstring>
 #include <cstdlib>
 #include <cmath>
+#include <iomanip>
 
 #include "colors.hpp"
 #include "PmergeMe.hpp"
@@ -49,27 +50,28 @@ void PmergeMe::v_sort(std::vector<int> vect)
 		std::cout << RED << "Not sorted!\n" << END;
 
 	double time_taken_us = ((end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec) / 1000000.0);
-	std::cout << "Sorted " << m_elements << " elements in " << time_taken_us << "s with std::vector " << " (" << m_vect_compares << " comparisons)\n";
+	std::cout << std::fixed << "Sorted " << m_elements << " elements in " << time_taken_us << "s with std::vector " << " (" << m_vect_compares << " comparisons)\n";
 }
 
 void PmergeMe::l_sort(std::list<int> lst)
 {
-	struct timeval start;
-	struct timeval end;
+	// struct timeval start;
+	// struct timeval end;
 
 	c_print(lst, "Before sort");
-	gettimeofday(&start, NULL);
+	// gettimeofday(&start, NULL);
 
 	int depth = l_swap_pairs(0);
-	l_insert(depth);
-	gettimeofday(&end, NULL);
+	depth++;
+	// l_insert(depth);
+	// gettimeofday(&end, NULL);
 
-	c_print(m_list, "\nAfter sort");
-	if (!is_sorted<std::list<int> >(m_list))
-		std::cout << RED << "Not sorted!\n" << END;
+	// c_print(m_list, "\nAfter sort");
+	// if (!is_sorted<std::list<int> >(m_list))
+	// 	std::cout << RED << "Not sorted!\n" << END;
 
-	double time_taken_us = ((end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec) / 1000000.0);
-	std::cout << "Sorted " << m_elements << " elements in " << time_taken_us << "s with std::list" << " (" << m_list_compares << " comparisons)\n";
+	// double time_taken_us = ((end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec) / 1000000.0);
+	// std::cout << std::fixed << "Sorted " << m_elements << " elements in " << time_taken_us << "s with std::list" << " (" << m_list_compares << " comparisons)\n";
 }
 
 // Idx starts from 0; recursion
@@ -78,9 +80,15 @@ int PmergeMe::v_swap_pairs(int level)
 	int group_size = std::pow(2, level); // How many numbers in each half of the pair
 	int pair_size = group_size * 2; // How big the pair is overall
 	if (pair_size > m_elements)
+	{
+		std::cout << "Level: " << level << " Not enough to make next level! Needed: " << pair_size << " Provided: " << m_elements << " Stopping...\n";
 		return (level);
+	}
 
 	int pairs_created = m_elements / pair_size;
+
+	std::cout << "Pair size: " << pair_size << " Group size: " << group_size << '\n';
+	std::cout << "Pairs created: " << pairs_created << '\n';
 
 	std::vector<int> buffer;
 	for (int i = 0; i < pairs_created; i++)
@@ -92,6 +100,9 @@ int PmergeMe::v_swap_pairs(int level)
 		int left_group_end_idx = (i * 2 * group_size) + group_size - 1;
 		int right_group_end_idx = (i * 2 * group_size) + (group_size * 2) - 1;
 
+		std::cout << LIGHT_GREEN << "start_of_left_group: " << m_vect[left_group_start_idx] << " start_of_right_group: " << m_vect[right_group_start_idx] << '\n' << END;
+		std::cout << YELLOW << "end_of_left_group: " << m_vect[left_group_end_idx] << " end_of_right_group: " << m_vect[right_group_end_idx] << '\n' << END;
+
 		if (m_vect[left_group_end_idx] > m_vect[right_group_end_idx])
 		{
 			for (int i = 0; i < group_size; i++) // Copy the left group
@@ -100,10 +111,63 @@ int PmergeMe::v_swap_pairs(int level)
 				m_vect[i + left_group_start_idx] = m_vect[i + right_group_start_idx];
 				m_vect[i + right_group_start_idx] = buffer[i];
 			}
+			std::cout << ICE_BLUE;
+			c_print(buffer, "Copy of left group");
+			std::cout << '\n' << END;
 			buffer.clear();
 		}
 	}
 	return (v_swap_pairs(++level));
+}
+
+int PmergeMe::l_swap_pairs(int level)
+{
+	int group_size = std::pow(2, level);
+	int pair_size = group_size * 2;
+	if (pair_size > m_elements)
+	{
+		std::cout << "Level: " << level << " Not enough to make next level! Needed: " << pair_size << " Provided: " << m_elements << " Stopping...\n";
+		return (level);
+	}
+	return (0);
+
+// 	// std::cout << ICE_BLUE << "Swapping\n" << END;
+// 	int pairs_created = m_elements / pair_size;
+
+// 	std::cout << "Pair size: " << pair_size << " Group size: " << group_size << '\n';
+// 	std::cout << "Pairs created: " << pairs_created << '\n';
+
+// 	std::vector<int> buffer;
+// 	for (int i = 0; i < pairs_created; i++)
+// 	{
+// 		++m_list_compares;
+// 		int left_group_start_idx = (i * 2 * group_size);
+// 		int right_group_start_idx = (i * 2 * group_size) + group_size;
+
+// 		int left_group_end_idx = (i * 2 * group_size) + group_size - 1;
+// 		int right_group_end_idx = (i * 2 * group_size) + (group_size * 2) - 1;
+
+// 		std::cout << LIGHT_GREEN << "start_of_left_group: " << m_list[left_group_start_idx] << " start_of_right_group: " << m_list[right_group_start_idx] << '\n' << END;
+// 		std::cout << YELLOW << "end_of_left_group: " << m_list[left_group_end_idx] << " end_of_right_group: " << m_list[right_group_end_idx] << '\n' << END;
+
+// 		if (m_vect[left_group_end_idx] > m_vect[right_group_end_idx])
+// 		{
+// 			for (int i = 0; i < group_size; i++) // Copy the left group
+// 			{
+// 				buffer.push_back(m_vect[i + left_group_start_idx]);
+// 				m_vect[i + left_group_start_idx] = m_vect[i + right_group_start_idx];
+// 				m_vect[i + right_group_start_idx] = buffer[i];
+// 			}
+// 			std::cout << ICE_BLUE;
+// 			v_print(buffer, "Copy of left group");
+// 			std::cout << '\n' << END;
+// 			buffer.clear();
+// 		}
+// 		v_print(m_vect, "m_vect");
+// 	}
+	
+// 	return (v_swap_pairs(level + 1, comparisons));
+// }
 }
 
 void PmergeMe::v_dynamic_binary_insert(std::vector<t_bounds> jacobsthal_pairings, std::vector<std::vector<int> >& main, std::vector<std::vector<int > > pend)
@@ -149,6 +213,8 @@ void PmergeMe::v_insert(int level)
 	int groups = m_elements / group_size;
 	std::vector<int> buffer(0);
 
+	std::cout << ORANGE << "Beginning insert for depth: " << level << "\nElements: " << m_elements << " Group size: " << group_size << " Groups: " << groups << '\n' << END;
+
 	// Create v_start
 	for (int group = 0; group < groups; group++)
 	{
@@ -165,15 +231,36 @@ void PmergeMe::v_insert(int level)
 	for (int i = 0; i < groups; i++)
 	{
 		if (i % 2) // if a
+		{
+			std::cout << PURPLE << "a" << i / 2 + 1 << ": ";
+			c_print(start[i], "");
+			std::cout << END;
 			main.push_back(start[i]);
+		}
 		else // if b
 		{
 			if (i == 0) // b1
 				main.push_back(start[i]);
 			else
 				pend.push_back(start[i]);
+			std::cout << ICE_BLUE << "b" << i / 2 + 1 << ": ";
+			c_print(start[i], "");
+			std::cout << END;
 		}
 	}
+
+
+	std::cout << LIGHT_GREEN;
+	c_print<std::vector<int>, std::vector<std::vector<int> > >(main, "v_main");
+	std::cout << END;
+
+	std::cout << ORANGE;
+	c_print<std::vector<int>, std::vector<std::vector<int> > >(pend, "v_pend");
+	std::cout << END;
+
+	std::cout << YELLOW;
+	c_print(remainder, "v_remainder");
+	std::cout << END;
 
 	std::vector<int> sequence = generate_insertion_sequence<std::vector<int> >(pend.size() + 1);
 
@@ -181,7 +268,7 @@ void PmergeMe::v_insert(int level)
 	v_dynamic_binary_insert(pairings, main, pend);
 
 	m_vect.clear();
-	v_push_flattened_vect(main);
+	v_flatten_into_m_vect(main);
 	v_insert(--level);
 }
 
