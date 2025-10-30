@@ -31,40 +31,9 @@ class PmergeMe
 		void l_push_into_m_list2(std::list<std::list<int> >& src);
 		void l_push_into_m_list(std::list<int>& src);
 
-		template <typename Container>
-		Container generate_insertion_sequence(int pend_elements)
-		{
-			Container jacobsthal_sequence(0);
+		std::vector<int> v_generate_insertion_sequence(int pend_elements);
+		std::list<int> l_generate_insertion_sequence(int pend_elements);
 
-			jacobsthal_sequence.push_back(0);
-			jacobsthal_sequence.push_back(1);
-		
-			int last = 1;
-			int prev = 0;
-			int next;
-			while (last < pend_elements)
-			{
-				if (jacobsthal_sequence.size() > 32)
-					throw std::runtime_error("Too many numbers!");
-				next = last + 2 * prev;
-				jacobsthal_sequence.push_back(next);
-				prev = last;
-				last = next;
-			}
-
-			Container output(0);
-			for (size_t i = 0; i + 1 < jacobsthal_sequence.size(); i++)
-			{
-				int num_of_elements_to_add = jacobsthal_sequence[i + 1] - jacobsthal_sequence[i];
-				for (int j = 0; j < num_of_elements_to_add; j++)
-				{
-					int to_insert = jacobsthal_sequence[i + 1] - j;
-					if (to_insert > 1 && to_insert <= pend_elements)
-						output.push_back(to_insert);
-				}
-			}
-			return (output);
-		}
 
 		template <typename Container, typename PairContainer>
 		PairContainer generate_bounds_pairing(const Container& jacobsthal_sequence)

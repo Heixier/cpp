@@ -131,6 +131,7 @@ int PmergeMe::v_swap_pairs(int level)
 			std::cout << '\n' << END;
 			buffer.clear();
 		}
+		c_print(m_vect, "m_vect");
 	}
 	return (v_swap_pairs(++level));
 }
@@ -181,6 +182,76 @@ int PmergeMe::l_swap_pairs(int level)
 	}
 	
 	return (l_swap_pairs(++level));
+}
+
+std::vector<int> PmergeMe::v_generate_insertion_sequence(int pend_elements)
+{
+	std::vector<int> jacobsthal_sequence(0);
+
+	jacobsthal_sequence.push_back(0);
+	jacobsthal_sequence.push_back(1);
+
+	int last = 1;
+	int prev = 0;
+	int next;
+	while (last < pend_elements)
+	{
+		if (jacobsthal_sequence.size() > 32)
+			throw std::runtime_error("Too many numbers!");
+		next = last + 2 * prev;
+		jacobsthal_sequence.push_back(next);
+		prev = last;
+		last = next;
+	}
+
+	std::vector<int> output(0);
+	for (size_t i = 0; i + 1 < jacobsthal_sequence.size(); i++)
+	{
+		int num_of_elements_to_add = jacobsthal_sequence[i + 1] - jacobsthal_sequence[i];
+		for (int j = 0; j < num_of_elements_to_add; j++)
+		{
+			int to_insert = jacobsthal_sequence[i + 1] - j;
+			if (to_insert > 1 && to_insert <= pend_elements)
+				output.push_back(to_insert);
+		}
+	}
+	return (output);
+}
+
+std::list<int> PmergeMe::l_generate_insertion_sequence(int pend_elements)
+{
+	std::list<int> jacobsthal_sequence(0);
+
+	jacobsthal_sequence.push_back(0);
+	jacobsthal_sequence.push_back(1);
+
+	int last = 1;
+	int prev = 0;
+	int next;
+	while (last < pend_elements)
+	{
+		if (jacobsthal_sequence.size() > 32)
+			throw std::runtime_error("Too many numbers!");
+		next = last + 2 * prev;
+		jacobsthal_sequence.push_back(next);
+		prev = last;
+		last = next;
+	}
+
+	std::list<int> output(0);
+	c_print(jacobsthal_sequence, "jacobsthal sequence");
+	for (size_t i = 0; i + 1 < jacobsthal_sequence.size(); i++)
+	{
+		int num_of_elements_to_add = lst_idx(jacobsthal_sequence, i + 1) - lst_idx(jacobsthal_sequence, i); // ERROR IS SOMEWHERE HERE
+		std::cout << "Number of elements to add: " << lst_idx(jacobsthal_sequence, i + 1) << " - " << lst_idx(jacobsthal_sequence, i) << " = " << num_of_elements_to_add << '\n';
+		for (int j = 0; j < num_of_elements_to_add; j++)
+		{
+			int to_insert = lst_idx(jacobsthal_sequence, i + 1) - j;
+			if (to_insert > 1 && to_insert <= pend_elements)
+				output.push_back(to_insert);
+		}
+	}
+	return (output);
 }
 
 void PmergeMe::v_dynamic_binary_insert(std::vector<t_bounds> jacobsthal_pairings, std::vector<std::vector<int> >& main, std::vector<std::vector<int > > pend)
@@ -255,6 +326,7 @@ void PmergeMe::v_insert(int level)
 	int group_size = std::pow(2, level); // How many numbers for each a/b section
 	int groups = m_elements / group_size;
 	std::vector<int> buffer(0);
+	c_print(m_vect, "m_vect: ");
 
 	std::cout << ORANGE << "Beginning insert for depth: " << level << "\nElements: " << m_elements << " Group size: " << group_size << " Groups: " << groups << '\n' << END;
 
@@ -268,7 +340,7 @@ void PmergeMe::v_insert(int level)
 	}
 	
 	for (int i = group_size * groups; i < m_elements; i++)
-		remainder.push_back(m_vect[i]);
+		remainder.push_back(m_vect[i]); // RUBBISH AND UNUSED IN VECT
 
 	// Create v_main and v_pend
 	for (int i = 0; i < groups; i++)
@@ -305,7 +377,7 @@ void PmergeMe::v_insert(int level)
 	c_print(remainder, "v_remainder");
 	std::cout << END;
 
-	std::vector<int> sequence = generate_insertion_sequence<std::vector<int> >(pend.size() + 1);
+	std::vector<int> sequence = v_generate_insertion_sequence(pend.size() + 1);
 
 	std::vector<t_bounds> pairings = generate_bounds_pairing<std::vector<int>, std::vector<t_bounds> >(sequence);
 	v_dynamic_binary_insert(pairings, main, pend);
@@ -329,6 +401,7 @@ void PmergeMe::l_insert(int level)
 	std::list<int> buffer(0);
 
 	std::cout << ORANGE << "Beginning insert for depth: " << level << "\nElements: " << m_elements << " Group size: " << group_size << " Groups: " << groups << '\n' << END;
+	c_print(m_list, "m_list: ");
 
 	// Create l_start
 	for (int group = 0; group < groups; group++)
@@ -340,7 +413,7 @@ void PmergeMe::l_insert(int level)
 	}
 	
 	for (int i = group_size * groups; i < m_elements; i++)
-		remainder.push_back(lst_idx(m_list, i));
+		remainder.push_back(lst_idx(m_list, i)); // RUBBISH
 
 	// Create v_main and v_pend
 	for (int i = 0; i < groups; i++)
@@ -364,29 +437,26 @@ void PmergeMe::l_insert(int level)
 		}
 	}
 
-	m_vect.clear();
-	l_push_into_m_list2(main);
-	l_push_into_m_list(remainder);
-
 	std::cout << LIGHT_GREEN;
-	c_print<std::list<int>, std::list<std::list<int> > >(main, "v_main");
+	c_print<std::list<int>, std::list<std::list<int> > >(main, "l_main");
 	std::cout << END;
 
 	std::cout << ORANGE;
-	c_print<std::list<int>, std::list<std::list<int> > >(pend, "v_pend");
+	c_print<std::list<int>, std::list<std::list<int> > >(pend, "l_pend");
 	std::cout << END;
 
 	std::cout << YELLOW;
-	c_print(remainder, "v_remainder");
+	c_print(remainder, "l_remainder");
 	std::cout << END;
 
-	std::list<int> sequence = generate_insertion_sequence<std::list<int> >(pend.size() + 1);
+	std::list<int> sequence = l_generate_insertion_sequence(pend.size() + 1);
 
 	std::list<t_bounds> pairings = generate_bounds_pairing<std::list<int>, std::list<t_bounds> >(sequence);
 	l_dynamic_binary_insert(pairings, main, pend);
 
 	m_list.clear();
 	l_push_into_m_list2(main);
+	l_push_into_m_list(remainder);
 	l_insert(--level);
 }
 
@@ -417,7 +487,7 @@ PmergeMe::PmergeMe(int argc, char **argv): m_elements(0), m_list_compares(0), m_
 		m_vect.push_back(atoi(argv[i]));
 	}
 
-	int fd = open("vect.txt", O_WRONLY | O_CREAT, 0777);
+	int fd = open("vect.txt", O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (fd == -1)
 	{
 		std::perror("open");
@@ -429,7 +499,7 @@ PmergeMe::PmergeMe(int argc, char **argv): m_elements(0), m_list_compares(0), m_
 
 	close(fd);
 
-	fd = open("list.txt", O_WRONLY | O_CREAT, 0777);
+	fd = open("list.txt", O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (fd == -1)
 	{
 		std::perror("open");
