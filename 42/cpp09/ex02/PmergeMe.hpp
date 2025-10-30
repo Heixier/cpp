@@ -194,9 +194,6 @@ class PmergeMe
 				}
 			}
 
-			push_to_container2<Container, Container2>(main, c);
-			push_to_container<Container>(remainder, c);
-		
 			Container sequence = generate_insertion_sequence<Container>(pend.size() + 1);
 		
 			PairContainer pairings = generate_bounds_pairing<Container, PairContainer>(sequence);
@@ -204,6 +201,7 @@ class PmergeMe
 		
 			c.clear();
 			push_to_container2<Container, Container2>(main, c);
+			push_to_container<Container>(remainder, c);
 			insert<Container, Container2, PairContainer>(c, --level, comparisons);
 		}
 
