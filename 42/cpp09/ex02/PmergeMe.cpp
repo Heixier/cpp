@@ -24,7 +24,7 @@ static bool are_integers(int argc, char **argv)
 	return (true);
 }
 
-void PmergeMe::v_flatten_into_m_vect(std::vector<std::vector<int> >& src)
+void PmergeMe::v_push_into_m_vect2(std::vector<std::vector<int> >& src)
 {
 	for (std::vector<std::vector<int> >::const_iterator iter2 = src.begin(); iter2 != src.end(); iter2++)
 	{
@@ -32,6 +32,22 @@ void PmergeMe::v_flatten_into_m_vect(std::vector<std::vector<int> >& src)
 			m_vect.push_back(*iter);
 	}
 }
+
+void PmergeMe::l_push_into_m_list2(std::list<std::list<int> >& src)
+{
+	for (std::list<std::list<int> >::const_iterator iter2 = src.begin(); iter2 != src.end(); iter2++)
+	{
+		for (std::list<int>::const_iterator iter = iter2 -> begin(); iter != iter2 -> end(); iter++)
+			m_list.push_back(*iter);
+	}
+}
+
+void PmergeMe::l_push_into_m_list(std::list<int>& src)
+{
+	for (std::list<int>::const_iterator iter = src.begin(); iter != src.end(); iter++)
+		m_list.push_back(*iter);
+}
+
 
 void PmergeMe::v_sort(std::vector<int> vect)
 {
@@ -62,9 +78,7 @@ void PmergeMe::l_sort(std::list<int> lst)
 	// gettimeofday(&start, NULL);
 
 	int depth = l_swap_pairs(0);
-	depth++;
-	depth--;
-	// l_insert(depth);
+	l_insert(depth);
 	// gettimeofday(&end, NULL);
 
 	// c_print(m_list, "\nAfter sort");
@@ -199,6 +213,36 @@ void PmergeMe::v_dynamic_binary_insert(std::vector<t_bounds> jacobsthal_pairings
 	}
 }
 
+void PmergeMe::l_dynamic_binary_insert(std::list<t_bounds> jacobsthal_pairings, std::list<std::list<int> >& main, std::list<std::list<int > > pend)
+{
+	for (std::list<t_bounds>::iterator jacobsthal_iter = jacobsthal_pairings.begin(); jacobsthal_iter != jacobsthal_pairings.end(); jacobsthal_iter++)
+	{
+		int lower_bound_idx = 0;
+		int upper_bound_idx = jacobsthal_iter -> exclusive_upper_bound_idx - 1;
+
+		int to_insert = lst_idx(pend, jacobsthal_iter -> b_element_idx).back();
+		while (lower_bound_idx <= upper_bound_idx)
+		{
+			++m_list_compares;
+			int to_compare_idx = lower_bound_idx + (upper_bound_idx - lower_bound_idx) / 2;
+			if (to_insert <= lst_idx(main, to_compare_idx).back())
+				upper_bound_idx = to_compare_idx - 1;
+			else
+				lower_bound_idx = to_compare_idx + 1;
+		}
+
+		int insertion_idx = lower_bound_idx;
+		main.insert(lst_idx_it(main, insertion_idx), lst_idx(pend, jacobsthal_iter -> b_element_idx));
+
+		// Push every index above it up by one to account for the newly inserted element
+		for (std::list<t_bounds>::iterator iter = jacobsthal_iter; iter != jacobsthal_pairings.end(); iter++)
+		{
+			if (iter -> exclusive_upper_bound_idx >= insertion_idx)
+				++iter -> exclusive_upper_bound_idx;
+		}
+	}
+}
+
 void PmergeMe::v_insert(int level)
 {
 	if (level < 0)
@@ -267,8 +311,83 @@ void PmergeMe::v_insert(int level)
 	v_dynamic_binary_insert(pairings, main, pend);
 
 	m_vect.clear();
-	v_flatten_into_m_vect(main);
+	v_push_into_m_vect2(main);
 	v_insert(--level);
+}
+
+void PmergeMe::l_insert(int level)
+{
+	if (level < 0)
+		return;
+	std::list<std::list<int> > start(0);
+	std::list<std::list<int> > main(0);
+	std::list<std::list<int> > pend(0);
+	std::list<int> remainder(0);
+
+	int group_size = std::pow(2, level); // How many numbers for each a/b section
+	int groups = m_elements / group_size;
+	std::list<int> buffer(0);
+
+	std::cout << ORANGE << "Beginning insert for depth: " << level << "\nElements: " << m_elements << " Group size: " << group_size << " Groups: " << groups << '\n' << END;
+
+	// Create l_start
+	for (int group = 0; group < groups; group++)
+	{
+		for (int i = 0; i < group_size; i++)
+			buffer.push_back(lst_idx(m_list, i + (group * group_size)));
+		start.push_back(buffer);
+		buffer.clear();
+	}
+	
+	for (int i = group_size * groups; i < m_elements; i++)
+		remainder.push_back(lst_idx(m_list, i));
+
+	// Create v_main and v_pend
+	for (int i = 0; i < groups; i++)
+	{
+		if (i % 2) // if a
+		{
+			std::cout << PURPLE << "a" << i / 2 + 1 << ": ";
+			c_print(lst_idx(start, i), "");
+			std::cout << END;
+			main.push_back(lst_idx(start, i));
+		}
+		else // if b
+		{
+			if (i == 0) // b1
+				main.push_back(lst_idx(start, i));
+			else
+				pend.push_back(lst_idx(start, i));
+			std::cout << ICE_BLUE << "b" << i / 2 + 1 << ": ";
+			c_print(lst_idx(start, i), "");
+			std::cout << END;
+		}
+	}
+
+	m_vect.clear();
+	l_push_into_m_list2(main);
+	l_push_into_m_list(remainder);
+
+	std::cout << LIGHT_GREEN;
+	c_print<std::list<int>, std::list<std::list<int> > >(main, "v_main");
+	std::cout << END;
+
+	std::cout << ORANGE;
+	c_print<std::list<int>, std::list<std::list<int> > >(pend, "v_pend");
+	std::cout << END;
+
+	std::cout << YELLOW;
+	c_print(remainder, "v_remainder");
+	std::cout << END;
+
+	std::list<int> sequence = generate_insertion_sequence<std::list<int> >(pend.size() + 1);
+
+	std::list<t_bounds> pairings = generate_bounds_pairing<std::list<int>, std::list<t_bounds> >(sequence);
+	l_dynamic_binary_insert(pairings, main, pend);
+
+	m_list.clear();
+	l_push_into_m_list2(main);
+	l_insert(--level);
 }
 
 #include <unistd.h>

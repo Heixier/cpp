@@ -25,10 +25,11 @@ class PmergeMe
 		int l_swap_pairs(int level);
 
 		void v_insert(int level);
-		int l_insert(int level);
+		void l_insert(int level);
 
-		void v_flatten_into_m_vect(std::vector<std::vector<int> >& src);
-		int l_flatten_into_m_list(std::list<std::list<int> >& src);
+		void v_push_into_m_vect2(std::vector<std::vector<int> >& src);
+		void l_push_into_m_list2(std::list<std::list<int> >& src);
+		void l_push_into_m_list(std::list<int>& src);
 
 		template <typename Container>
 		Container generate_insertion_sequence(int pend_elements)
@@ -81,6 +82,7 @@ class PmergeMe
 		}
 
 		void v_dynamic_binary_insert(std::vector<t_bounds> jacobsthal_pairings, std::vector<std::vector<int> >& main, std::vector<std::vector<int > > pend);
+		void l_dynamic_binary_insert(std::list<t_bounds> jacobsthal_pairings, std::list<std::list<int> >& main, std::list<std::list<int > > pend);
 
 		template <typename Container>
 		void c_print(const Container& c, const std::string& name) const
@@ -112,6 +114,16 @@ class PmergeMe
 			typename std::list<T>::iterator it = lst.begin();
 			std::advance(it, idx);
 			return (*it);
+		}
+
+		template <typename T>
+		typename std::list<T>::iterator lst_idx_it(std::list<T>& lst, int idx)
+		{
+			if (idx < 0)
+				throw std::runtime_error("boi your index calculations got screwed up somewhere");
+			typename std::list<T>::iterator it = lst.begin();
+			std::advance(it, idx);
+			return (it);
 		}
 
 		template <typename Container>
