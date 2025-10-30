@@ -26,12 +26,12 @@ class PmergeMe
 			int comparisons = 0;
 			gettimeofday(&start, NULL);
 
-			int depth = swap_pairs<std::vector<int> >(c, 0, comparisons);
+			int depth = swap_pairs<Container>(c, 0, comparisons);
 			insert<Container, Container2, PairContainer>(c, depth, comparisons);
 			gettimeofday(&end, NULL);
 
-			c_print(m_vect, "\nAfter sort");
-			if (!is_sorted<std::vector<int> >(m_vect))
+			c_print(c, "\nAfter sort");
+			if (!is_sorted<Container>(c))
 				std::cout << RED << "Not sorted!\n" << END;
 
 			double time_taken_us = ((end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec) / 1000000.0);
@@ -163,7 +163,6 @@ class PmergeMe
 			Container2 main(0);
 			Container2 pend(0);
 			Container remainder(0);
-
 		
 			int group_size = std::pow(2, level); // How many numbers for each a/b section
 			int groups = m_elements / group_size;
@@ -194,6 +193,9 @@ class PmergeMe
 						pend.push_back(start[i]);
 				}
 			}
+
+			push_to_container2<Container, Container2>(main, c);
+			push_to_container<Container>(remainder, c);
 		
 			Container sequence = generate_insertion_sequence<Container>(pend.size() + 1);
 		
@@ -201,18 +203,25 @@ class PmergeMe
 			dynamic_binary_insert<Container2, PairContainer>(pairings, main, pend, comparisons);
 		
 			c.clear();
-			push_to_flattened_container<Container, Container2>(main, c);
+			push_to_container2<Container, Container2>(main, c);
 			insert<Container, Container2, PairContainer>(c, --level, comparisons);
 		}
 
 		template <typename Container, typename Container2>
-		void push_to_flattened_container(const Container2& src, Container& dest)
+		void push_to_container2(const Container2& src, Container& dest)
 		{
 			for (typename Container2::const_iterator iter2 = src.begin(); iter2 != src.end(); iter2++)
 			{
 				for (typename Container::const_iterator iter = iter2 -> begin(); iter != iter2 -> end(); iter++)
 					dest.push_back(*iter);
 			}
+		}
+
+		template <typename Container>
+		void push_to_container(const Container& src, Container& dest)
+		{
+			for (typename Container::const_iterator iter = src.begin(); iter != src.end(); iter++)
+				dest.push_back(*iter);
 		}
 
 		template <typename Container>
@@ -233,8 +242,6 @@ class PmergeMe
 			std::cout << '\n';
 		}
 		
-		void v_print2(const std::vector<std::vector<int > >& vect2, const std::string& name) const;
-
 		template <typename Container>
 		bool is_sorted(Container c)
 		{

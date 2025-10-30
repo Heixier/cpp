@@ -47,6 +47,7 @@ PmergeMe::PmergeMe(int argc, char **argv): m_elements(0), m_deque_compares(0), m
 	}
 
 	sort<std::vector<int>, std::vector<std::vector<int> >, std::vector<t_bounds> >("std::vector", m_vect);
+	sort<std::deque<int>, std::deque<std::deque<int> >, std::deque<t_bounds> >("std::deque", m_deque);
 }
 
 PmergeMe::PmergeMe(): m_elements(0), m_deque_compares(0), m_vect_compares(0)
