@@ -26,8 +26,7 @@ class PmergeMe
 			int comparisons = 0;
 			gettimeofday(&start, NULL);
 
-			int depth = swap_pairs<Container>(c, 0, comparisons);
-			insert<Container, Container2, PairContainer>(c, depth, comparisons);
+			insert<Container, Container2, PairContainer>(c, swap_pairs<Container>(c, 0, comparisons), comparisons);
 			gettimeofday(&end, NULL);
 
 			c_print(c, "\nAfter sort");

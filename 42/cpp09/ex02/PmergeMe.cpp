@@ -10,17 +10,8 @@
 
 static bool are_integers(int argc, char **argv)
 {
-	for (int i = 0; i < argc; i++)
-	{
-		int element = 0;
-		while (argv[i][element])
-		{
-			if (!std::isdigit(argv[i][element]) || std::strlen(argv[i]) > 11 || atoll(argv[i]) != atoi(argv[i]))
-				return (false);
-			element++;
-		}
-	}
-	return (true);
+
+	integer check is fooped
 }
 
 PmergeMe::PmergeMe(int argc, char **argv): m_elements(0), m_deque_compares(0), m_vect_compares(0)
