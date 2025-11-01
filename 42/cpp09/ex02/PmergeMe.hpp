@@ -6,7 +6,9 @@
 #include <sys/time.h>
 #include <iostream>
 #include <stdexcept>
+#include <cmath>
 
+#include "colors.hpp"
 #include "structs.hpp"
 
 class PmergeMe
@@ -16,12 +18,62 @@ class PmergeMe
 		~PmergeMe();
 
 	private:
+	
+		template <typename Container, typename Container2, typename PairContainer>
+		void sort(const std::string& container_name, Container& c)
+		{
+			struct timeval start;
+			struct timeval end;
 
-		void v_sort(std::vector<int> vect);
-		int v_swap_pairs(int level);
-		void v_insert(int level);
+			c_print(c, "Before sort");
+			int comparisons = 0;
+			gettimeofday(&start, NULL);
 
-		void v_push_flattened_vect(std::vector<std::vector<int> >& src);
+			insert<Container, Container2, PairContainer>(c, swap_pairs<Container>(c, 0, comparisons), comparisons);
+			gettimeofday(&end, NULL);
+
+			c_print(c, "\nAfter sort");
+			if (!is_sorted<Container>(c))
+				std::cout << RED << "Not sorted!\n" << END;
+
+			double time_taken_us = ((end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec) / 1000000.0);
+			std::cout << std::fixed << "Sorted " << m_elements << " elements in " << time_taken_us << "s with " << container_name << " (" << comparisons << " comparisons)\n";
+		}
+
+		// Idx starts from 0; recursion
+		template <typename Container>
+		int swap_pairs(Container& c, int level, int& comparisons)
+		{
+			int group_size = std::pow(2, level); // How many numbers in each half of the pair
+			int pair_size = group_size * 2; // How big the pair is overall
+			if (pair_size > m_elements)
+				return (level);
+
+			int pairs_created = m_elements / pair_size;
+
+			Container buffer;
+			for (int i = 0; i < pairs_created; i++)
+			{
+				++comparisons;
+				int left_group_start_idx = (i * 2 * group_size);
+				int right_group_start_idx = (i * 2 * group_size) + group_size;
+
+				int left_group_end_idx = (i * 2 * group_size) + group_size - 1;
+				int right_group_end_idx = (i * 2 * group_size) + (group_size * 2) - 1;
+
+				if (c[left_group_end_idx] > c[right_group_end_idx])
+				{
+					for (int i = 0; i < group_size; i++) // Copy the left group
+					{
+						buffer.push_back(c[i + left_group_start_idx]);
+						c[i + left_group_start_idx] = c[i + right_group_start_idx];
+						c[i + right_group_start_idx] = buffer[i];
+					}
+					buffer.clear();
+				}
+			}
+			return (swap_pairs(c, level + 1, comparisons));
+		}
 
 		template <typename Container>
 		Container generate_insertion_sequence(int pend_elements)
@@ -73,7 +125,104 @@ class PmergeMe
 			return (bounds);
 		}
 
-		void v_dynamic_binary_insert(std::vector<t_bounds> jacobsthal_pairings, std::vector<std::vector<int> >& main, std::vector<std::vector<int > > pend);
+		template <typename Container2, typename PairContainer>
+		void dynamic_binary_insert(PairContainer jacobsthal_pairings, Container2& main, Container2& pend, int& comparisons)
+		{
+			for (typename PairContainer::iterator jacobsthal_iter = jacobsthal_pairings.begin(); jacobsthal_iter != jacobsthal_pairings.end(); jacobsthal_iter++)
+			{
+				int lower_bound_idx = 0;
+				int upper_bound_idx = jacobsthal_iter -> exclusive_upper_bound_idx - 1;
+
+				int to_insert = pend[jacobsthal_iter -> b_element_idx].back();
+				while (lower_bound_idx <= upper_bound_idx)
+				{
+					++comparisons;
+					int to_compare_idx = lower_bound_idx + (upper_bound_idx - lower_bound_idx) / 2;
+					if (to_insert <= main[to_compare_idx].back())
+						upper_bound_idx = to_compare_idx - 1;
+					else
+						lower_bound_idx = to_compare_idx + 1;
+				}
+
+				int insertion_idx = lower_bound_idx;
+				main.insert(main.begin() + insertion_idx, pend[jacobsthal_iter -> b_element_idx]);
+
+				// Push every index above it up by one to account for the newly inserted element
+				for (typename PairContainer::iterator iter = jacobsthal_iter; iter != jacobsthal_pairings.end(); iter++)
+				{
+					if (iter -> exclusive_upper_bound_idx >= insertion_idx)
+						++iter -> exclusive_upper_bound_idx;
+				}
+			}
+		}
+
+		template <typename Container, typename Container2, typename PairContainer>
+		void insert(Container& c, int level, int& comparisons)
+		{
+			if (level < 0)
+				return;
+			Container2 start(0);
+			Container2 main(0);
+			Container2 pend(0);
+			Container remainder(0);
+		
+			int group_size = std::pow(2, level); // How many numbers for each a/b section
+			int groups = m_elements / group_size;
+			Container buffer(0);
+		
+			// Create v_start
+			for (int group = 0; group < groups; group++)
+			{
+				for (int i = 0; i < group_size; i++)
+					buffer.push_back(c[i + (group * group_size)]);
+				start.push_back(buffer);
+				buffer.clear();
+			}
+		 
+			for (int i = group_size * groups; i < m_elements; i++)
+				remainder.push_back(c[i]);
+		
+			// Create v_main and v_pend
+			for (int i = 0; i < groups; i++)
+			{
+				if (i % 2) // if a
+					main.push_back(start[i]);
+				else // if b
+				{
+					if (i == 0) // b1
+						main.push_back(start[i]);
+					else
+						pend.push_back(start[i]);
+				}
+			}
+
+			Container sequence = generate_insertion_sequence<Container>(pend.size() + 1);
+		
+			PairContainer pairings = generate_bounds_pairing<Container, PairContainer>(sequence);
+			dynamic_binary_insert<Container2, PairContainer>(pairings, main, pend, comparisons);
+		
+			c.clear();
+			push_to_container2<Container, Container2>(main, c);
+			push_to_container<Container>(remainder, c);
+			insert<Container, Container2, PairContainer>(c, --level, comparisons);
+		}
+
+		template <typename Container, typename Container2>
+		void push_to_container2(const Container2& src, Container& dest)
+		{
+			for (typename Container2::const_iterator iter2 = src.begin(); iter2 != src.end(); iter2++)
+			{
+				for (typename Container::const_iterator iter = iter2 -> begin(); iter != iter2 -> end(); iter++)
+					dest.push_back(*iter);
+			}
+		}
+
+		template <typename Container>
+		void push_to_container(const Container& src, Container& dest)
+		{
+			for (typename Container::const_iterator iter = src.begin(); iter != src.end(); iter++)
+				dest.push_back(*iter);
+		}
 
 		template <typename Container>
 		void c_print(const Container& c, const std::string& name) const
@@ -93,8 +242,6 @@ class PmergeMe
 			std::cout << '\n';
 		}
 		
-		void v_print2(const std::vector<std::vector<int > >& vect2, const std::string& name) const;
-
 		template <typename Container>
 		bool is_sorted(Container c)
 		{

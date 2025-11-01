@@ -1,6 +1,5 @@
 #include <iostream>
 #include <cmath>
-#include <stdexcept>
 #include "PmergeMe.hpp"
 #include "colors.hpp"
 
@@ -15,11 +14,8 @@ int main (int argc, char **argv)
 	{
 		std::cerr << RED << "Error: " << e.what() << '\n';
 	}
-	for (int i = 0; i < argc; i++)
-	{
-		// int num = ((std::pow(2, i) - std::pow(-1, i)) / 3);
-		// std::cout << "Jacobsthal " << i<< ": " << generate_jacobsthal(i) << '\n';
-	}
 
-	// std::cout << "Argc: " << argc << '\n';
+	test jacobsthal limit
+	test elements all exist and sorted (sorted is tested)
+	fix output to only show before and after once
 }
