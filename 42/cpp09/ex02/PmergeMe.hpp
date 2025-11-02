@@ -33,7 +33,7 @@ class PmergeMe
 			insert<std::vector<int>, std::vector<std::vector<int> >, std::vector<t_bounds> >(m_vect, swap_pairs<std::vector<int> >(m_vect, 0, comparisons), comparisons);
 			gettimeofday(&end, NULL);
 
-			c_print(m_vect, "\nAfter sort");
+			c_print(m_vect, "After sort");
 			if (!is_sorted<std::vector<int> >(m_vect))
 				throw std::runtime_error("Not sorted!");
 			if (comparisons > comparison_limit)

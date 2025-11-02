@@ -52,8 +52,6 @@ PmergeMe::PmergeMe(int argc, char **argv): m_elements(0), m_deque_compares(0), m
 	m_deque.clear();
 	m_elements = argc;
 
-	std::cout << "m_elements: " << m_elements << '\n';
-
 	for (int i = 0; i < m_elements; i++)
 	{
 		m_deque.push_back(atoi(argv[i]));
