@@ -6,7 +6,6 @@
 #include <cmath>
 
 #include "PmergeMe.hpp"
-#include "structs.hpp"
 
 static bool are_positive_integers(int argc, char **argv)
 {
@@ -26,6 +25,17 @@ static bool are_positive_integers(int argc, char **argv)
 	}
 	return (true);
 }
+
+int PmergeMe::get_comparison_limit()
+{
+	if (!m_elements)
+		return (0);
+	int sum = 0;
+	for (int i = 1; i <= m_elements; ++i)
+		sum += std::ceil(std::log(3.0 * i / 4.0) / std::log(2.0));
+	return (sum);
+}
+
 
 PmergeMe::PmergeMe(int argc, char **argv): m_elements(0), m_deque_compares(0), m_vect_compares(0)
 {
@@ -50,8 +60,7 @@ PmergeMe::PmergeMe(int argc, char **argv): m_elements(0), m_deque_compares(0), m
 		m_vect.push_back(atoi(argv[i]));
 	}
 
-	sort<std::vector<int>, std::vector<std::vector<int> >, std::vector<t_bounds> >("std::vector", m_vect);
-	sort<std::deque<int>, std::deque<std::deque<int> >, std::deque<t_bounds> >("std::deque", m_deque);
+	sort();
 }
 
 PmergeMe::PmergeMe(): m_elements(0), m_deque_compares(0), m_vect_compares(0)

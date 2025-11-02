@@ -14,8 +14,4 @@ int main (int argc, char **argv)
 	{
 		std::cerr << RED << "Error: " << e.what() << '\n';
 	}
-
-	test jacobsthal limit
-	test elements all exist and sorted (sorted is tested)
-	fix output to only show before and after once
 }
