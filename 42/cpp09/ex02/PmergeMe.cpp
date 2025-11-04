@@ -37,6 +37,44 @@ int PmergeMe::get_comparison_limit()
 }
 
 
+void PmergeMe::sort()
+{
+	struct timeval start;
+	struct timeval end;
+
+	// Vector
+	c_print(m_vect, "Before sort");
+	int comparisons = 0;
+	int comparison_limit = get_comparison_limit();
+	double time_taken;
+
+	gettimeofday(&start, NULL);
+	insert<std::vector<int>, std::vector<std::vector<int> >, std::vector<t_bounds> >(m_vect, swap_pairs<std::vector<int> >(m_vect, 0, comparisons), comparisons);
+	gettimeofday(&end, NULL);
+
+	c_print(m_vect, "After sort");
+	if (!is_sorted<std::vector<int> >(m_vect))
+		throw std::runtime_error("Not sorted!");
+	if (comparisons > comparison_limit)
+		throw std::runtime_error("Too many comparisons!");
+	
+	time_taken = ((end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec) / 1000000.0);
+	std::cout << std::fixed << "Sorted " << m_elements << " elements in " << time_taken << "s with std::vector\n";
+	comparisons = 0;
+	gettimeofday(&start, NULL);
+	insert<std::deque<int>, std::deque<std::deque<int> >, std::deque<t_bounds> >(m_deque, swap_pairs<std::deque<int> >(m_deque, 0, comparisons), comparisons);
+	gettimeofday(&end, NULL);
+	time_taken = ((end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec) / 1000000.0);
+	std::cout << std::fixed << "Sorted " << m_elements << " elements in " << time_taken << "s with std::deque\n";
+
+	if (!is_sorted<std::deque<int> >(m_deque))
+		throw std::runtime_error("Not sorted!");
+	if (comparisons > comparison_limit)
+		throw std::runtime_error("Too many comparisons!");
+	if (m_vect.size() != static_cast<size_t>(m_elements) || m_deque.size() != static_cast<size_t>(m_elements))
+		throw std::runtime_error("Elements missing!");
+}
+
 PmergeMe::PmergeMe(int argc, char **argv): m_elements(0), m_deque_compares(0), m_vect_compares(0)
 {
 	if (argc < 2)
