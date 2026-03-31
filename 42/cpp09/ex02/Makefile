@@ -1,5 +1,5 @@
 CXX = c++
-CXXFLAGS = -std=c++98 -Wall -Wextra -Werror -MMD
+CXXFLAGS = -std=c++98 -Wall -Wextra -Werror -MMD -g
 NAME = PmergeMe
 
 SRCS = main.cpp PmergeMe.cpp
